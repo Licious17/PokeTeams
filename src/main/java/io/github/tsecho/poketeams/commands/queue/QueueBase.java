@@ -31,10 +31,10 @@ public class QueueBase implements CommandExecutor {
 		addIfPermissible(Permissions.QUEUE_LIST, Texts.of("&e/teams queue list"));
 
 		PaginationList.builder()
-		.title(Texts.of("&ePokeTeams Queue"))
-		.contents(help)
-		.padding(Texts.of("&a="))
-		.sendTo(src);
+			.title(Texts.of("&ePokeTeams Queue"))
+			.contents(help)
+			.padding(Texts.of("&a="))
+			.sendTo(src);
 		
 		return CommandResult.success();
 	}
