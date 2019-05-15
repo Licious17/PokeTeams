@@ -28,7 +28,7 @@ public class BankBase implements CommandExecutor {
 		addIfPermissible(Permissions.BANK_BASE, Texts.of("&6/teams bank help"));
 		addIfPermissible(Permissions.BANK_BALANCE, Texts.of("&6/teams bank balance"));
 		addIfPermissible(Permissions.BANK_ADD, Texts.of("&6/teams bank add <amount>"));
-		addIfPermissible(Permissions.BANK_WITHDRAW, Texts.of("&e/teams bank withdraw <amount>"));
+		addIfPermissible(Permissions.BANK_WITHDRAW, Texts.of("&6/teams bank withdraw <amount>"));
 
 		PaginationList.builder()
 			.title(Texts.of("&6PokeTeams Bank"))
