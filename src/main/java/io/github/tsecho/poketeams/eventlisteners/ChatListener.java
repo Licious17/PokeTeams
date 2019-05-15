@@ -20,7 +20,7 @@ public class ChatListener implements EventListener<MessageChannelEvent.Chat>{
 	private PokeTeamsAPI role;
 	
 	@Override
-	public void handle(MessageChannelEvent.Chat e) throws Exception {
+	public void handle(MessageChannelEvent.Chat e) {
 		this.e = e;
 		if(isPlayer() && inGroupChat())
 			modifyMessage();

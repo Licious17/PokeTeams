@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class PokeTeamsAPI {
 
-	protected String name, role, team;
+	protected String role, team;
 	protected String uuid;
 	protected int players;
 
@@ -64,7 +64,6 @@ public class PokeTeamsAPI {
 				players = 0;
 
 		} else {
-			this.name = name;
 			uuid = Sponge.getServiceManager().provide(UserStorageService.class).get().get(name).get().getUniqueId().toString();
 			players = 0;
 
@@ -348,14 +347,6 @@ public class PokeTeamsAPI {
 	public boolean canDemote() {
 		return team != null && ConfigManager.getConfNode("Team-Settings", "Roles", role, "Demote").getBoolean();
 	}
-
-	/**
-	 *
-	 * @return {@code true} if the user has the Use-PC permission in config based on their role
-	 */
-	public boolean canUsePC() {
-		return team != null && ConfigManager.getConfNode("Team-Settings", "Roles", role, "Use-PC").getBoolean();
-	}
 	
 	/**
 	 * 
@@ -531,7 +522,7 @@ public class PokeTeamsAPI {
 			return ConfigManager.getStorNode("Teams", team, "Tag").getString();
 		else 
 			return Texts.getString(PlaceholderAPI.getInstance()
-									.replace(ConfigManager.getConfNode("Placeholder-Settings", "Default-TeamTag").getString(), name));
+									.replace(ConfigManager.getConfNode("Placeholder-Settings", "Default-TeamTag").getString(), team));
 	}
 
 	/**

@@ -36,6 +36,15 @@ public class Permissions {
 	public static final String BANK_BALANCE = "poketeams.command.bank.balance";
 	public static final String BANK_WITHDRAW = "poketeams.command.bank.withdraw";
 
+	/* alliance commands */
+	public static final String ALLY_BASE = "poketeams.command.ally.base";
+	public static final String ALLY_CHAT = "poketeams.command.ally.chat";
+	public static final String ALLY_CREATE = "poketeams.command.ally.create";
+	public static final String ALLY_DELETE = "poketeams.command.ally.delete";
+	public static final String ALLY_INFO = "poketeams.command.ally.info";
+	public static final String ALLY_INVITE = "poketeams.command.ally.invite";
+	public static final String ALLY_LEAVE = "poketeams.command.ally.leave";
+
 	/* admin commands */
 	public static final String ADMIN_BASE = "poketeams.command.admin.base";
 	public static final String ADMIN_DELETE = "poketeams.command.admin.delete";

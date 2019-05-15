@@ -42,7 +42,6 @@ public class ConfigManager {
 			langLoad = HoconConfigurationLoader.builder().setPath(lang).build();
 			allyLoad = HoconConfigurationLoader.builder().setPath(alliances).build();
 
-
 			confNode = confLoad.load();
 			storNode = storLoad.load();
 			censorNode = censorLoad.load();
