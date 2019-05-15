@@ -24,7 +24,7 @@ archivesBaseName = "PokeTeams"
 
 minecraft {
     version = "1.12.2-14.23.5.2768"
-    mappings = 'snapshot_20171003'
+    mappings = 'stable_39'
 }
 
 repositories {
