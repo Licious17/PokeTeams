@@ -8,7 +8,7 @@ import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 
-public class Chat implements CommandExecutor {
+public class TransferOwner implements CommandExecutor {
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
@@ -17,8 +17,8 @@ public class Chat implements CommandExecutor {
 
     public static CommandSpec build() {
         return CommandSpec.builder()
-                .permission(Permissions.ALLY_CHAT)
-                .executor(new Chat())
+                .permission(Permissions.ALLY_TRANSFER)
+                .executor(new TransferOwner())
                 .build();
     }
 }

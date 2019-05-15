@@ -53,7 +53,7 @@ public class TransferOwner implements CommandExecutor {
 
     public static CommandSpec build() {
         return CommandSpec.builder()
-                .permission(Permissions.TRANSFEROWNER)
+                .permission(Permissions.TRANSFER)
                 .arguments(GenericArguments.onlyOne(GenericArguments.user(Text.of("player"))))
                 .executor(new TransferOwner())
                 .build();

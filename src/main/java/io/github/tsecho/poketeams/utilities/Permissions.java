@@ -17,7 +17,7 @@ public class Permissions {
 	public static final String LEADERBOARD = "poketeams.command.leaderboard";
 	public static final String TAG = "poketeams.command.tag";
 	public static final String LIST = "poketeams.command.list";
-	public static final String TRANSFEROWNER = "poketeams.command.tranferowner";
+	public static final String TRANSFER = "poketeams.command.tranferowner";
 	public static final String SOCIAL_SPY = "poketeams.command.socialspy";
 
 	/* bases commands */
@@ -44,6 +44,7 @@ public class Permissions {
 	public static final String ALLY_INFO = "poketeams.command.ally.info";
 	public static final String ALLY_INVITE = "poketeams.command.ally.invite";
 	public static final String ALLY_LEAVE = "poketeams.command.ally.leave";
+	public static final String ALLY_TRANSFER = "poketeams.command.ally.transfer";
 
 	/* admin commands */
 	public static final String ADMIN_BASE = "poketeams.command.admin.base";

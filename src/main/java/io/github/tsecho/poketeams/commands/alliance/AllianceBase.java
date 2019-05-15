@@ -1,8 +1,5 @@
 package io.github.tsecho.poketeams.commands.alliance;
 
-import io.github.tsecho.poketeams.commands.admin.*;
-import io.github.tsecho.poketeams.commands.admin.Create;
-import io.github.tsecho.poketeams.commands.admin.Delete;
 import io.github.tsecho.poketeams.language.Texts;
 import io.github.tsecho.poketeams.utilities.Permissions;
 import org.spongepowered.api.command.CommandException;
@@ -28,16 +25,16 @@ public class AllianceBase implements CommandExecutor {
         this.src = src;
         this.help = new ArrayList<>();
 
-        addIfPermissible(Permissions.ADMIN_SET, Texts.of("&b/teams admin set <player> <team>"));
-        addIfPermissible(Permissions.ADMIN_PROMOTE, Texts.of("&b/teams admin promote <player>"));
-        addIfPermissible(Permissions.ADMIN_DEMOTE, Texts.of("&b/teams admin demote <player>"));
-        addIfPermissible(Permissions.ADMIN_CREATE, Texts.of("&b/teams admin create <team>"));
-        addIfPermissible(Permissions.ADMIN_DELETE, Texts.of("&b/teams admin delete <team>"));
-        addIfPermissible(Permissions.ADMIN_KICK, Texts.of("&b/teams admin kick <team> <name>"));
-        addIfPermissible(Permissions.ADMIN_RENAME, Texts.of("&b/teams admin rename <team>"));
+        addIfPermissible(Permissions.ALLY_CREATE, Texts.of("&b/teams ally create <name>"));
+        addIfPermissible(Permissions.ALLY_DELETE, Texts.of("&b/teams ally delete"));
+        addIfPermissible(Permissions.ALLY_INVITE, Texts.of("&b/teams ally invite <player>"));
+        addIfPermissible(Permissions.ALLY_INFO, Texts.of("&b/teams ally info [<alliance>]"));
+        addIfPermissible(Permissions.ALLY_CHAT, Texts.of("&b/teams ally chat [<message>]"));
+        addIfPermissible(Permissions.ALLY_LEAVE, Texts.of("&b/teams ally leave"));
+        addIfPermissible(Permissions.ALLY_TRANSFER, Texts.of("&b/teams ally transfer <player>"));
 
         PaginationList.builder()
-                .title(Texts.of("&bPokeTeams Admin"))
+                .title(Texts.of("&bPokeTeams Alliances"))
                 .contents(help)
                 .padding(Texts.of("&9="))
                 .sendTo(src);
@@ -60,16 +57,23 @@ public class AllianceBase implements CommandExecutor {
 
     public static CommandSpec build() {
         return CommandSpec.builder()
-                .executor(new AdminBase())
-                .permission(Permissions.BASE)
+                .executor(new AllianceBase())
+                .permission(Permissions.ALLY_BASE)
                 .child(AllianceBase.help(), "help")
+                .child(Chat.build(), "chat")
+                .child(Create.build(), "create")
+                .child(Delete.build(), "delete")
+                .child(Info.build(), "info")
+                .child(Invite.build(), "invite")
+                .child(Leave.build(), "leave")
+                .child(TransferOwner.build(), "transfer", "transferowner")
                 .build();
     }
 
     private static CommandSpec help() {
         return CommandSpec.builder()
-                .permission(Permissions.ADMIN_BASE)
-                .executor(new AdminBase())
+                .permission(Permissions.ALLY_BASE)
+                .executor(new AllianceBase())
                 .build();
     }
 }

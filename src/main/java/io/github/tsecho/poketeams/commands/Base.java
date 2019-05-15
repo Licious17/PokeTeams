@@ -1,6 +1,8 @@
 package io.github.tsecho.poketeams.commands;
 
+import io.github.tsecho.poketeams.apis.AllianceAPI;
 import io.github.tsecho.poketeams.commands.admin.AdminBase;
+import io.github.tsecho.poketeams.commands.alliance.AllianceBase;
 import io.github.tsecho.poketeams.commands.banks.BankBase;
 import io.github.tsecho.poketeams.commands.bases.BasesBase;
 import io.github.tsecho.poketeams.commands.queue.QueueBase;
@@ -42,8 +44,9 @@ public class Base implements CommandExecutor{
 		addIfPermissible(Permissions.BASE_TELEPORT, Texts.of("&c/teams base set"));
 		addIfPermissible(Permissions.QUEUE_BASE, Texts.of("&c/teams queue"));
 		addIfPermissible(Permissions.BANK_BASE, Texts.of("&c/teams bank"));
-		addIfPermissible(Permissions.TRANSFEROWNER, Texts.of("&c/teams transferowner <player>"));
-		addIfPermissible(Permissions.ADMIN_BASE, Texts.of("&c/teams admin"));
+		addIfPermissible(Permissions.TRANSFER, Texts.of("&c/teams transferowner <player>"));
+        addIfPermissible(Permissions.ALLY_BASE, Texts.of("&c/teams ally"));
+        addIfPermissible(Permissions.ADMIN_BASE, Texts.of("&c/teams admin"));
 		addIfPermissible(Permissions.SOCIAL_SPY, Texts.of("&c/teams socialspy"));
 
 		PaginationList.builder()
@@ -92,6 +95,7 @@ public class Base implements CommandExecutor{
 				.child(BankBase.build(), "bank", "money")
 				.child(TransferOwner.build(), "transferowner", "tranfser")
 				.child(SocialSpy.build(), "socialspy", "ss", "spy")
+                .child(AllianceBase.build(), "alliance", "ally", "alliances", "allies")
 				.build();
 	}
 
