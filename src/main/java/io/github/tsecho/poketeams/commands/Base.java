@@ -14,42 +14,53 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.service.pagination.PaginationList;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.action.TextActions;
 
 import java.util.ArrayList;
 
 public class Base implements CommandExecutor{
 
+	private CommandSource src;
+	private ArrayList<Text> help;
+	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
-		ArrayList<Text> help = new ArrayList<Text>();
-		help.add(Texts.of("&c/teams leaderboard"));
-		help.add(Texts.of("&c/teams list"));
-		help.add(Texts.of("&c/teams create <team>"));
-		help.add(Texts.of("&c/teams delete"));
-		help.add(Texts.of("&c/teams info [<team>]"));
-		help.add(Texts.of("&c/teams invite"));
-		help.add(Texts.of("&c/teams kick <player>"));
-		help.add(Texts.of("&c/teams tag <tag>"));
-		help.add(Texts.of("&c/teams chat [<message>]"));
-		help.add(Texts.of("&c/teams base"));
-		help.add(Texts.of("&c/teams base set"));
-		help.add(Texts.of("&c/teams queue"));
-		help.add(Texts.of("&c/teams bank"));
-		help.add(Texts.of("&c/teams transferowner <player>"));
+		this.src = src;
+		this.help = new ArrayList();
 		
-		if(src.hasPermission(Permissions.ADMIN_BASE))
-			help.add(Texts.of("&c/teams admin"));
-		if(src.hasPermission(Permissions.SOCIAL_SPY))
-			help.add(Texts.of("&c/teams socialspy"));
-		
+		addIfPermissable(Permissions.LEADERBOARD, Texts.of("&c/teams leaderboard"));
+		addIfPermissable(Permissions.LIST, Texts.of("&c/teams list"));
+		addIfPermissable(Permissions.CREATE, Texts.of("&c/teams create <team>"));
+		addIfPermissable(Permissions.DELETE, Texts.of("&c/teams delete"));
+		addIfPermissable(Permissions.INFO, Texts.of("&c/teams info [<team>]"));
+		addIfPermissable(Permissions.INVITE, Texts.of("&c/teams invite"));
+		addIfPermissable(Permissions.KICK, Texts.of("&c/teams kick <player>"));
+		addIfPermissable(Permissions.TAG, Texts.of("&c/teams tag <tag>"));
+		addIfPermissable(Permissions.CHAT, Texts.of("&c/teams chat [<message>]"));
+		addIfPermissable(Permissions.BASE_TELEPORT, Texts.of("&c/teams base"));
+		addIfPermissable(Permissions.BASE_TELEPORT, Texts.of("&c/teams base set"));
+		addIfPermissable(Permissions.QUEUE_BASE, Texts.of("&c/teams queue"));
+		addIfPermissable(Permissions.BANK_BASE, Texts.of("&c/teams bank"));
+		addIfPermissable(Permissions.TRANSFEROWNER, Texts.of("&c/teams transferowner <player>"));
+		addIfPermissable(Permissions.ADMIN_BASE, Texts.of("&c/teams admin"));
+		addIfPermissable(Permissions.SOCIAL_SPY, Texts.of("&c/teams socialspy"));
+
 		PaginationList.builder()
-		.title(Texts.of("&cPokeTeams"))
-		.contents(help)
-		.padding(Texts.of("&b="))
-		.sendTo(src);
+			.title(Texts.of("&cPokeTeams"))
+			.contents(help)
+			.padding(Texts.of("&b="))
+			.sendTo(src);
 		
 		return CommandResult.success();
+	}
+
+	private void addIfPermissable(String permission, Text line) {
+		if(src.hasPermission(permission))
+			help.add(line.toBuilder()
+						.onHover(TextActions.showText(Texts.of("&b&oClick me to execute this command!")))
+						.onClick(TextActions.suggestCommand(line.toPlain()))
+						.build());
 	}
 	
 	public static CommandSpec build() {
