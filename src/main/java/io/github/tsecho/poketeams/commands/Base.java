@@ -27,24 +27,24 @@ public class Base implements CommandExecutor{
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
 		this.src = src;
-		this.help = new ArrayList();
+		this.help = new ArrayList<>();
 		
-		addIfPermissable(Permissions.LEADERBOARD, Texts.of("&c/teams leaderboard"));
-		addIfPermissable(Permissions.LIST, Texts.of("&c/teams list"));
-		addIfPermissable(Permissions.CREATE, Texts.of("&c/teams create <team>"));
-		addIfPermissable(Permissions.DELETE, Texts.of("&c/teams delete"));
-		addIfPermissable(Permissions.INFO, Texts.of("&c/teams info [<team>]"));
-		addIfPermissable(Permissions.INVITE, Texts.of("&c/teams invite"));
-		addIfPermissable(Permissions.KICK, Texts.of("&c/teams kick <player>"));
-		addIfPermissable(Permissions.TAG, Texts.of("&c/teams tag <tag>"));
-		addIfPermissable(Permissions.CHAT, Texts.of("&c/teams chat [<message>]"));
-		addIfPermissable(Permissions.BASE_TELEPORT, Texts.of("&c/teams base"));
-		addIfPermissable(Permissions.BASE_TELEPORT, Texts.of("&c/teams base set"));
-		addIfPermissable(Permissions.QUEUE_BASE, Texts.of("&c/teams queue"));
-		addIfPermissable(Permissions.BANK_BASE, Texts.of("&c/teams bank"));
-		addIfPermissable(Permissions.TRANSFEROWNER, Texts.of("&c/teams transferowner <player>"));
-		addIfPermissable(Permissions.ADMIN_BASE, Texts.of("&c/teams admin"));
-		addIfPermissable(Permissions.SOCIAL_SPY, Texts.of("&c/teams socialspy"));
+		addIfPermissible(Permissions.LEADERBOARD, Texts.of("&c/teams leaderboard"));
+		addIfPermissible(Permissions.LIST, Texts.of("&c/teams list"));
+		addIfPermissible(Permissions.CREATE, Texts.of("&c/teams create <team>"));
+		addIfPermissible(Permissions.DELETE, Texts.of("&c/teams delete"));
+		addIfPermissible(Permissions.INFO, Texts.of("&c/teams info [<team>]"));
+		addIfPermissible(Permissions.INVITE, Texts.of("&c/teams invite"));
+		addIfPermissible(Permissions.KICK, Texts.of("&c/teams kick <player>"));
+		addIfPermissible(Permissions.TAG, Texts.of("&c/teams tag <tag>"));
+		addIfPermissible(Permissions.CHAT, Texts.of("&c/teams chat [<message>]"));
+		addIfPermissible(Permissions.BASE_TELEPORT, Texts.of("&c/teams base"));
+		addIfPermissible(Permissions.BASE_TELEPORT, Texts.of("&c/teams base set"));
+		addIfPermissible(Permissions.QUEUE_BASE, Texts.of("&c/teams queue"));
+		addIfPermissible(Permissions.BANK_BASE, Texts.of("&c/teams bank"));
+		addIfPermissible(Permissions.TRANSFEROWNER, Texts.of("&c/teams transferowner <player>"));
+		addIfPermissible(Permissions.ADMIN_BASE, Texts.of("&c/teams admin"));
+		addIfPermissible(Permissions.SOCIAL_SPY, Texts.of("&c/teams socialspy"));
 
 		PaginationList.builder()
 			.title(Texts.of("&cPokeTeams"))
@@ -55,12 +55,17 @@ public class Base implements CommandExecutor{
 		return CommandResult.success();
 	}
 
-	private void addIfPermissable(String permission, Text line) {
-		if(src.hasPermission(permission))
-			help.add(line.toBuilder()
-						.onHover(TextActions.showText(Texts.of("&b&oClick me to execute this command!")))
-						.onClick(TextActions.suggestCommand(line.toPlain()))
-						.build());
+	private void addIfPermissible(String permission, Text line) {
+        if(src.hasPermission(permission)) {
+            Text newLine = line.toBuilder()
+                    .onHover(TextActions.showText(Texts.of("&b&oClick me to execute this command!")))
+                    .build();
+
+            if(line.toPlain().contains("<") || line.toPlain().contains("["))
+                help.add(newLine.toBuilder().onClick(TextActions.suggestCommand(line.toPlain())).build());
+            else
+                help.add(newLine.toBuilder().onClick(TextActions.runCommand(line.toPlain())).build());
+        }
 	}
 	
 	public static CommandSpec build() {
@@ -90,7 +95,7 @@ public class Base implements CommandExecutor{
 				.build();
 	}
 
-	public static CommandSpec help() {
+	private static CommandSpec help() {
 		return CommandSpec.builder()
 				.permission(Permissions.BASE)
 				.executor(new Base())

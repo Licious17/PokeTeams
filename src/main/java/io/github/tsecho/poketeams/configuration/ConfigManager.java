@@ -13,10 +13,10 @@ import java.nio.file.Path;
 
 public class ConfigManager {
 
-	private static Path dir, config, storage, censor, lang;
-	private static ConfigurationLoader<CommentedConfigurationNode> storLoad, confLoad, censorLoad, langLoad;
-	private static CommentedConfigurationNode confNode, storNode, censorNode, langNode;
-	private static final String[] FILES = {"Configuration.conf", "Censor.conf", "Language.conf", "Teams.conf"};
+	private static Path dir, config, storage, censor, lang, alliances;
+	private static ConfigurationLoader<CommentedConfigurationNode> storLoad, confLoad, censorLoad, langLoad, allyLoad;
+	private static CommentedConfigurationNode confNode, storNode, censorNode, langNode, allyNode;
+	private static final String[] FILES = {"Configuration.conf", "Censor.conf", "Language.conf", "Teams.conf", "Alliances.conf"};
 
 	public static void setup(Path folder) {
 		dir = folder;
@@ -24,6 +24,7 @@ public class ConfigManager {
 		censor = dir.resolve(FILES[1]);
 		lang = dir.resolve(FILES[2]);
 		storage = dir.resolve(FILES[3]);
+		alliances = dir.resolve(FILES[4]);
 	}
 	
 	public static void load() {
@@ -39,11 +40,14 @@ public class ConfigManager {
 			storLoad = HoconConfigurationLoader.builder().setPath(storage).build();
 			censorLoad = HoconConfigurationLoader.builder().setPath(censor).build();
 			langLoad = HoconConfigurationLoader.builder().setPath(lang).build();
+			allyLoad = HoconConfigurationLoader.builder().setPath(alliances).build();
+
 
 			confNode = confLoad.load();
 			storNode = storLoad.load();
 			censorNode = censorLoad.load();
 			langNode = langLoad.load();
+			allyNode = allyLoad.load();
 				
 		} catch(IOException e) {
 			PokeTeams.getLogger().error("Error loading up PokeTeams Configuration"); e.printStackTrace();
@@ -59,6 +63,7 @@ public class ConfigManager {
 			storLoad.save(storNode);
 			censorLoad.save(censorNode);
 			langLoad.save(langNode);
+			allyLoad.save(allyNode);
 		} catch (IOException e) {
 			PokeTeams.getLogger().error("Error saving PokeTeams Configuration"); e.printStackTrace();
 		}
@@ -97,6 +102,10 @@ public class ConfigManager {
 
 	public static CommentedConfigurationNode getCensorNode(Object... node) {
 		return censorNode.getNode(node);
+	}
+
+	public static CommentedConfigurationNode getAllyNode(Object... node) {
+		return allyNode.getNode(node);
 	}
 
 }

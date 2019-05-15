@@ -3,6 +3,7 @@ package io.github.tsecho.poketeams.apis;
 import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.enums.Ranks;
 import io.github.tsecho.poketeams.language.ChatUtils;
+import io.github.tsecho.poketeams.language.Texts;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
@@ -529,7 +530,8 @@ public class PokeTeamsAPI {
 		if(!ConfigManager.getStorNode("Teams", team, "Tag").isVirtual())
 			return ConfigManager.getStorNode("Teams", team, "Tag").getString();
 		else 
-			return ConfigManager.getConfNode("Placeholder-Settings", "Default-TeamTag").getString();
+			return Texts.getString(PlaceholderAPI.getInstance()
+									.replace(ConfigManager.getConfNode("Placeholder-Settings", "Default-TeamTag").getString(), name));
 	}
 
 	/**

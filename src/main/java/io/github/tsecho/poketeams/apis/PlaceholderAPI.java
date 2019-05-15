@@ -128,7 +128,7 @@ public class PlaceholderAPI {
 		if(role.inTeam())
 			return role.getTeam();
 		else
-			return ConfigManager.getConfNode("Placeholder-Settings", "Default-TeamName").getString();
+			return Texts.getString(replace(ConfigManager.getConfNode("Placeholder-Settings", "Default-TeamName").getString(), src));
 	}
 
 	@Placeholder(id = "teamtag")
