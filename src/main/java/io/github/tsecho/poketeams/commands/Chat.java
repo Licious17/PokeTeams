@@ -2,6 +2,7 @@ package io.github.tsecho.poketeams.commands;
 
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
 import io.github.tsecho.poketeams.configuration.ConfigManager;
+import io.github.tsecho.poketeams.enums.ChatTypes;
 import io.github.tsecho.poketeams.enums.Messages.ErrorMessages;
 import io.github.tsecho.poketeams.enums.Messages.SuccessMessages;
 import io.github.tsecho.poketeams.enums.Messages.TechnicalMessages;
@@ -40,11 +41,11 @@ public class Chat implements CommandExecutor {
 		if(args.getOne(Text.of("message")).isPresent())
 			return sendMessage(args);
 
-		if(ChatUtils.inChat(src.getName())) {
-			ChatUtils.removeChat(src.getName());
+		if(ChatUtils.getChatType(src.getName()) != ChatTypes.PUBLIC) {
+			ChatUtils.setChat(src.getName(), ChatTypes.PUBLIC);
 			src.sendMessage(SuccessMessages.REMOVED_CHAT.getText(src));
 		} else {
-			ChatUtils.addChat(src.getName());
+			ChatUtils.setChat(src.getName(), ChatTypes.TEAM);
 			src.sendMessage(SuccessMessages.ADDED_CHAT.getText(src));
 		}
 

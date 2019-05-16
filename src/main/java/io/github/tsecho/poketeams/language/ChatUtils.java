@@ -1,36 +1,30 @@
 package io.github.tsecho.poketeams.language;
 
+import io.github.tsecho.poketeams.enums.ChatTypes;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ChatUtils {
 
-    private static ArrayList<String> chatRegistery = new ArrayList();
+    private static Map<String, ChatTypes> chatRegistry = new HashMap<>();
     private static ArrayList<String> socialSpy = new ArrayList();
 
     /**
-     * Adds players to the team chat registery
-     * @param name of a player to add to the teams chat
+     * Adds players to the chat registry
+     * @param name of a player to add to a specific chat
      */
-    public static void addChat(String name) {
-        if(!inChat(name))
-            chatRegistery.add(name);
-    }
-
-    /**
-     * Removes a player from the team chat registery
-     * @param name of a player to remove from team chat
-     */
-    public static void removeChat(String name) {
-        if(inChat(name))
-            chatRegistery.remove(name);
+    public static void setChat(String name, ChatTypes type) {
+        chatRegistry.put(name, type);
     }
 
     /**
      * @param name of a player to check for team chat
-     * @return true if a player is in the teams chat
+     * @return ChatType the player is in
      */
-    public static boolean inChat(String name) {
-        return chatRegistery.contains(name);
+    public static ChatTypes getChatType(String name) {
+        return chatRegistry.get(name);
     }
 
     /**

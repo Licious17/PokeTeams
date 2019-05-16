@@ -7,8 +7,7 @@ import org.spongepowered.api.service.user.UserStorageService;
 import java.util.ArrayList;
 import java.util.Map;
 
-import static io.github.tsecho.poketeams.configuration.ConfigManager.getStorNode;
-import static io.github.tsecho.poketeams.configuration.ConfigManager.save;
+import static io.github.tsecho.poketeams.configuration.ConfigManager.*;
 
 public class Utils {
 
@@ -30,6 +29,10 @@ public class Utils {
 		return !getStorNode("Teams", team).isVirtual();
 	}
 
+	public static boolean allianceExists(String alliance) {
+		return !getAllyNode("Allies", alliance).isVirtual();
+	}
+
 	public static void moveToUUID() {
 		UserStorageService service = Sponge.getServiceManager().provide(UserStorageService.class).get();
 
@@ -42,7 +45,7 @@ public class Utils {
 				String name = players.getKey().toString();
 				String rank = getStorNode("Teams", team, "Members", name).getString();
 
-				if (!name.matches("[a-f0-9]{8}-[a-f0-9]{4}-4[0-9]{3}-[89ab][a-f0-9]{3}-[0-9a-f]{12}") && service.get(name).isPresent()) {
+				if (name.length() < 17 && service.get(name).isPresent()) {
 					String uuid = service.get(name).get().getUniqueId().toString();
 
 					if (!uuid.equals(name)) {

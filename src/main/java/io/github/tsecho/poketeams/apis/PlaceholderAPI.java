@@ -59,14 +59,16 @@ public class PlaceholderAPI {
 				case "teambal":
 					return builder.description("Player's team's bank balance");
 				case "formattedteamtag":
-					return (builder).description("Player's team's tag with formatting options in config");
+					return builder.description("Player's team's tag with formatting options in config");
 				case "teamrating":
-					return (builder).description("Player's team's total rating");
+					return builder.description("Player's team's total rating");
+				case "teamalliance":
+					return builder.description("Player's team's alliance name");
 			}
 
 			return builder;
 
-		}).map(builder -> builder.plugin(PokeTeams.getInstance()).author("TSEcho").version("3.8.0")).forEach(builder -> {
+		}).map(builder -> builder.plugin(PokeTeams.getInstance()).author("TSEcho").version("4.0.0")).forEach(builder -> {
 
 			try {
 				builder.buildAndRegister();
@@ -97,6 +99,7 @@ public class PlaceholderAPI {
 				.replaceAll("%teamcaughtlegend%", getLegendCaught(src)
 				.replaceAll("%teamrating%", getRating(src))
 				.replaceAll("%formattedteamtag%", getFormattedTeamTag(src))
+				.replaceAll("%teamalliance%", getAlliance(src))
 				.replaceAll("%teambal%", getBalance(src))))))))));
 	}
 
@@ -111,13 +114,14 @@ public class PlaceholderAPI {
 				.replaceAll("%player%", src)
 				.replaceAll("%teamname%", role.getTeam())
 				.replaceAll("%teamtag%", role.getTag())
+				.replaceAll("%teamcaughtlegend%", String.valueOf(role.getLegends()))
+				.replaceAll("%teamalliance%", new AllianceAPI(role).getAlliance())
 				.replaceAll("%teamwins%", String.valueOf(role.getWins()))
 				.replaceAll("%teamkills%" , String.valueOf(role.getKills()))
 				.replaceAll("%teamlosses%", String.valueOf(role.getLosses()))
 				.replaceAll("%teamratio%", String.valueOf(role.getRatio()))
 				.replaceAll("%teamcaught%", String.valueOf(role.getCaught()))
-				.replaceAll("%teamcaughtlegend%", String.valueOf(role.getLegends()))
-				.replaceAll("%formattedteamtag%", String.valueOf(role.getFormattedTeamTag()))
+				.replaceAll("%formattedteamtag%", role.getFormattedTeamTag())
 				.replaceAll("%teamrating%", String.valueOf(role.getRating()))
 				.replaceAll("%teambal%", String.valueOf(role.getBal())));
 	}
@@ -179,6 +183,11 @@ public class PlaceholderAPI {
 	@Placeholder(id = "teamrating")
 	public String getRating(@Source CommandSource src) {
 		return String.valueOf(new PokeTeamsAPI(src).getRating());
+	}
+
+	@Placeholder(id = "teamalliance")
+	public String getAlliance(@Source CommandSource src) {
+		return String.valueOf(new AllianceAPI(new PokeTeamsAPI(src)).getAlliance());
 	}
 
 	public PlaceholderService getService() {

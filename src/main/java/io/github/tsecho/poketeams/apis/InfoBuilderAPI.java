@@ -63,7 +63,7 @@ public class InfoBuilderAPI extends PokeTeamsAPI {
     public InfoBuilderAPI(String team, Player src) {
         super(team, true);
         this.src = src;
-        contents = new ArrayList();
+        contents = new ArrayList<>();
     }
 
     /**
@@ -74,7 +74,7 @@ public class InfoBuilderAPI extends PokeTeamsAPI {
     public InfoBuilderAPI(Player member, Player src) {
         super(member);
         this.src = src;
-        contents = new ArrayList();
+        contents = new ArrayList<>();
     }
 
     /**
@@ -85,7 +85,7 @@ public class InfoBuilderAPI extends PokeTeamsAPI {
     public InfoBuilderAPI(String team, CommandSource src) {
         super(team, true);
         this.src = src;
-        contents = new ArrayList();
+        contents = new ArrayList<>();
     }
 
     /**
@@ -185,11 +185,11 @@ public class InfoBuilderAPI extends PokeTeamsAPI {
      * @return the current builder
      */
     public InfoBuilderAPI addPlayerList() {
-        HashMap<String, String> owners = new HashMap();
-        HashMap<String, String> captains = new HashMap();
-        HashMap<String, String> officers = new HashMap();
-        HashMap<String, String> members = new HashMap();
-        HashMap<String, String> grunts = new HashMap();
+        HashMap<String, String> owners = new HashMap<>();
+        HashMap<String, String> captains = new HashMap<>();
+        HashMap<String, String> officers = new HashMap<>();
+        HashMap<String, String> members = new HashMap<>();
+        HashMap<String, String> grunts = new HashMap<>();
 
         if(teamExists()) {
             for (Map.Entry<Object, ? extends CommentedConfigurationNode> players : ConfigManager

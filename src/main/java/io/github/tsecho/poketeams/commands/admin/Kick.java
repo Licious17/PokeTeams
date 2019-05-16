@@ -2,6 +2,7 @@ package io.github.tsecho.poketeams.commands.admin;
 
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
 import io.github.tsecho.poketeams.configuration.ConfigManager;
+import io.github.tsecho.poketeams.enums.ChatTypes;
 import io.github.tsecho.poketeams.enums.Messages.ErrorMessages;
 import io.github.tsecho.poketeams.enums.Messages.SuccessMessages;
 import io.github.tsecho.poketeams.language.ChatUtils;
@@ -53,7 +54,7 @@ public class Kick implements CommandExecutor {
 		if(role.getMemberTotal() == 1 && ConfigManager.getConfNode("Team-Settings", "Delete-When-Empty").getBoolean()) {
 			messagePlayer();
 			role.deleteTeam();
-			ChatUtils.removeChat(user.getName());
+			ChatUtils.setChat(user.getName(), ChatTypes.PUBLIC);
 		} else {
 			messagePlayer();
 			role.kickPlayer(user.getName());

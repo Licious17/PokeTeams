@@ -1,5 +1,7 @@
 package io.github.tsecho.poketeams.commands;
 
+import io.github.tsecho.poketeams.apis.AllianceAPI;
+import io.github.tsecho.poketeams.enums.AllyRanks;
 import io.github.tsecho.poketeams.enums.Messages.ErrorMessages;
 import io.github.tsecho.poketeams.enums.Messages.SuccessMessages;
 import io.github.tsecho.poketeams.enums.Messages.TechnicalMessages;
@@ -37,9 +39,7 @@ public class Leave implements CommandExecutor {
 		if(canOwnerDelete()) {
 
 			src.sendMessage(SuccessMessages.LEFT.getText(src));
-			ConfigManager.getStorNode("Teams", role.getTeam(), "Members", src.getName()).setValue(null);
-			ConfigManager.save();
-			ChatUtils.removeChat(player.getName());
+			role.kickPlayer(src.getName());
 
 			if(ConfigManager.getStorNode("Teams", role.getTeam(), "Members").getChildrenMap().entrySet().isEmpty()) {
 				if(ConfigManager.getConfNode("Team-Settings", "Delete-When-Empty").getBoolean()) {

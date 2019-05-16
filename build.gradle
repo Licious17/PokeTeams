@@ -5,7 +5,6 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
-		maven { url = 'https://oss.sonatype.org/content/groups/public' }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
@@ -18,7 +17,7 @@ apply plugin: 'java'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version = "4.0.0"
+version = "4.0.0-BETA-1"
 group = 'io.github.tsecho.poketeams'
 archivesBaseName = "PokeTeams"
 

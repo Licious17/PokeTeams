@@ -3,6 +3,7 @@ package io.github.tsecho.poketeams.commands.admin;
 import java.util.Map;
 
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
+import io.github.tsecho.poketeams.enums.ChatTypes;
 import io.github.tsecho.poketeams.enums.Messages.ErrorMessages;
 import io.github.tsecho.poketeams.enums.Messages.SuccessMessages;
 import io.github.tsecho.poketeams.language.ChatUtils;
@@ -35,14 +36,13 @@ public class Delete implements CommandExecutor {
 		if(!role.teamExists())
 			return ErrorCheck.test(src, ErrorMessages.NOT_EXISTS);
 
-		for (Map.Entry<Object, ? extends CommentedConfigurationNode> teams : ConfigManager
-				.getStorNode("Teams", team, "Members").getChildrenMap().entrySet()) {
 
-			String member = teams.getKey().toString();
-			ChatUtils.removeChat(member);
-
-			Sponge.getServer().getPlayer(member).ifPresent(p -> p.sendMessage(SuccessMessages.DISBANDED.getText(p)));
-		}
+		ConfigManager.getStorNode("Teams", team, "Members").getChildrenMap().entrySet().stream()
+				.map(key -> key.getKey().toString())
+				.forEach(user -> {
+					ChatUtils.setChat(user, ChatTypes.PUBLIC);
+					Sponge.getServer().getPlayer(user).ifPresent(p -> p.sendMessage(SuccessMessages.DISBANDED.getText(p)));
+				});
 
 		role.deleteTeam();
 		src.sendMessage(SuccessMessages.DELETED_TEAM.getText(src));

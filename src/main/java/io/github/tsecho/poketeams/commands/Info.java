@@ -26,7 +26,7 @@ public class Info implements CommandExecutor {
 
 		Optional<String> teamOpt = args.<String>getOne(Text.of("team"));
 
-		if (args.getOne(Text.of("team")).isPresent()) {
+		if (teamOpt.isPresent()) {
 
 			String teamName = teamOpt.get();
 

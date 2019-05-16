@@ -31,7 +31,7 @@ public class AllianceBase implements CommandExecutor {
         addIfPermissible(Permissions.ALLY_INFO, Texts.of("&b/teams ally info [<alliance>]"));
         addIfPermissible(Permissions.ALLY_CHAT, Texts.of("&b/teams ally chat [<message>]"));
         addIfPermissible(Permissions.ALLY_LEAVE, Texts.of("&b/teams ally leave"));
-        addIfPermissible(Permissions.ALLY_TRANSFER, Texts.of("&b/teams ally transfer <player>"));
+        addIfPermissible(Permissions.ALLY_TRANSFER, Texts.of("&b/teams ally transfer <team>"));
 
         PaginationList.builder()
                 .title(Texts.of("&bPokeTeams Alliances"))

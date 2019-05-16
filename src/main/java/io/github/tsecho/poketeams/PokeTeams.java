@@ -7,6 +7,7 @@ import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
 import io.github.tsecho.poketeams.apis.PlaceholderAPI;
 import io.github.tsecho.poketeams.commands.Base;
 import io.github.tsecho.poketeams.configuration.ConfigManager;
+import io.github.tsecho.poketeams.enums.ChatTypes;
 import io.github.tsecho.poketeams.eventlisteners.ChatListener;
 import io.github.tsecho.poketeams.language.ChatUtils;
 import io.github.tsecho.poketeams.pixelmon.BattleManager;
@@ -47,7 +48,7 @@ public class PokeTeams {
 
 	public static final String ID = "poketeams";
 	public static final String NAME = "PokeTeams";
-	public static final String VERSION = "4.0.0";
+	public static final String VERSION = "4.0.0-BETA1";
 	public static final String AUTHORS = "TSEcho";
 	public static final String DESCRIPTION = "Teams plugin with Pixelmon Reforged Support";
 	
@@ -95,8 +96,13 @@ public class PokeTeams {
 	
 	@Listener
 	public void onLeave(ClientConnectionEvent.Disconnect e, @Root Player player) {
-		ChatUtils.removeChat(player.getName());
+		ChatUtils.setChat(player.getName(), ChatTypes.PUBLIC);
 		if(QueueManager.queue.contains(player.getName())) QueueManager.queue.remove(player.getName());
+	}
+
+	@Listener
+	public void onJoin(ClientConnectionEvent.Join e, @Root Player player) {
+		ChatUtils.setChat(player.getName(), ChatTypes.PUBLIC);
 	}
 
 	@SubscribeEvent

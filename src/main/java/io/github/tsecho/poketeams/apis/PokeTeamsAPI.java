@@ -1,6 +1,6 @@
 package io.github.tsecho.poketeams.apis;
 
-import io.github.tsecho.poketeams.configuration.ConfigManager;
+import io.github.tsecho.poketeams.enums.ChatTypes;
 import io.github.tsecho.poketeams.enums.Ranks;
 import io.github.tsecho.poketeams.language.ChatUtils;
 import io.github.tsecho.poketeams.language.Texts;
@@ -8,10 +8,14 @@ import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.world.World;
 
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static io.github.tsecho.poketeams.configuration.ConfigManager.*;
 
 public class PokeTeamsAPI {
 
@@ -32,15 +36,14 @@ public class PokeTeamsAPI {
 		uuid = player.getUniqueId().toString();
 
 		//loop through teams
-		for (Map.Entry<Object, ? extends CommentedConfigurationNode> teams : ConfigManager
-				.getStorNode("Teams").getChildrenMap().entrySet()) {
+		for (Map.Entry<Object, ? extends CommentedConfigurationNode> teams : getStorNode("Teams").getChildrenMap().entrySet()) {
 
 			String teamTemp = teams.getKey().toString();
 
-			if(!ConfigManager.getStorNode("Teams", teamTemp, "Members", uuid).isVirtual()) {
+			if(!getStorNode("Teams", teamTemp, "Members", uuid).isVirtual()) {
 				team = teamTemp;
-				role = ConfigManager.getStorNode("Teams", teamTemp, "Members", uuid).getString();
-				players = ConfigManager.getStorNode("Teams", teamTemp, "Members").getChildrenMap().entrySet().size();
+				role = getStorNode("Teams", teamTemp, "Members", uuid).getString();
+				players = getStorNode("Teams", teamTemp, "Members").getChildrenMap().entrySet().size();
 				break;
 			}
 		}
@@ -57,9 +60,9 @@ public class PokeTeamsAPI {
 	 */
 	public PokeTeamsAPI(String name, boolean isTeam) {
 		if(isTeam) {
-			this.team = !ConfigManager.getStorNode("Teams", name).isVirtual() ? name : null;
+			this.team = !getStorNode("Teams", name).isVirtual() ? name : null;
 			if(team != null)
-				players = ConfigManager.getStorNode("Teams", name, "Members").getChildrenMap().entrySet().size();
+				players = getStorNode("Teams", name, "Members").getChildrenMap().entrySet().size();
 			else
 				players = 0;
 
@@ -67,19 +70,34 @@ public class PokeTeamsAPI {
 			uuid = Sponge.getServiceManager().provide(UserStorageService.class).get().get(name).get().getUniqueId().toString();
 			players = 0;
 
-			for (Map.Entry<Object, ? extends CommentedConfigurationNode> teams : ConfigManager
-					.getStorNode("Teams").getChildrenMap().entrySet()) {
+			for (Map.Entry<Object, ? extends CommentedConfigurationNode> teams : getStorNode("Teams").getChildrenMap().entrySet()) {
 
 				String teamTemp = teams.getKey().toString();
 
-				if(!ConfigManager.getStorNode("Teams", teamTemp, "Members", uuid).isVirtual()) {
+				if(!getStorNode("Teams", teamTemp, "Members", uuid).isVirtual()) {
 					team = teamTemp;
-					role = ConfigManager.getStorNode("Teams", teamTemp, "Members", uuid).getString();
-					players = ConfigManager.getStorNode("Teams", teamTemp, "Members").getChildrenMap().entrySet().size();
+					role = getStorNode("Teams", teamTemp, "Members", uuid).getString();
+					players = getStorNode("Teams", teamTemp, "Members").getChildrenMap().entrySet().size();
 					break;
 				}
 			}
 		}
+	}
+
+	/**
+	 * Note: These players may not be online so check the optional first
+	 * @return a list of all Users on this team
+	 */
+	public List<User> getAllMembers() {
+		UserStorageService service = Sponge.getServiceManager().provide(UserStorageService.class).get();
+
+		if(!teamExists())
+			return new ArrayList<>();
+
+		return getStorNode("Teams", team, "Members").getChildrenMap().entrySet().stream()
+				.map(key -> key.getKey().toString())
+				.map(uuid -> service.get(UUID.fromString(uuid)).get())
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -103,7 +121,7 @@ public class PokeTeamsAPI {
 	 */
 	public void deleteTeam() {
 		if(teamExists()) {
-			ConfigManager.getStorNode("Teams", team).setValue(null);
+			getStorNode("Teams", team).setValue(null);
 			role = team = null;
 			players = 0;
 		}
@@ -117,8 +135,8 @@ public class PokeTeamsAPI {
 	public void setRole(int newRole) {
 		if(inTeam()) {
 			role = Ranks.getEnum(newRole).getName();
-			ConfigManager.getStorNode("Teams", team, "Members", uuid).setValue(role);
-			ConfigManager.save();
+			getStorNode("Teams", team, "Members", uuid).setValue(role);
+			save();
 		}
 	}
 
@@ -129,8 +147,8 @@ public class PokeTeamsAPI {
 	 */
 	public void addTeamMember(CommandSource player, String rank) {
 		if(teamExists()) {
-			ConfigManager.getStorNode("Teams", team, "Members", ((Player) player).getUniqueId().toString()).setValue(rank);
-			ConfigManager.save();
+			getStorNode("Teams", team, "Members", ((Player) player).getUniqueId().toString()).setValue(rank);
+			save();
 		}
 	}
 
@@ -140,10 +158,10 @@ public class PokeTeamsAPI {
 	 * @param rank of the player to set at
 	 */
 	public void addTeamMember(String playerName, String rank) {
-		if(teamExists()) {
+		if (teamExists()) {
 			String playerUUID = Sponge.getServiceManager().provide(UserStorageService.class).get().get(playerName).get().getUniqueId().toString();
-			ConfigManager.getStorNode("Teams", team, "Members", playerUUID).setValue(rank);
-			ConfigManager.save();
+			getStorNode("Teams", team, "Members", playerUUID).setValue(rank);
+			save();
 		}
 	}
 
@@ -153,9 +171,9 @@ public class PokeTeamsAPI {
      */
 	public void kickPlayer(String playerName) {
         String playerUUID = Sponge.getServiceManager().provide(UserStorageService.class).get().get(playerName).get().getUniqueId().toString();
-        ConfigManager.getStorNode("Teams", team, "Members", playerUUID).setValue(null);
-        ConfigManager.save();
-        ChatUtils.removeChat(playerName);
+        getStorNode("Teams", team, "Members", playerUUID).setValue(null);
+        save();
+        ChatUtils.setChat(playerName, ChatTypes.PUBLIC);
         players -= 1;
     }
 
@@ -167,8 +185,8 @@ public class PokeTeamsAPI {
 	public boolean takeBal(int amount) {
 		if(teamExists()) {
 			if(getBal() - amount >= 0) {
-				ConfigManager.getStorNode("Teams", team, "Stats", "Bal").setValue(getBal() - amount);
-				ConfigManager.save();
+				getStorNode("Teams", team, "Stats", "Bal").setValue(getBal() - amount);
+				save();
 				return true;
 			}
 		}
@@ -182,8 +200,8 @@ public class PokeTeamsAPI {
 	 */
 	public void addLoss(int amount) {
 		if(teamExists()) {
-			ConfigManager.getStorNode("Teams", team, "Record", "Losses").setValue(getLosses() + amount);
-			ConfigManager.save();
+			getStorNode("Teams", team, "Record", "Losses").setValue(getLosses() + amount);
+			save();
 		}
 	}
 
@@ -194,8 +212,8 @@ public class PokeTeamsAPI {
 	 */
 	public void addWin(int amount) {
 		if(teamExists()) {
-			ConfigManager.getStorNode("Teams", team, "Record", "Wins").setValue(getWins() + amount);
-			ConfigManager.save();
+			getStorNode("Teams", team, "Record", "Wins").setValue(getWins() + amount);
+			save();
 		}
 	}
 	
@@ -206,8 +224,8 @@ public class PokeTeamsAPI {
 	 */
 	public void addAmountCaught(int amount) {
 		if(teamExists()) {
-			ConfigManager.getStorNode("Teams", team, "Stats", "Caught").setValue(getCaught() + amount);
-			ConfigManager.save();
+			getStorNode("Teams", team, "Stats", "Caught").setValue(getCaught() + amount);
+			save();
 		}
 	}
 
@@ -218,8 +236,8 @@ public class PokeTeamsAPI {
 	 */
 	public void addBal(int amount) {
 		if(teamExists()) {
-			ConfigManager.getStorNode("Teams", team, "Stats", "Bal").setValue(getBal() + amount);
-			ConfigManager.save();
+			getStorNode("Teams", team, "Stats", "Bal").setValue(getBal() + amount);
+			save();
 		}
 	}
 	
@@ -230,8 +248,8 @@ public class PokeTeamsAPI {
 	 */
 	public void addAmountKilled(int amount) {
 		if(teamExists()) {
-			ConfigManager.getStorNode("Teams", team, "Stats", "Kills").setValue(getKills() + amount);
-			ConfigManager.save();
+			getStorNode("Teams", team, "Stats", "Kills").setValue(getKills() + amount);
+			save();
 		}
 	}
 	
@@ -242,8 +260,8 @@ public class PokeTeamsAPI {
 	 */
 	public void addLegendsCaught(int amount) {
 		if(teamExists()) {
-			ConfigManager.getStorNode("Teams", team, "Stats", "Legends").setValue(getLegends() + amount);
-			ConfigManager.save();
+			getStorNode("Teams", team, "Stats", "Legends").setValue(getLegends() + amount);
+			save();
 		}
 	}
 	
@@ -254,8 +272,8 @@ public class PokeTeamsAPI {
 	 */
 	public void setTag(String tag) {
 		if(teamExists()) {
-			ConfigManager.getStorNode("Teams", team, "Tag").setValue(tag);
-			ConfigManager.save();
+			getStorNode("Teams", team, "Tag").setValue(tag);
+			save();
 		}
 	}
 
@@ -268,11 +286,11 @@ public class PokeTeamsAPI {
 	 */
 	public void setBase(double x, double y, double z, World world) {
 		if(teamExists()) {
-			ConfigManager.getStorNode("Teams", team, "Location", "X").setValue(x);
-			ConfigManager.getStorNode("Teams", team, "Location", "Y").setValue(y);
-			ConfigManager.getStorNode("Teams", team, "Location", "Z").setValue(z);
-			ConfigManager.getStorNode("Teams", team, "Location", "World").setValue(world.getUniqueId().toString());
-			ConfigManager.save();
+			getStorNode("Teams", team, "Location", "X").setValue(x);
+			getStorNode("Teams", team, "Location", "Y").setValue(y);
+			getStorNode("Teams", team, "Location", "Z").setValue(z);
+			getStorNode("Teams", team, "Location", "World").setValue(world.getUniqueId().toString());
+			save();
 		}
 	}
 
@@ -282,10 +300,10 @@ public class PokeTeamsAPI {
 	 */
 	public boolean setTeamName(String newName) {
 		if(teamExists()) {
-			Map<Object, ? extends CommentedConfigurationNode> teamCopy = ConfigManager.getStorNode("Teams", team).getChildrenMap();
-			ConfigManager.getStorNode("Teams", team).setValue(teamCopy);
-			ConfigManager.getStorNode("Teams", newName).setValue(null);
-			ConfigManager.save();
+			Map<Object, ? extends CommentedConfigurationNode> teamCopy = getStorNode("Teams", team).getChildrenMap();
+			getStorNode("Teams", team).setValue(teamCopy);
+			getStorNode("Teams", newName).setValue(null);
+			save();
 			team = newName;
 			return true;
 		}
@@ -315,13 +333,21 @@ public class PokeTeamsAPI {
 	public String getTranslatedRank() {
 		return role != null ? Ranks.getEnum(getRank()).getTranslatedName() : "";
 	}
-	
+
+    /**
+     *
+     * @return {@code true} if the user has any alliance permission in config based on their role
+     */
+    public boolean canAllianceCommands() {
+        return team != null && getConfNode("Team-Settings", "Roles", role, "Alliance-Commands").getBoolean();
+    }
+
 	/**
 	 * 
 	 * @return {@code true} if the user has the delete permission in config based on their role
 	 */
 	public boolean canDelete() {
-		return team != null && ConfigManager.getConfNode("Team-Settings", "Roles", role, "Delete").getBoolean();
+		return team != null && getConfNode("Team-Settings", "Roles", role, "Delete").getBoolean();
 	}
 	
 	/**
@@ -329,7 +355,7 @@ public class PokeTeamsAPI {
 	 * @return {@code true} if the user has the kick permission in config based on their role
 	 */
 	public boolean canKick() {
-		return team != null && ConfigManager.getConfNode("Team-Settings", "Roles", role, "Kick").getBoolean();
+		return team != null && getConfNode("Team-Settings", "Roles", role, "Kick").getBoolean();
 	}
 	
 	/**
@@ -337,7 +363,7 @@ public class PokeTeamsAPI {
 	 * @return {@code true} if the user has the promote permission in config based on their role
 	 */
 	public boolean canPromote() {
-		return team != null && ConfigManager.getConfNode("Team-Settings", "Roles", role, "Promote").getBoolean();
+		return team != null && getConfNode("Team-Settings", "Roles", role, "Promote").getBoolean();
 	}
 	
 	/**
@@ -345,7 +371,7 @@ public class PokeTeamsAPI {
 	 * @return {@code true} if the user has the demote permission in config based on their role
 	 */
 	public boolean canDemote() {
-		return team != null && ConfigManager.getConfNode("Team-Settings", "Roles", role, "Demote").getBoolean();
+		return team != null && getConfNode("Team-Settings", "Roles", role, "Demote").getBoolean();
 	}
 	
 	/**
@@ -353,7 +379,7 @@ public class PokeTeamsAPI {
 	 * @return {@code true} if the user has the invite permission in config based on their role
 	 */
 	public boolean canInvite() {
-		return team != null && ConfigManager.getConfNode("Team-Settings", "Roles", role, "Invite").getBoolean();
+		return team != null && getConfNode("Team-Settings", "Roles", role, "Invite").getBoolean();
 	}
 	
 	/**
@@ -361,7 +387,7 @@ public class PokeTeamsAPI {
 	 * @return {@code true} if the user has the base-set permission in config based on their role
 	 */
 	public boolean canSetBase() {
-		return role != null && ConfigManager.getConfNode("Team-Settings", "Roles", role, "Base-Set").getBoolean();
+		return role != null && getConfNode("Team-Settings", "Roles", role, "Base-Set").getBoolean();
 	}
 		
 	/**
@@ -369,7 +395,7 @@ public class PokeTeamsAPI {
 	 * @return {@code true} if the user has the base-teleport permission in config based on their role
 	 */
 	public boolean canTeleport() {
-		return role != null && ConfigManager.getConfNode("Team-Settings", "Roles", role, "Base-Teleport").getBoolean();
+		return role != null && getConfNode("Team-Settings", "Roles", role, "Base-Teleport").getBoolean();
 	}
 	
 	/**
@@ -377,7 +403,7 @@ public class PokeTeamsAPI {
 	 * @return {@code true} if the user has the tag-set permission in config based on their role
 	 */
 	public boolean canSetTag() {
-		return role != null && ConfigManager.getConfNode("Team-Settings", "Roles", role, "Tag-Set").getBoolean();
+		return role != null && getConfNode("Team-Settings", "Roles", role, "Tag-Set").getBoolean();
 	}
 	
 	/**
@@ -385,7 +411,7 @@ public class PokeTeamsAPI {
 	 * @return {@code true} if the user has the bank-add permission in config based on their role
 	 */
 	public boolean canAddBank() {
-		return role != null && ConfigManager.getConfNode("Team-Settings", "Roles", role, "Bank-Add").getBoolean();
+		return role != null && getConfNode("Team-Settings", "Roles", role, "Bank-Add").getBoolean();
 	}
 
 	/**
@@ -393,7 +419,7 @@ public class PokeTeamsAPI {
 	 * @return {@code true} if the user has the bank-take permission in config based on their role
 	 */
 	public boolean canTakeBank() {
-		return role != null && ConfigManager.getConfNode("Team-Settings", "Roles", role, "Bank-Take").getBoolean();
+		return role != null && getConfNode("Team-Settings", "Roles", role, "Bank-Take").getBoolean();
 	}
 
 	/**
@@ -401,7 +427,7 @@ public class PokeTeamsAPI {
 	 * @return {@code true} if the user has the queue-join permission in config based on their role
 	 */
 	public boolean canJoinQueue() {
-		return role != null && ConfigManager.getConfNode("Team-Settings", "Roles", role, "queue-Join").getBoolean();
+		return role != null && getConfNode("Team-Settings", "Roles", role, "queue-Join").getBoolean();
 	}
 	
 	/**
@@ -409,7 +435,7 @@ public class PokeTeamsAPI {
 	 * @return {@code true} if the user has a base location saved in the config
 	 */
 	public boolean hasBase() {
-		return !ConfigManager.getStorNode("Teams", team, "Location").isVirtual();
+		return !getStorNode("Teams", team, "Location").isVirtual();
 	}
 
 	/**
@@ -417,7 +443,7 @@ public class PokeTeamsAPI {
 	 * @return {@code double} value of the X coordinate of the user's base  
 	 */
 	public double getX() {
-		return team != null ? ConfigManager.getStorNode("Teams", team, "Location", "X").getDouble() : 0.0;
+		return team != null ? getStorNode("Teams", team, "Location", "X").getDouble() : 0.0;
 	}
 	
 	/**
@@ -425,7 +451,7 @@ public class PokeTeamsAPI {
 	 * @return {@code double} value of the Y coordinate of the user's base  
 	 */
 	public double getY() {
-		return team != null ? ConfigManager.getStorNode("Teams", team, "Location", "Y").getDouble() : 0.0;
+		return team != null ? getStorNode("Teams", team, "Location", "Y").getDouble() : 0.0;
 	}
 
 	/**
@@ -433,7 +459,7 @@ public class PokeTeamsAPI {
 	 * @return {@code double} value of the Z coordinate of the user's base  
 	 */
 	public double getZ() {
-		return team != null ? ConfigManager.getStorNode("Teams", team, "Location", "Z").getDouble() : 0.0;
+		return team != null ? getStorNode("Teams", team, "Location", "Z").getDouble() : 0.0;
 	}
 	
 	/**
@@ -441,7 +467,7 @@ public class PokeTeamsAPI {
 	 * @return {@code int} value of the the team's win record
 	 */
 	public int getWins() {
-		return team != null ? ConfigManager.getStorNode("Teams", team, "Record", "Wins").getInt() : 0;
+		return team != null ? getStorNode("Teams", team, "Record", "Wins").getInt() : 0;
 	}
 	
 	/**
@@ -449,7 +475,7 @@ public class PokeTeamsAPI {
 	 * @return {@code int} value of the the team's loss record
 	 */
 	public int getLosses() {
-		return team != null ? ConfigManager.getStorNode("Teams", team, "Record", "Losses").getInt() : 0;
+		return team != null ? getStorNode("Teams", team, "Record", "Losses").getInt() : 0;
 	}
 	
 	/**
@@ -470,7 +496,7 @@ public class PokeTeamsAPI {
 	 * @return {@code int} value of the the team's catching record
 	 */
 	public int getCaught() {
-		return team != null ? ConfigManager.getStorNode("Teams", team, "Stats", "Caught").getInt() : 0;
+		return team != null ? getStorNode("Teams", team, "Stats", "Caught").getInt() : 0;
 	}
 	
 	/**
@@ -478,7 +504,7 @@ public class PokeTeamsAPI {
 	 * @return {@code int} value of the the team's pokemon fainting record
 	 */
 	public int getKills() {
-		return team != null ? ConfigManager.getStorNode("Teams", team, "Stats", "Kills").getInt() : 0;
+		return team != null ? getStorNode("Teams", team, "Stats", "Kills").getInt() : 0;
 	}
 
 	/**
@@ -486,7 +512,7 @@ public class PokeTeamsAPI {
 	 * @return {@code int} value of the the team's legendary catch record
 	 */
 	public int getLegends() {
-		return team != null ? ConfigManager.getStorNode("Teams", team, "Stats", "Legends").getInt() : 0;
+		return team != null ? getStorNode("Teams", team, "Stats", "Legends").getInt() : 0;
 	}
 	
 	/**
@@ -502,7 +528,7 @@ public class PokeTeamsAPI {
 	 * @return {@code int} value of how many members there can be in a team 
 	 */
 	public int getMaxPlayers() {
-		return ConfigManager.getConfNode("Team-Settings", "Max-Members").getInt();
+		return getConfNode("Team-Settings", "Max-Members").getInt();
 	}
 	
 	/**
@@ -510,7 +536,7 @@ public class PokeTeamsAPI {
 	 * @return {@code String} name of the team 
 	 */
 	public String getTeam() {
-		return team != null ? team : "";
+		return teamExists() ? team : getConfNode("Placeholder-Settings", "Default-TeamName").getString();
 	}
 	
 	/**
@@ -518,11 +544,11 @@ public class PokeTeamsAPI {
 	 * @return {@code String} representation of the team's tag. Will return the default if no tag is set
 	 */
 	public String getTag() {
-		if(!ConfigManager.getStorNode("Teams", team, "Tag").isVirtual())
-			return ConfigManager.getStorNode("Teams", team, "Tag").getString();
+		if(!getStorNode("Teams", team, "Tag").isVirtual())
+			return getStorNode("Teams", team, "Tag").getString();
 		else 
 			return Texts.getString(PlaceholderAPI.getInstance()
-									.replace(ConfigManager.getConfNode("Placeholder-Settings", "Default-TeamTag").getString(), team));
+									.replace(getConfNode("Placeholder-Settings", "Default-TeamTag").getString(), team));
 	}
 
 	/**
@@ -530,11 +556,11 @@ public class PokeTeamsAPI {
 	 * @return {@code String} representation of a player's tag with formatting from config
 	 */
 	public String getFormattedTeamTag() {
-		if(!ConfigManager.getStorNode("Teams", team, "Tag").isVirtual())
-			return ConfigManager.getConfNode("Placeholder-Settings", "Formatted-TeamTag").getString()
+		if(!getStorNode("Teams", team, "Tag").isVirtual())
+			return getConfNode("Placeholder-Settings", "Formatted-TeamTag").getString()
 				.replaceAll("%teamtag%", getTag());
 		else
-			return ConfigManager.getConfNode("Placeholder-Settings", "Default-TeamTag").getString();
+			return getConfNode("Placeholder-Settings", "Default-TeamTag").getString();
 	}
 	
 	/**
@@ -543,7 +569,7 @@ public class PokeTeamsAPI {
 	 * 
 	 */
 	public int getBal() { 
-		return team != null ? ConfigManager.getStorNode("Teams", team, "Stats", "Bal").getInt() : 0;
+		return team != null ? getStorNode("Teams", team, "Stats", "Bal").getInt() : 0;
 	}
 
 	/**
@@ -551,11 +577,11 @@ public class PokeTeamsAPI {
 	 * @return the rating of a team based on several settings and records
 	 */
 	public double getRating() {
-		double highCaught = ConfigManager.getConfNode("Leaderboard-Settings", "CAUGHT").getInt();
-		double highLegend = ConfigManager.getConfNode("Leaderboard-Settings", "LEGENDS").getInt();
-		double highKills = ConfigManager.getConfNode("Leaderboard-Settings", "KILLS").getInt();
-		double highBal = ConfigManager.getConfNode("Leaderboard-Settings", "BAL").getInt();
-		double highRecord = ConfigManager.getConfNode("Leaderboard-Settings", "RECORD").getInt();
+		double highCaught = getConfNode("Leaderboard-Settings", "CAUGHT").getInt();
+		double highLegend = getConfNode("Leaderboard-Settings", "LEGENDS").getInt();
+		double highKills = getConfNode("Leaderboard-Settings", "KILLS").getInt();
+		double highBal = getConfNode("Leaderboard-Settings", "BAL").getInt();
+		double highRecord = getConfNode("Leaderboard-Settings", "RECORD").getInt();
 
 		double totCaught = highCaught >= getCaught() ? ((double) getCaught() / highCaught) * 100.0 : 100.0;
 		double totLegend = highLegend >= getLegends() ? ((double) getLegends() / highLegend) * 100.0 : 100.0;
