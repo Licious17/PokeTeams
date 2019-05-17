@@ -32,7 +32,7 @@ public class Set implements CommandExecutor {
 		newRole = new PokeTeamsAPI(args.<String>getOne(Text.of("team")).get(), true);
 
 		if(role.inTeam())
-			return ErrorCheck.test(src, ErrorMessages.ALREADY_IN_TEAM);
+			return ErrorCheck.test(src, ErrorMessages.OTHER_IN_TEAM);
 		if(!newRole.teamExists())
 			return ErrorCheck.test(src, ErrorMessages.NOT_EXISTS);
 
