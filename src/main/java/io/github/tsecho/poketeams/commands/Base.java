@@ -1,6 +1,5 @@
 package io.github.tsecho.poketeams.commands;
 
-import io.github.tsecho.poketeams.apis.AllianceAPI;
 import io.github.tsecho.poketeams.commands.admin.AdminBase;
 import io.github.tsecho.poketeams.commands.alliance.AllianceBase;
 import io.github.tsecho.poketeams.commands.banks.BankBase;
@@ -36,6 +35,8 @@ public class Base implements CommandExecutor{
 		addIfPermissible(Permissions.CREATE, Texts.of("&c/teams create <team>"));
 		addIfPermissible(Permissions.DELETE, Texts.of("&c/teams delete"));
 		addIfPermissible(Permissions.INFO, Texts.of("&c/teams info [<team>]"));
+		addIfPermissible(Permissions.PROMOTE, Texts.of("&c/teams promote <player>"));
+		addIfPermissible(Permissions.DEMOTE, Texts.of("&c/teams demote <player>"));
 		addIfPermissible(Permissions.INVITE, Texts.of("&c/teams invite"));
 		addIfPermissible(Permissions.KICK, Texts.of("&c/teams kick <player>"));
 		addIfPermissible(Permissions.TAG, Texts.of("&c/teams tag <tag>"));
