@@ -39,8 +39,9 @@ public class Promote implements CommandExecutor {
 			return ErrorCheck.test(src, ErrorMessages.INSUFFICIENT_RANK);
 		if(roleOther.getPlace() + 1 >= 5)
 			return ErrorCheck.test(src, ErrorMessages.CANT_PROMOTE);
-		if((role.getPlace() <= (roleOther.getPlace() + 1)) || role.getPlace() != 4)
-			return ErrorCheck.test(src, ErrorMessages.INSUFFICIENT_RANK);
+		if(role.getPlace() <= (roleOther.getPlace() + 1))
+			if(role.getPlace() != 4)
+				return ErrorCheck.test(src, ErrorMessages.INSUFFICIENT_RANK);
 
 		if(roleOther.getPlace() == 3 && role.getPlace() == 4) {
 
