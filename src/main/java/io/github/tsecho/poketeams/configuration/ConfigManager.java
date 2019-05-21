@@ -25,6 +25,8 @@ public class ConfigManager {
 		lang = dir.resolve(FILES[2]);
 		storage = dir.resolve(FILES[3]);
 		alliances = dir.resolve(FILES[4]);
+		load();
+		update();
 	}
 	
 	public static void load() {
@@ -32,9 +34,9 @@ public class ConfigManager {
 			if(!Files.exists(dir))
 				Files.createDirectory(dir);
 
-			PokeTeams.getContainer().getAsset(FILES[0]).get().copyToFile(config, false, true);
-			PokeTeams.getContainer().getAsset(FILES[1]).get().copyToFile(censor, false, true);
-			PokeTeams.getContainer().getAsset(FILES[2]).get().copyToFile(lang, false, true);
+			PokeTeams.getInstance().getContainer().getAsset(FILES[0]).get().copyToFile(config, false, true);
+			PokeTeams.getInstance().getContainer().getAsset(FILES[1]).get().copyToFile(censor, false, true);
+			PokeTeams.getInstance().getContainer().getAsset(FILES[2]).get().copyToFile(lang, false, true);
 
 			confLoad = HoconConfigurationLoader.builder().setPath(config).build();
 			storLoad = HoconConfigurationLoader.builder().setPath(storage).build();
@@ -49,7 +51,7 @@ public class ConfigManager {
 			allyNode = allyLoad.load();
 				
 		} catch(IOException e) {
-			PokeTeams.getLogger().error("Error loading up PokeTeams Configuration"); e.printStackTrace();
+			PokeTeams.getInstance().getLogger().error("Error loading up PokeTeams Configuration"); e.printStackTrace();
 		}
 
 		save();
@@ -64,26 +66,26 @@ public class ConfigManager {
 			langLoad.save(langNode);
 			allyLoad.save(allyNode);
 		} catch (IOException e) {
-			PokeTeams.getLogger().error("Error saving PokeTeams Configuration"); e.printStackTrace();
+			PokeTeams.getInstance().getLogger().error("Error saving PokeTeams Configuration"); e.printStackTrace();
 		}
 	}
 
 	public static void update() {
 		try {
 			confNode.mergeValuesFrom(HoconConfigurationLoader.builder()
-					.setURL(PokeTeams.getContainer().getAsset(FILES[0]).get().getUrl())
+					.setURL(PokeTeams.getInstance().getContainer().getAsset(FILES[0]).get().getUrl())
 					.build()
 					.load(ConfigurationOptions.defaults()));
 
 			langNode.mergeValuesFrom(HoconConfigurationLoader.builder()
-					.setURL(PokeTeams.getContainer().getAsset(FILES[2]).get().getUrl())
+					.setURL(PokeTeams.getInstance().getContainer().getAsset(FILES[2]).get().getUrl())
 					.build()
 					.load(ConfigurationOptions.defaults()));
 
 			save();
 
 		} catch (IOException e) {
-			PokeTeams.getLogger().error("Error updating up PokeTeams Configuration"); e.printStackTrace();
+			PokeTeams.getInstance().getLogger().error("Error updating up PokeTeams Configuration"); e.printStackTrace();
 		}
 	}
 

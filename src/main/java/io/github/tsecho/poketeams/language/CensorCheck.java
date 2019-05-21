@@ -75,7 +75,7 @@ public class CensorCheck {
 	
 	private void partialCensor() {
 		for(String swear : words)
-			if (word.toLowerCase().contains(swear.toLowerCase()))
+			if (word.toLowerCase().contains(swear.toLowerCase().trim()))
 				FAILED = true;
 	}
 	

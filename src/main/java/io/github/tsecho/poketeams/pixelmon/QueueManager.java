@@ -115,7 +115,7 @@ public class QueueManager {
 		} else {
 			a.setLocation(WorldInfo.getPosA(), WorldInfo.getWorldUUID());
 			b.setLocation(WorldInfo.getPosB(), WorldInfo.getWorldUUID());
-			PokeTeams.getLogger().error("The world name in the configuration is not a valid world name!");
+			PokeTeams.getInstance().getLogger().error("The world name in the configuration is not a valid world name!");
 		}
 	}
 }

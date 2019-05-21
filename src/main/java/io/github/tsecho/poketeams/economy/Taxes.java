@@ -33,20 +33,20 @@ public class Taxes {
 	}
 	
 	private static void loopTeams(boolean tax) {
-		for (Map.Entry<Object, ? extends CommentedConfigurationNode> teams : ConfigManager.getStorNode("Teams").getChildrenMap().entrySet()) {
-			
-			team = teams.getKey().toString();
+		ConfigManager.getStorNode("Teams").getChildrenMap().forEach((key, value) -> {
+
+			team = key.toString();
 			teamBal = ConfigManager.getStorNode("Teams", team, "Stats", "Bal").getInt();
 			cost = ConfigManager.getConfNode("Team-Settings", "Money", "Tax").getInt();
 
-			if(cantPay())
+			if (cantPay())
 				if (tax)
 					sendDeletion();
 				else
 					sendWarning();
-			else if(tax)
+			else if (tax)
 				takeMoney();
-		}
+		});
 	}
 
 	private static void takeMoney() {

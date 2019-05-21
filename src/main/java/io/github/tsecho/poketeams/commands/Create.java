@@ -70,7 +70,7 @@ public class Create implements CommandExecutor {
 
 			} else {
 				src.sendMessage(Texts.of("&cERROR: Economy is not enabled. Please alert an admin or server owner"));
-				PokeTeams.getLogger().error("Economy plugin is not installed. Please install one for player's to use");
+				PokeTeams.getInstance().getLogger().error("Economy plugin is not installed. Please install one for player's to use");
 			}
 
 		} else {

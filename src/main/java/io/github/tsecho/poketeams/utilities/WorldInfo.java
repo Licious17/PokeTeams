@@ -2,17 +2,18 @@ package io.github.tsecho.poketeams.utilities;
 
 import com.flowpowered.math.vector.Vector3d;
 import io.github.tsecho.poketeams.configuration.ConfigManager;
+import lombok.Getter;
 import org.spongepowered.api.Sponge;
 
 import java.util.UUID;
 
 public class WorldInfo {
-	
-	private static UUID WORLD_UUID;
-	private static Vector3d posA, posB;
+
+	@Getter private static UUID worldUUID;
+	@Getter private static Vector3d posA, posB;
 	
 	public static void init() {
-		WORLD_UUID = Sponge.getServer().getDefaultWorld().get().getUniqueId();
+		worldUUID = Sponge.getServer().getDefaultWorld().get().getUniqueId();
 	}
 
 	public static void refreshPos() {
@@ -25,18 +26,6 @@ public class WorldInfo {
 
 		posA = new Vector3d(x1,y1,z1);
 		posB = new Vector3d(x2,y2,z2);
-	}
-
-	public static Vector3d getPosA() {
-		return posA;
-	}
-
-	public static Vector3d getPosB() {
-		return posB;
-	}
-
-	public static UUID getWorldUUID() {
-		return WORLD_UUID;
 	}
 
 	public static boolean useArena() {

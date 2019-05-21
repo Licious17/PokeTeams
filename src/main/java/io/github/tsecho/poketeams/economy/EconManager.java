@@ -19,8 +19,8 @@ public class EconManager {
     private Currency currency;
     private UniqueAccount account;
     private final Cause CAUSE = Cause.of(EventContext.builder()
-                                     .add(EventContextKeys.PLUGIN, PokeTeams.getContainer())
-                                     .build(), PokeTeams.getContainer());
+                                     .add(EventContextKeys.PLUGIN, PokeTeams.getInstance().getContainer())
+                                     .build(), PokeTeams.getInstance().getContainer());
 
     public EconManager(Player player) {
         Sponge.getServiceManager().provide(EconomyService.class).ifPresent(service -> {

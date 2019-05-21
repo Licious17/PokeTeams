@@ -3,6 +3,7 @@ package io.github.tsecho.poketeams.apis;
 import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.language.Texts;
 import io.github.tsecho.poketeams.PokeTeams;
+import lombok.Getter;
 import me.rojo8399.placeholderapi.Listening;
 import me.rojo8399.placeholderapi.Placeholder;
 import me.rojo8399.placeholderapi.PlaceholderService;
@@ -15,9 +16,9 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 @Listening
 public class PlaceholderAPI {
 
-	public static boolean ENABLED = false;
+	@Getter private PlaceholderService service;
+	@Getter private boolean enabled = false;
 	private static PlaceholderAPI INSTANCE;
-	private PlaceholderService placeholders;
 
 	private PlaceholderAPI() {}
 
@@ -26,7 +27,7 @@ public class PlaceholderAPI {
 			INSTANCE = new PlaceholderAPI();
 
 			if(Sponge.getPluginManager().getPlugin("placeholderapi").isPresent()) {
-				INSTANCE.placeholders = Sponge.getServiceManager().provideUnchecked(PlaceholderService.class);
+				INSTANCE.service = Sponge.getServiceManager().provideUnchecked(PlaceholderService.class);
 				INSTANCE.load();
 			}
 		}
@@ -36,8 +37,8 @@ public class PlaceholderAPI {
 
 	private void load() {
 
-		ENABLED = true;
-		INSTANCE.placeholders.loadAll(INSTANCE, PokeTeams.getInstance()).stream().map(builder -> {
+		enabled = true;
+		INSTANCE.service.loadAll(INSTANCE, PokeTeams.getInstance()).stream().map(builder -> {
 
 			switch(builder.getId()) {
 				case "teamname":
@@ -80,11 +81,11 @@ public class PlaceholderAPI {
 
 	/**
 	 * This will try to use PAPI first but will fallback if needed
-	 * @return a text with all replaced placeholders
+	 * @return a text with all replaced service
 	 */
 	public Text replace(String s, CommandSource src) {
-		if(ENABLED)
-			return placeholders.replaceSourcePlaceholders(Texts.of(s), src);
+		if(enabled)
+			return service.replaceSourcePlaceholders(Texts.of(s), src);
 		else
 			return TextSerializers.FORMATTING_CODE.deserialize(s
 				.replaceAll("_", "")
@@ -105,7 +106,7 @@ public class PlaceholderAPI {
 
 	/**
 	 * This will use a the string as the replacement
-	 * @return a text with all replaced placeholders
+	 * @return a text with all replaced service
 	 */
 	public Text replace(String s, String src) {
 		PokeTeamsAPI role = new PokeTeamsAPI(src, false);
@@ -188,9 +189,5 @@ public class PlaceholderAPI {
 	@Placeholder(id = "teamalliance")
 	public String getAlliance(@Source CommandSource src) {
 		return String.valueOf(new AllianceAPI(new PokeTeamsAPI(src)).getAlliance());
-	}
-
-	public PlaceholderService getService() {
-		return placeholders;
 	}
 }

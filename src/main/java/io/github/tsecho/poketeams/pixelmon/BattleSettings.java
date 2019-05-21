@@ -35,20 +35,10 @@ public class BattleSettings {
     }
 
     private void setupClauses() {
-        if(ConfigManager.getConfNode("Battle-Settings", "Competitive", "Clauses", "SleepClause").getBoolean())
-            clauses.add(BattleClauseRegistry.getClauseRegistry().getClause(BattleClauseRegistry.SLEEP_CLAUSE));
-
-        if(ConfigManager.getConfNode("Battle-Settings", "Competitive", "Clauses", "BagClause").getBoolean())
-            clauses.add(BattleClauseRegistry.getClauseRegistry().getClause(BattleClauseRegistry.BAG_CLAUSE));
-
-        if(ConfigManager.getConfNode("Battle-Settings", "Competitive", "Clauses", "ForfeitClause").getBoolean())
-            clauses.add(BattleClauseRegistry.getClauseRegistry().getClause(BattleClauseRegistry.FORFEIT_CLAUSE));
-
-        if(ConfigManager.getConfNode("Battle-Settings", "Competitive", "Clauses", "InverseBattle").getBoolean())
-            clauses.add(BattleClauseRegistry.getClauseRegistry().getClause(BattleClauseRegistry.INVERSE_BATTLE));
-
-        if(ConfigManager.getConfNode("Battle-Settings", "Competitive", "Clauses", "SkyBattle").getBoolean())
-            clauses.add(BattleClauseRegistry.getClauseRegistry().getClause(BattleClauseRegistry.SKY_BATTLE));
+        ConfigManager.getConfNode("Battle-Settings", "Competitive", "Clauses").getChildrenMap().entrySet().stream()
+                .filter(node -> node.getValue().getBoolean())
+                .map(node -> node.getKey().toString().toLowerCase())
+                .forEach(clause -> clauses.add(BattleClauseRegistry.getClauseRegistry().getClause(clause)));
     }
 
     /**
