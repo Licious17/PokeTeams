@@ -1,33 +1,32 @@
 package io.github.tsecho.poketeams.pixelmon;
 
+import com.pixelmonmod.pixelmon.Pixelmon;
+import com.pixelmonmod.pixelmon.battles.BattleRegistry;
+import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
+import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
+import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
+import io.github.tsecho.poketeams.PokeTeams;
+import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
+import io.github.tsecho.poketeams.configuration.ConfigManager;
+import io.github.tsecho.poketeams.enums.Messages.ErrorMessages;
+import io.github.tsecho.poketeams.enums.Messages.QueueMessages;
+import io.github.tsecho.poketeams.utilities.Utils;
+import io.github.tsecho.poketeams.utilities.WorldInfo;
+import lombok.Getter;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.scheduler.Task;
+import org.spongepowered.api.world.World;
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
-import io.github.tsecho.poketeams.configuration.ConfigManager;
-import io.github.tsecho.poketeams.enums.Messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.Messages.QueueMessages;
-import io.github.tsecho.poketeams.utilities.WorldInfo;
-import io.github.tsecho.poketeams.utilities.Utils;
-import org.spongepowered.api.Sponge;
-import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.scheduler.Task;
-
-import com.pixelmonmod.pixelmon.Pixelmon;
-import com.pixelmonmod.pixelmon.battles.BattleRegistry;
-import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
-import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
-
-import io.github.tsecho.poketeams.PokeTeams;
-import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
-import org.spongepowered.api.world.World;
-
 public class QueueManager {
 
-	public static ArrayList<String> queue = new ArrayList<String>();
+	@Getter private static ArrayList<String> queue = new ArrayList();
 	private static final Random RANDOM = new Random();
 	private String playerName1, playerName2;
 
@@ -65,7 +64,7 @@ public class QueueManager {
 			
 				Task.builder()
 					.delay(5, TimeUnit.SECONDS)
-					.execute(() -> forceBattle())
+					.execute(this::forceBattle)
 					.submit(PokeTeams.getInstance());
 			}			
 		}

@@ -37,25 +37,25 @@ public class Join implements CommandExecutor{
 			return ErrorCheck.test(src, ErrorMessages.NOT_IN_TEAM);
 		if(!role.canJoinQueue())
 			return ErrorCheck.test(src, ErrorMessages.INSUFFICIENT_RANK);
-		if(QueueManager.queue.contains(src.getName()))
+		if(QueueManager.getQueue().contains(src.getName()))
 			return ErrorCheck.test(src, QueueMessages.ALREADY_IN_QUEUE);
 
-		if(ConfigManager.getConfNode("Battle-Settings", "queue-Fee", "Enabled").getBoolean()) {
+		if(ConfigManager.getConfNode("Battle-Settings", "Queue-Fee", "Enabled").getBoolean()) {
 
 			EconManager econ = new EconManager((Player) src);
 
 			if(econ.isEnabled()) {
 
-				if(QueueManager.queue.contains(src.getName()))
+				if(QueueManager.getQueue().contains(src.getName()))
 					return ErrorCheck.test(src, QueueMessages.ALREADY_IN_QUEUE);
 
 				if(econ.enterQueue().getResult() != ResultType.SUCCESS)
 					return ErrorCheck.test(src, ErrorMessages.INSUFFICIENT_FUNDS);
 
 				src.sendMessage(Texts.of(QueueMessages.ADDED_QUEUE_COST.getString()
-						.replaceAll("%price%", String.valueOf(ConfigManager.getConfNode("Battle-Settings", "queue-Fee", "Price").getInt())), src));
+						.replaceAll("%price%", String.valueOf(ConfigManager.getConfNode("Battle-Settings", "Queue-Fee", "Price").getInt())), src));
 
-				QueueManager.queue.add(src.getName());
+				QueueManager.getQueue().add(src.getName());
 
 			} else {
 				src.sendMessage(Texts.of("&cEconomy plugin is not installed! Please contact an admin with this message"));
@@ -63,7 +63,7 @@ public class Join implements CommandExecutor{
 			}
 
 		} else {
-			QueueManager.queue.add(src.getName());
+			QueueManager.getQueue().add(src.getName());
 			src.sendMessage(QueueMessages.ADDED_QUEUE.getText(src));
 		}
 		

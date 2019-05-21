@@ -18,8 +18,6 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.util.TypeTokens;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static io.github.tsecho.poketeams.configuration.ConfigManager.getConfNode;
@@ -97,15 +95,14 @@ public class PlayerBattleListener {
 	private Optional<Player[]> getParticipants(ImmutableMap<BattleParticipant, BattleResults> results) {
 		Player[] participants = new Player[2];
 
-		results.entrySet().forEach(entry -> {
-			if (entry.getValue() == BattleResults.VICTORY) {
-				participants[0] = ((Player) entry.getKey().getEntity());
-			} else if (entry.getValue() == BattleResults.DEFEAT) {
-				participants[1] = ((Player) entry.getKey().getEntity());
-			}
+		results.forEach((participant, type) -> {
+			if (type == BattleResults.VICTORY)
+				participants[0] = ((Player) participant.getEntity());
+			else if (type == BattleResults.DEFEAT)
+				participants[1] = ((Player) participant.getEntity());
 		});
 
-		if(participants.length == 2)
+		if(participants[0] != null && participants[1] != null)
         	return Optional.of(participants);
 		return Optional.empty();
 	}

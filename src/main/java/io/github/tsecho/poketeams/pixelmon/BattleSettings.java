@@ -14,7 +14,7 @@ public class BattleSettings {
     private BattleRules rules;
 
     public BattleSettings() {
-        clauses = new ArrayList();
+        clauses = new ArrayList<>();
         rules = new BattleRules();
         setupRules();
         setupClauses();
@@ -39,6 +39,7 @@ public class BattleSettings {
                 .filter(node -> node.getValue().getBoolean())
                 .map(node -> node.getKey().toString().toLowerCase())
                 .forEach(clause -> clauses.add(BattleClauseRegistry.getClauseRegistry().getClause(clause)));
+        rules.setNewClauses(clauses);
     }
 
     /**

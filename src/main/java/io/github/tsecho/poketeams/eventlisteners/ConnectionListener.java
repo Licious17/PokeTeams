@@ -13,7 +13,7 @@ public class ConnectionListener {
     @Listener
     public void onLeave(ClientConnectionEvent.Disconnect e, @Root Player player) {
         ChatUtils.setChat(player.getName(), ChatTypes.PUBLIC);
-        if(QueueManager.queue.contains(player.getName())) QueueManager.queue.remove(player.getName());
+        if(QueueManager.getQueue().contains(player.getName())) QueueManager.getQueue().remove(player.getName());
     }
 
     @Listener

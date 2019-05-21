@@ -20,10 +20,10 @@ public class Leave implements CommandExecutor {
 
 		if(!(src instanceof Player))
 			return ErrorCheck.test(src, TechnicalMessages.NOT_PLAYER);
-		if(!QueueManager.queue.contains(src.getName()))
+		if(!QueueManager.getQueue().contains(src.getName()))
 			return ErrorCheck.test(src, QueueMessages.NOT_IN_QUEUE);
 
-		QueueManager.queue.remove(src.getName());
+		QueueManager.getQueue().remove(src.getName());
 		src.sendMessage(QueueMessages.LEAVE_QUEUE.getText(src));
 
 		return CommandResult.success();

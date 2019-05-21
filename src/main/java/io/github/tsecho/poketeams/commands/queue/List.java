@@ -20,16 +20,16 @@ public class List implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		
-		ArrayList<Text> contents = new ArrayList<Text>();
+		ArrayList<Text> contents = new ArrayList<>();
 		
 		int num = 1;
-		for(String i : QueueManager.queue) {
+		for(String i : QueueManager.getQueue()) {
 			contents.add(TextSerializers.FORMATTING_CODE.deserialize("&b" + num + ".) " + i));
 			num++;
 		}
 		
 		PaginationList.builder()
-			.title(Text.of(TextColors.YELLOW, "queue List"))
+			.title(Text.of(TextColors.YELLOW, "Queue List"))
 			.padding(Text.of(TextColors.GREEN, "="))
 			.linesPerPage(12)
 			.contents(contents)
