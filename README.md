@@ -1,6 +1,6 @@
 # PokeTeams
 
-## Wiki
+## Download
 
 _Download can be found on [the ore versions page](https://ore.spongepowered.org/thesilentecho/PokeTeams/versions)_
 
