@@ -34,6 +34,9 @@ public class CensorCheck {
 	 */
 	public boolean failsCensor(boolean isTag) {
 
+		if(word.contains("$"))
+			FAILED = true;
+
 		if(!isTag && ConfigManager.getConfNode("Team-Settings", "Name", "Use-Censor").getBoolean())
 			if (ConfigManager.getCensorNode("Partial-Censor").getBoolean())
 				partialCensor();
