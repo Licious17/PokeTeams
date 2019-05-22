@@ -1,7 +1,7 @@
 package io.github.tsecho.poketeams.commands;
 
-import io.github.tsecho.poketeams.enums.Messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.Messages.SuccessMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.language.Texts;
 import io.github.tsecho.poketeams.utilities.Permissions;

@@ -3,12 +3,13 @@ package io.github.tsecho.poketeams.eventlisteners;
 import com.google.common.collect.ImmutableMap;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
+import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
 import com.pixelmonmod.pixelmon.enums.battle.BattleResults;
 import io.github.tsecho.poketeams.PokeTeams;
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
 import io.github.tsecho.poketeams.economy.EconManager;
-import io.github.tsecho.poketeams.enums.Messages.QueueMessages;
-import io.github.tsecho.poketeams.enums.Messages.SuccessMessages;
+import io.github.tsecho.poketeams.enums.messages.QueueMessages;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
 import io.github.tsecho.poketeams.language.Texts;
 import io.github.tsecho.poketeams.utilities.Utils;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -96,10 +97,11 @@ public class PlayerBattleListener {
 		Player[] participants = new Player[2];
 
 		results.forEach((participant, type) -> {
-			if (type == BattleResults.VICTORY)
-				participants[0] = ((Player) participant.getEntity());
-			else if (type == BattleResults.DEFEAT)
-				participants[1] = ((Player) participant.getEntity());
+			if(participant instanceof PlayerParticipant)
+				if(type == BattleResults.VICTORY)
+					participants[0] = ((Player) participant.getEntity());
+				else if(type == BattleResults.DEFEAT)
+					participants[1] = ((Player) participant.getEntity());
 		});
 
 		if(participants[0] != null && participants[1] != null)

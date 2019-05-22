@@ -2,9 +2,9 @@ package io.github.tsecho.poketeams.commands.queue;
 
 import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.economy.EconManager;
-import io.github.tsecho.poketeams.enums.Messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.Messages.QueueMessages;
-import io.github.tsecho.poketeams.enums.Messages.TechnicalMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
+import io.github.tsecho.poketeams.enums.messages.QueueMessages;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
 import io.github.tsecho.poketeams.PokeTeams;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.language.Texts;

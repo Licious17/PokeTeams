@@ -2,8 +2,8 @@ package io.github.tsecho.poketeams.commands;
 
 import io.github.tsecho.poketeams.apis.InfoBuilderAPI;
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
-import io.github.tsecho.poketeams.enums.Messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.Messages.TechnicalMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
 import io.github.tsecho.poketeams.utilities.Utils;

@@ -1,9 +1,8 @@
 package io.github.tsecho.poketeams.economy;
 
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
-import io.github.tsecho.poketeams.enums.Messages.SuccessMessages;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
 import io.github.tsecho.poketeams.configuration.ConfigManager;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.util.TypeTokens;
@@ -12,7 +11,6 @@ import java.time.Instant;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Taxes {

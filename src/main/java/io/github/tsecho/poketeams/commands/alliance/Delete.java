@@ -2,15 +2,11 @@ package io.github.tsecho.poketeams.commands.alliance;
 
 import io.github.tsecho.poketeams.apis.AllianceAPI;
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
-import io.github.tsecho.poketeams.enums.AllyRanks;
-import io.github.tsecho.poketeams.enums.Messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.Messages.SuccessMessages;
-import io.github.tsecho.poketeams.enums.Messages.TechnicalMessages;
-import io.github.tsecho.poketeams.language.CensorCheck;
-import io.github.tsecho.poketeams.language.Texts;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
-import io.github.tsecho.poketeams.utilities.Utils;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -18,7 +14,6 @@ import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.text.Text;
 
 public class Delete implements CommandExecutor {
 

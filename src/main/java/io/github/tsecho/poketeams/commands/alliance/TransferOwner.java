@@ -3,9 +3,9 @@ package io.github.tsecho.poketeams.commands.alliance;
 import io.github.tsecho.poketeams.apis.AllianceAPI;
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
 import io.github.tsecho.poketeams.enums.AllyRanks;
-import io.github.tsecho.poketeams.enums.Messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.Messages.SuccessMessages;
-import io.github.tsecho.poketeams.enums.Messages.TechnicalMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
 import org.spongepowered.api.command.CommandException;
@@ -16,7 +16,6 @@ import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.text.Text;
 
 public class TransferOwner implements CommandExecutor {

@@ -1,7 +1,7 @@
 package io.github.tsecho.poketeams.apis;
 
 import io.github.tsecho.poketeams.configuration.ConfigManager;
-import io.github.tsecho.poketeams.enums.Messages.ErrorMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
 import io.github.tsecho.poketeams.enums.Ranks;
 import io.github.tsecho.poketeams.language.Texts;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;

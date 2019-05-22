@@ -1,7 +1,7 @@
 package io.github.tsecho.poketeams.commands.queue;
 
-import io.github.tsecho.poketeams.enums.Messages.QueueMessages;
-import io.github.tsecho.poketeams.enums.Messages.TechnicalMessages;
+import io.github.tsecho.poketeams.enums.messages.QueueMessages;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.pixelmon.QueueManager;
 import io.github.tsecho.poketeams.utilities.Permissions;

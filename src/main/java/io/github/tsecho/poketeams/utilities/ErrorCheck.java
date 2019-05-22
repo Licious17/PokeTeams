@@ -1,8 +1,8 @@
 package io.github.tsecho.poketeams.utilities;
 
-import io.github.tsecho.poketeams.enums.Messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.Messages.QueueMessages;
-import io.github.tsecho.poketeams.enums.Messages.TechnicalMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
+import io.github.tsecho.poketeams.enums.messages.QueueMessages;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 
