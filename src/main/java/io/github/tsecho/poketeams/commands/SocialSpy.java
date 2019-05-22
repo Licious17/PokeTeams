@@ -1,6 +1,6 @@
 package io.github.tsecho.poketeams.commands;
 
-import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessage;
 import io.github.tsecho.poketeams.language.ChatUtils;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
@@ -18,14 +18,14 @@ public class SocialSpy implements CommandExecutor {
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
         if(!(src instanceof Player))
-            ErrorCheck.test(src, TechnicalMessages.NOT_PLAYER);
+            ErrorCheck.test(src, TechnicalMessage.NOT_PLAYER);
 
         if(ChatUtils.inSocialSpyOff(src.getName())) {
             ChatUtils.removeSocialSpyOff(src.getName());
-            src.sendMessage(TechnicalMessages.SOCIALSPY_ON.getText(src));
+            src.sendMessage(TechnicalMessage.SOCIALSPY_ON.getText(src));
         } else {
             ChatUtils.addSocialSpyOff(src.getName());
-            src.sendMessage(TechnicalMessages.SOCIALSPY_OFF.getText(src));
+            src.sendMessage(TechnicalMessage.SOCIALSPY_OFF.getText(src));
         }
 
         return CommandResult.success();

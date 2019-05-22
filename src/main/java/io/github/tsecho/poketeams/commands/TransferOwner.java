@@ -1,9 +1,9 @@
 package io.github.tsecho.poketeams.commands;
 
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
-import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessage;
 import io.github.tsecho.poketeams.language.Texts;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
@@ -29,24 +29,24 @@ public class TransferOwner implements CommandExecutor {
         newOwner = args.<User>getOne(Text.of("player")).get();
 
         if(!(src instanceof Player))
-            return ErrorCheck.test(src, TechnicalMessages.NOT_PLAYER);
+            return ErrorCheck.test(src, TechnicalMessage.NOT_PLAYER);
 
         role = new PokeTeamsAPI(src);
         roleOther = new PokeTeamsAPI(newOwner.getName(), false);
 
         if((!role.inTeam() || !roleOther.inTeam()) || (!role.getTeam().equals(roleOther.getTeam())))
-            return ErrorCheck.test(src, ErrorMessages.BOTH_NOT_IN_TEAM);
+            return ErrorCheck.test(src, ErrorMessage.BOTH_NOT_IN_TEAM);
         if(role.getPlace() != 4)
-            return ErrorCheck.test(src, ErrorMessages.INSUFFICIENT_RANK);
+            return ErrorCheck.test(src, ErrorMessage.INSUFFICIENT_RANK);
         if(src.getName().equals(newOwner.getName()))
-            return ErrorCheck.test(src, ErrorMessages.CANT_DO_THAT);
+            return ErrorCheck.test(src, ErrorMessage.CANT_DO_THAT);
 
         role.setRole(3);
         roleOther.setRole(4);
 
-        src.sendMessage(SuccessMessages.DEMOTED.getText(src));
-        src.sendMessage(Texts.of(SuccessMessages.PROMOTE_SEND.getString().replaceAll("%player%", newOwner.getName())));
-        newOwner.getPlayer().ifPresent(p -> p.sendMessage(SuccessMessages.PROMOTED.getText(p)));
+        src.sendMessage(SuccessMessage.DEMOTED.getText(src));
+        src.sendMessage(Texts.of(SuccessMessage.PROMOTE_SEND.getString().replaceAll("%player%", newOwner.getName())));
+        newOwner.getPlayer().ifPresent(p -> p.sendMessage(SuccessMessage.PROMOTED.getText(p)));
 
         return CommandResult.success();
     }

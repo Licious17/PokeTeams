@@ -8,8 +8,8 @@ import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import io.github.tsecho.poketeams.PokeTeams;
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
 import io.github.tsecho.poketeams.configuration.ConfigManager;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.QueueMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.QueueMessage;
 import io.github.tsecho.poketeams.utilities.Utils;
 import io.github.tsecho.poketeams.utilities.WorldInfo;
 import lombok.Getter;
@@ -57,8 +57,8 @@ public class QueueManager {
 
 			if((role1.inTeam() && role2.inTeam()) && (!role1.getTeam().equals(role2.getTeam()))) {
 
-				player1.sendMessage(QueueMessages.START_BATTLE.getText(player1));
-				player2.sendMessage(QueueMessages.START_BATTLE.getText(player2));
+				player1.sendMessage(QueueMessage.START_BATTLE.getText(player1));
+				player2.sendMessage(QueueMessage.START_BATTLE.getText(player2));
 
 				removeQueue();
 			
@@ -88,8 +88,8 @@ public class QueueManager {
 			BattleRegistry.startBattle(new BattleParticipant[]{battler1}, new BattleParticipant[]{battler2}, new BattleSettings().getSettings());
 
 		} else {
-			Sponge.getServer().getPlayer(playerName1).ifPresent(player -> player.sendMessage(ErrorMessages.NOT_ONLINE.getText(player)));
-			Sponge.getServer().getPlayer(playerName2).ifPresent(player -> player.sendMessage(ErrorMessages.NOT_ONLINE.getText(player)));
+			Sponge.getServer().getPlayer(playerName1).ifPresent(player -> player.sendMessage(ErrorMessage.NOT_ONLINE.getText(player)));
+			Sponge.getServer().getPlayer(playerName2).ifPresent(player -> player.sendMessage(ErrorMessage.NOT_ONLINE.getText(player)));
 		}
 	}
 

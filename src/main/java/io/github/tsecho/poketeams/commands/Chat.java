@@ -3,9 +3,9 @@ package io.github.tsecho.poketeams.commands;
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
 import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.enums.ChatTypes;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
-import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessage;
 import io.github.tsecho.poketeams.language.ChatUtils;
 import io.github.tsecho.poketeams.language.Texts;
 import io.github.tsecho.poketeams.utilities.Permissions;
@@ -32,21 +32,21 @@ public class Chat implements CommandExecutor {
 		this.src = src;
 
 		if(!(src instanceof Player))
-			src.sendMessage(TechnicalMessages.NOT_PLAYER.getText(src));
+			src.sendMessage(TechnicalMessage.NOT_PLAYER.getText(src));
 
 		role = new PokeTeamsAPI(src);
 
 		if(!role.inTeam())
-			src.sendMessage(ErrorMessages.NOT_IN_TEAM.getText(src));
-		if(args.getOne(Text.of("message")).isPresent())
+			src.sendMessage(ErrorMessage.NOT_IN_TEAM.getText(src));
+		if(args.getOne(Text.of("messages")).isPresent())
 			return sendMessage(args);
 
 		if(ChatUtils.getChatType(src.getName()) != ChatTypes.PUBLIC) {
 			ChatUtils.setChat(src.getName(), ChatTypes.PUBLIC);
-			src.sendMessage(SuccessMessages.REMOVED_CHAT.getText(src));
+			src.sendMessage(SuccessMessage.REMOVED_CHAT.getText(src));
 		} else {
 			ChatUtils.setChat(src.getName(), ChatTypes.TEAM);
-			src.sendMessage(SuccessMessages.ADDED_CHAT.getText(src));
+			src.sendMessage(SuccessMessage.ADDED_CHAT.getText(src));
 		}
 
 		return CommandResult.success();
@@ -56,7 +56,7 @@ public class Chat implements CommandExecutor {
 
 		String prefix = ConfigManager.getConfNode("Chat-Settings", "Prefix").getString();
 		String chatColor = ConfigManager.getConfNode("Chat-Settings", "Chat-Color").getString();
-		String message = args.<String>getOne(Text.of("message")).get();
+		String message = args.<String>getOne(Text.of("messages")).get();
 
 		Text newMessage = Texts.of((prefix + chatColor + message), src);
 		Text staffMessage = Texts.of(ConfigManager.getConfNode("Chat-Settings", "SocialSpy-Message").getString() + message, src);
@@ -84,7 +84,7 @@ public class Chat implements CommandExecutor {
 	public static CommandSpec build() {
 		return CommandSpec.builder()
 				.permission(Permissions.CHAT)
-				.arguments(GenericArguments.optionalWeak(GenericArguments.remainingJoinedStrings(Text.of("message"))))
+				.arguments(GenericArguments.optionalWeak(GenericArguments.remainingJoinedStrings(Text.of("messages"))))
 				.executor(new Chat())
 				.build();
 	}

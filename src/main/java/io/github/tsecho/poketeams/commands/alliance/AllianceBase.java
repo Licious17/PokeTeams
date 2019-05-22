@@ -29,7 +29,7 @@ public class AllianceBase implements CommandExecutor {
         addIfPermissible(Permissions.ALLY_DELETE, Texts.of("&b/teams ally delete"));
         addIfPermissible(Permissions.ALLY_INVITE, Texts.of("&b/teams ally invite <player>"));
         addIfPermissible(Permissions.ALLY_INFO, Texts.of("&b/teams ally info [<alliance>]"));
-        addIfPermissible(Permissions.ALLY_CHAT, Texts.of("&b/teams ally chat [<message>]"));
+        addIfPermissible(Permissions.ALLY_CHAT, Texts.of("&b/teams ally chat [<messages>]"));
         addIfPermissible(Permissions.ALLY_LEAVE, Texts.of("&b/teams ally leave"));
         addIfPermissible(Permissions.ALLY_TRANSFER, Texts.of("&b/teams ally transfer <team>"));
 

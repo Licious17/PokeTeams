@@ -1,9 +1,9 @@
 package io.github.tsecho.poketeams.commands.queue;
 
-import io.github.tsecho.poketeams.enums.messages.QueueMessages;
-import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
-import io.github.tsecho.poketeams.utilities.ErrorCheck;
+import io.github.tsecho.poketeams.enums.messages.QueueMessage;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessage;
 import io.github.tsecho.poketeams.pixelmon.QueueManager;
+import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -19,12 +19,12 @@ public class Leave implements CommandExecutor {
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
 		if(!(src instanceof Player))
-			return ErrorCheck.test(src, TechnicalMessages.NOT_PLAYER);
+			return ErrorCheck.test(src, TechnicalMessage.NOT_PLAYER);
 		if(!QueueManager.getQueue().contains(src.getName()))
-			return ErrorCheck.test(src, QueueMessages.NOT_IN_QUEUE);
+			return ErrorCheck.test(src, QueueMessage.NOT_IN_QUEUE);
 
 		QueueManager.getQueue().remove(src.getName());
-		src.sendMessage(QueueMessages.LEAVE_QUEUE.getText(src));
+		src.sendMessage(QueueMessage.LEAVE_QUEUE.getText(src));
 
 		return CommandResult.success();
 	}

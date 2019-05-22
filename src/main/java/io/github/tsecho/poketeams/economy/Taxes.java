@@ -1,8 +1,8 @@
 package io.github.tsecho.poketeams.economy;
 
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
 import io.github.tsecho.poketeams.configuration.ConfigManager;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.util.TypeTokens;
@@ -50,7 +50,7 @@ public class Taxes {
 	private static void takeMoney() {
 		ConfigManager.getStorNode("Teams", team, "Members").getChildrenMap().entrySet().stream()
 				.map(key -> key.getKey().toString())
-				.forEach(membber -> Sponge.getServer().getPlayer(membber).ifPresent(p -> p.sendMessage(SuccessMessages.TAX_TAKEN.getText(p))));
+				.forEach(membber -> Sponge.getServer().getPlayer(membber).ifPresent(p -> p.sendMessage(SuccessMessage.TAX_TAKEN.getText(p))));
 		new PokeTeamsAPI(team, true).addBal(-1 * cost);
 	}
 
@@ -58,14 +58,14 @@ public class Taxes {
 	private static void sendDeletion() {
 		ConfigManager.getStorNode("Teams", team, "Members").getChildrenMap().entrySet().stream()
 				.map(key -> key.getKey().toString())
-				.forEach(member -> Sponge.getServer().getPlayer(member).ifPresent(p -> p.sendMessage(SuccessMessages.DISBANDED.getText(p))));
+				.forEach(member -> Sponge.getServer().getPlayer(member).ifPresent(p -> p.sendMessage(SuccessMessage.DISBANDED.getText(p))));
 		new PokeTeamsAPI(team, true).deleteTeam();
 	}
 	
 	private static void sendWarning() {
 		ConfigManager.getStorNode("Teams", team, "Members").getChildrenMap().entrySet().stream()
 				.map(key -> key.getKey().toString())
-				.forEach(membber -> Sponge.getServer().getPlayer(membber).ifPresent(p -> p.sendMessage(SuccessMessages.TAX_WARNING.getText(p))));
+				.forEach(membber -> Sponge.getServer().getPlayer(membber).ifPresent(p -> p.sendMessage(SuccessMessage.TAX_WARNING.getText(p))));
 	}
 	
 	private static boolean cantPay() {

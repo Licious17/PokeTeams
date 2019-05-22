@@ -8,8 +8,8 @@ import com.pixelmonmod.pixelmon.enums.battle.BattleResults;
 import io.github.tsecho.poketeams.PokeTeams;
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
 import io.github.tsecho.poketeams.economy.EconManager;
-import io.github.tsecho.poketeams.enums.messages.QueueMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
+import io.github.tsecho.poketeams.enums.messages.QueueMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
 import io.github.tsecho.poketeams.language.Texts;
 import io.github.tsecho.poketeams.utilities.Utils;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -53,10 +53,10 @@ public class PlayerBattleListener {
 	private void sendOutput(Player winner, Player loser) {
 
 		if(getConfNode("Battle-Settings", "Message-Winners").getBoolean())
-			winner.sendMessage(QueueMessages.BATTLE_WON.getText(winner));
+			winner.sendMessage(QueueMessage.BATTLE_WON.getText(winner));
 
 		if(getConfNode("Battle-Settings", "Message-Losers").getBoolean())
-			loser.sendMessage(QueueMessages.BATTLE_LOST.getText(loser));
+			loser.sendMessage(QueueMessage.BATTLE_LOST.getText(loser));
 
 		if(!getConfNode("Battle-Settings", "Give-Winner-Rewards").getBoolean())
 			return;
@@ -72,7 +72,7 @@ public class PlayerBattleListener {
 
 						BigDecimal cost = BigDecimal.valueOf(Integer.valueOf(i.replaceAll("\\D+","")));
 						econ.pay(cost);
-						winner.sendMessage(Texts.of(SuccessMessages.MONEY_REWARD.getString(winner).replaceAll("%price%", cost.toPlainString()), winner));
+						winner.sendMessage(Texts.of(SuccessMessage.MONEY_REWARD.getString(winner).replaceAll("%price%", cost.toPlainString()), winner));
 
 					} else {
 						PokeTeams.getInstance().getLogger().error("Economy plugin is not available! Please add one for rewards to work properly");
@@ -88,7 +88,7 @@ public class PlayerBattleListener {
 	}
 
 	private boolean queueAllows(Player winner, Player loser) {
-		if(getConfNode("Battle-Settings", "Record-Only-queue").getBoolean())
+		if(getConfNode("Battle-Settings", "Record-Only-Queue").getBoolean())
 			return Utils.inQueue(winner.getName()) && Utils.inQueue(loser.getName());
 		return true;
 	}
@@ -97,11 +97,12 @@ public class PlayerBattleListener {
 		Player[] participants = new Player[2];
 
 		results.forEach((participant, type) -> {
-			if(participant instanceof PlayerParticipant)
-				if(type == BattleResults.VICTORY)
-					participants[0] = ((Player) participant.getEntity());
-				else if(type == BattleResults.DEFEAT)
-					participants[1] = ((Player) participant.getEntity());
+			if(participant instanceof PlayerParticipant) {
+                if(type == BattleResults.VICTORY)
+                    participants[0] = ((Player) participant.getEntity());
+                else if(type == BattleResults.DEFEAT)
+                    participants[1] = ((Player) participant.getEntity());
+            }
 		});
 
 		if(participants[0] != null && participants[1] != null)

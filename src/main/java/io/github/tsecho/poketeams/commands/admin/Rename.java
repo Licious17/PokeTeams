@@ -1,8 +1,8 @@
 package io.github.tsecho.poketeams.commands.admin;
 
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
 import io.github.tsecho.poketeams.utilities.Permissions;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -26,10 +26,10 @@ public class Rename implements CommandExecutor {
 		role = new PokeTeamsAPI(team, true);
 
 		if(!role.teamExists())
-			src.sendMessage(ErrorMessages.NOT_EXISTS.getText(src));
+			src.sendMessage(ErrorMessage.NOT_EXISTS.getText(src));
 
 		role.setTeamName(name);
-		src.sendMessage(SuccessMessages.RENAMED.getText(src));
+		src.sendMessage(SuccessMessage.RENAMED.getText(src));
 		
 		return CommandResult.success();
 	}

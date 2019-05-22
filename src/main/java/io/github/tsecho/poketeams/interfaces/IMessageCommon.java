@@ -1,7 +1,6 @@
 package io.github.tsecho.poketeams.interfaces;
 
 import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
 public interface IMessageCommon {
@@ -9,7 +8,7 @@ public interface IMessageCommon {
     /**
      *
      * @param src to get the string from
-     * @return a string based off of a config message
+     * @return a string based off of a config messages
      */
     String getString(CommandSource src);
 

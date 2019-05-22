@@ -1,10 +1,10 @@
 package io.github.tsecho.poketeams.commands.admin;
 
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
-import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.configuration.ConfigManager;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
+import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -27,7 +27,7 @@ public class Reset implements CommandExecutor {
 		role = new PokeTeamsAPI(team, true);
 
 		if(!role.teamExists())
-			return ErrorCheck.test(src, ErrorMessages.NOT_EXISTS);
+			return ErrorCheck.test(src, ErrorMessage.NOT_EXISTS);
 
 		ConfigManager.getStorNode("Teams", team, "Record", "Wins").setValue(0);
 		ConfigManager.getStorNode("Teams", team, "Record", "Losses").setValue(0);
@@ -36,7 +36,7 @@ public class Reset implements CommandExecutor {
 		ConfigManager.getStorNode("Teams", team, "Stats", "Legends").setValue(0);
 		ConfigManager.save();
 
-		src.sendMessage(SuccessMessages.RESET_TEAM.getText(src));
+		src.sendMessage(SuccessMessage.RESET_TEAM.getText(src));
 
 		return CommandResult.success();
 	}

@@ -1,11 +1,11 @@
 package io.github.tsecho.poketeams.commands.admin;
 
 import io.github.tsecho.poketeams.configuration.ConfigManager;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
+import io.github.tsecho.poketeams.language.Texts;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
-import io.github.tsecho.poketeams.language.Texts;
 import io.github.tsecho.poketeams.utilities.Utils;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -24,7 +24,7 @@ public class Create implements CommandExecutor {
         String team = args.<String>getOne(Text.of("team")).get();
 
         if(Utils.teamExists(team))
-            return ErrorCheck.test(src, ErrorMessages.AlREADY_EXISTS);
+            return ErrorCheck.test(src, ErrorMessage.AlREADY_EXISTS);
 
         ConfigManager.getStorNode("Teams", team, "Record", "Wins").setValue(0);
         ConfigManager.getStorNode("Teams", team, "Record", "Losses").setValue(0);
@@ -35,7 +35,7 @@ public class Create implements CommandExecutor {
                 ConfigManager.getConfNode("Team-Settings", "Default-Team-Bal"));
         ConfigManager.save();
 
-        src.sendMessage(Texts.of(SuccessMessages.CREATED_TEAM.getString().replaceAll("%teamname%", team)));
+        src.sendMessage(Texts.of(SuccessMessage.CREATED_TEAM.getString().replaceAll("%teamname%", team)));
 
         return CommandResult.success();
     }

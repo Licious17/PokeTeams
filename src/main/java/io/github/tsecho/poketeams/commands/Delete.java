@@ -4,9 +4,9 @@ import io.github.tsecho.poketeams.apis.AllianceAPI;
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
 import io.github.tsecho.poketeams.enums.AllyRanks;
 import io.github.tsecho.poketeams.enums.ChatTypes;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
-import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessage;
 import io.github.tsecho.poketeams.language.ChatUtils;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
@@ -29,25 +29,25 @@ public class Delete implements CommandExecutor {
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
 		if (!(src instanceof Player))
-			return ErrorCheck.test(src, TechnicalMessages.NOT_PLAYER);
+			return ErrorCheck.test(src, TechnicalMessage.NOT_PLAYER);
 
 		role = new PokeTeamsAPI(src);
 
 		if(!role.inTeam())
-			return ErrorCheck.test(src, ErrorMessages.NOT_IN_TEAM);
+			return ErrorCheck.test(src, ErrorMessage.NOT_IN_TEAM);
 		if(!role.canDelete())
-			return ErrorCheck.test(src, ErrorMessages.INSUFFICIENT_RANK);
+			return ErrorCheck.test(src, ErrorMessage.INSUFFICIENT_RANK);
 
 		AllianceAPI alliance = new AllianceAPI(role);
 
 		if(alliance.inAlliance() && alliance.getRank().equals(AllyRanks.OWNER.getName()))
-			return ErrorCheck.test(src, ErrorMessages.ALLY_NEEDS_LEADER);
+			return ErrorCheck.test(src, ErrorMessage.ALLY_NEEDS_LEADER);
 
 		getStorNode("Teams", role.getTeam(), "Members").getChildrenMap().entrySet().stream()
 				.map(key -> key.getKey().toString())
 				.forEach(member -> {
 					ChatUtils.setChat(member, ChatTypes.PUBLIC);
-					Sponge.getServer().getPlayer(member).ifPresent(p -> p.sendMessage(SuccessMessages.DISBANDED.getText(src)));
+					Sponge.getServer().getPlayer(member).ifPresent(p -> p.sendMessage(SuccessMessage.DISBANDED.getText(src)));
 				});
 
 		role.deleteTeam();

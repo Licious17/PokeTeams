@@ -1,12 +1,13 @@
 package io.github.tsecho.poketeams.commands.bases;
 
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
-import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
-import io.github.tsecho.poketeams.utilities.ErrorCheck;
-import io.github.tsecho.poketeams.utilities.WorldInfo;
+import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
 import io.github.tsecho.poketeams.configuration.ConfigManager;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessage;
+import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
+import io.github.tsecho.poketeams.utilities.WorldInfo;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -14,8 +15,6 @@ import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
-
-import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
 
 public class Set implements CommandExecutor {
 
@@ -26,20 +25,20 @@ public class Set implements CommandExecutor {
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
 		if(!(src instanceof Player))
-			return ErrorCheck.test(src, TechnicalMessages.NOT_PLAYER);
+			return ErrorCheck.test(src, TechnicalMessage.NOT_PLAYER);
 
 		player = (Player) src;
 		role = new PokeTeamsAPI(src);
 
 		if(!role.inTeam())
-			return ErrorCheck.test(src, ErrorMessages.NOT_IN_TEAM);
+			return ErrorCheck.test(src, ErrorMessage.NOT_IN_TEAM);
 		if(!role.canSetBase())
-			return ErrorCheck.test(src, ErrorMessages.INSUFFICIENT_RANK);
+			return ErrorCheck.test(src, ErrorMessage.INSUFFICIENT_RANK);
 		if(isBadWorld())
-			return ErrorCheck.test(src, ErrorMessages.BAD_WORLD);
+			return ErrorCheck.test(src, ErrorMessage.BAD_WORLD);
 
 		role.setBase(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ(), player.getWorld());
-		src.sendMessage(SuccessMessages.SET_BASE.getText(src));
+		src.sendMessage(SuccessMessage.SET_BASE.getText(src));
 
 		return CommandResult.success();
 	}

@@ -1,10 +1,11 @@
 package io.github.tsecho.poketeams.commands;
 
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
-import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
-import io.github.tsecho.poketeams.utilities.ErrorCheck;
+import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessage;
 import io.github.tsecho.poketeams.language.CensorCheck;
+import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -16,8 +17,6 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
-import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
-
 public class Tag implements CommandExecutor {
 
 	@Override
@@ -26,20 +25,20 @@ public class Tag implements CommandExecutor {
 		String tag = args.<String>getOne(Text.of("tag")).get();
 
 		if(!(src instanceof Player))
-			return ErrorCheck.test(src, TechnicalMessages.NOT_PLAYER);
+			return ErrorCheck.test(src, TechnicalMessage.NOT_PLAYER);
 
 		PokeTeamsAPI role = new PokeTeamsAPI(src);
 		CensorCheck check = new CensorCheck(tag);
 
 		if(!role.inTeam())
-			return ErrorCheck.test(src, ErrorMessages.NOT_IN_TEAM);
+			return ErrorCheck.test(src, ErrorMessage.NOT_IN_TEAM);
 		if(!role.canSetTag())
-			return ErrorCheck.test(src, ErrorMessages.INSUFFICIENT_RANK);
+			return ErrorCheck.test(src, ErrorMessage.INSUFFICIENT_RANK);
 		if(check.failsCensor(true))
-			return ErrorCheck.test(src, ErrorMessages.INNAPROPRIATE);
+			return ErrorCheck.test(src, ErrorMessage.INNAPROPRIATE);
 
 		role.setTag(tag);
-		src.sendMessage(SuccessMessages.TAG_CHANGE.getText(src));
+		src.sendMessage(SuccessMessage.TAG_CHANGE.getText(src));
 
 		return CommandResult.success();
 	}

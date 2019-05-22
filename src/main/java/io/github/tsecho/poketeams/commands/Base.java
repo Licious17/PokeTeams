@@ -40,7 +40,7 @@ public class Base implements CommandExecutor{
 		addIfPermissible(Permissions.INVITE, Texts.of("&c/teams invite"));
 		addIfPermissible(Permissions.KICK, Texts.of("&c/teams kick <player>"));
 		addIfPermissible(Permissions.TAG, Texts.of("&c/teams tag <tag>"));
-		addIfPermissible(Permissions.CHAT, Texts.of("&c/teams chat [<message>]"));
+		addIfPermissible(Permissions.CHAT, Texts.of("&c/teams chat [<messages>]"));
 		addIfPermissible(Permissions.BASE_TELEPORT, Texts.of("&c/teams base"));
 		addIfPermissible(Permissions.BASE_TELEPORT, Texts.of("&c/teams base set"));
 		addIfPermissible(Permissions.QUEUE_BASE, Texts.of("&c/teams queue"));

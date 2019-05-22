@@ -2,9 +2,9 @@ package io.github.tsecho.poketeams.commands.banks;
 
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
 import io.github.tsecho.poketeams.economy.EconManager;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
-import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessage;
 import io.github.tsecho.poketeams.language.Texts;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
@@ -29,23 +29,23 @@ public class Withdraw implements CommandExecutor {
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
         if(!(src instanceof Player))
-            return ErrorCheck.test(src, TechnicalMessages.NOT_PLAYER);
+            return ErrorCheck.test(src, TechnicalMessage.NOT_PLAYER);
 
         role = new PokeTeamsAPI(src);
 
         if(!role.inTeam())
-            return ErrorCheck.test(src, ErrorMessages.NOT_IN_TEAM);
+            return ErrorCheck.test(src, ErrorMessage.NOT_IN_TEAM);
         if(!role.canTakeBank())
-            return ErrorCheck.test(src, ErrorMessages.INSUFFICIENT_RANK);
+            return ErrorCheck.test(src, ErrorMessage.INSUFFICIENT_RANK);
 
         requested = args.<Integer>getOne(Text.of("amount")).get();
 
         if(requested < 0)
-            return ErrorCheck.test(src, ErrorMessages.NOT_POSITIVE);
+            return ErrorCheck.test(src, ErrorMessage.NOT_POSITIVE);
         if(role.takeBal(requested))
-            src.sendMessage(Texts.of(SuccessMessages.MONEY_REWARD.getString(src).replaceAll("%price%", String.valueOf(requested))));
+            src.sendMessage(Texts.of(SuccessMessage.MONEY_REWARD.getString(src).replaceAll("%price%", String.valueOf(requested))));
         else
-            return ErrorCheck.test(src, ErrorMessages.INSUFFICIENT_FUNDS);
+            return ErrorCheck.test(src, ErrorMessage.INSUFFICIENT_FUNDS);
 
         EconManager econ = new EconManager((Player) src);
         econ.pay(BigDecimal.valueOf(requested));

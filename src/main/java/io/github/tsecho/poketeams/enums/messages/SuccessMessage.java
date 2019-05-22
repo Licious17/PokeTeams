@@ -6,7 +6,7 @@ import io.github.tsecho.poketeams.language.Texts;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.text.Text;
 
-public enum SuccessMessages implements IMessageCommon {
+public enum SuccessMessage implements IMessageCommon {
 
     CREATED_TEAM, DELETED_TEAM, TELEPORTED, SET_BASE, SEND_INVITE,
     LEFT, ADDED_CHAT, REMOVED_CHAT, RESET_TEAM, DISBANDED, TAX_TAKEN,

@@ -3,9 +3,9 @@ package io.github.tsecho.poketeams.commands.alliance;
 import io.github.tsecho.poketeams.apis.AllianceAPI;
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
 import io.github.tsecho.poketeams.enums.AllyRanks;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
-import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessage;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
 import org.spongepowered.api.command.CommandException;
@@ -22,30 +22,30 @@ public class Leave implements CommandExecutor {
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
         if(!(src instanceof Player))
-            return ErrorCheck.test(src, TechnicalMessages.NOT_PLAYER);
+            return ErrorCheck.test(src, TechnicalMessage.NOT_PLAYER);
 
         PokeTeamsAPI role = new PokeTeamsAPI(src);
 
         if(!role.inTeam())
-            return ErrorCheck.test(src, ErrorMessages.NOT_IN_TEAM);
+            return ErrorCheck.test(src, ErrorMessage.NOT_IN_TEAM);
 
         AllianceAPI alliance = new AllianceAPI(role);
 
         if(!alliance.inAlliance())
-            return ErrorCheck.test(src, ErrorMessages.NOT_IN_ALLIANCE);
+            return ErrorCheck.test(src, ErrorMessage.NOT_IN_ALLIANCE);
         if(!role.canAllianceCommands())
-            return ErrorCheck.test(src, ErrorMessages.INSUFFICIENT_RANK);
+            return ErrorCheck.test(src, ErrorMessage.INSUFFICIENT_RANK);
 
         int size = alliance.getAllTeams().size();
 
         if(size > 1) {
             if(alliance.getRank().equals(AllyRanks.OWNER.getName())) {
-                src.sendMessage(ErrorMessages.ALLY_NEEDS_LEADER.getText(src));
+                src.sendMessage(ErrorMessage.ALLY_NEEDS_LEADER.getText(src));
             } else {
                 alliance.removeTeam(role);
             }
         } else {
-            src.sendMessage(SuccessMessages.ALLY_DELETED.getText(src));
+            src.sendMessage(SuccessMessage.ALLY_DELETED.getText(src));
             alliance.delete();
         }
 

@@ -1,9 +1,9 @@
 package io.github.tsecho.poketeams.commands.admin;
 
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
 import io.github.tsecho.poketeams.enums.Ranks;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
 import io.github.tsecho.poketeams.language.Texts;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
@@ -32,13 +32,13 @@ public class Set implements CommandExecutor {
 		newRole = new PokeTeamsAPI(args.<String>getOne(Text.of("team")).get(), true);
 
 		if(role.inTeam())
-			return ErrorCheck.test(src, ErrorMessages.OTHER_IN_TEAM);
+			return ErrorCheck.test(src, ErrorMessage.OTHER_IN_TEAM);
 		if(!newRole.teamExists())
-			return ErrorCheck.test(src, ErrorMessages.NOT_EXISTS);
+			return ErrorCheck.test(src, ErrorMessage.NOT_EXISTS);
 
 		newRole.addTeamMember(player.getName(), rank);
-		player.getPlayer().ifPresent(p -> p.sendMessage(SuccessMessages.TEAM_CHANGE_RECEIVE.getText(p)));
-		src.sendMessage(Texts.of(SuccessMessages.TEAM_CHANGE_SEND.getString(), player.getName()));
+		player.getPlayer().ifPresent(p -> p.sendMessage(SuccessMessage.TEAM_CHANGE_RECEIVE.getText(p)));
+		src.sendMessage(Texts.of(SuccessMessage.TEAM_CHANGE_SEND.getString(), player.getName()));
 
 		return CommandResult.success();
 	}

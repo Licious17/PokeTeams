@@ -1,8 +1,8 @@
 package io.github.tsecho.poketeams.apis;
 
 import io.github.tsecho.poketeams.configuration.ConfigManager;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
 import io.github.tsecho.poketeams.enums.Ranks;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
 import io.github.tsecho.poketeams.language.Texts;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import org.spongepowered.api.Sponge;
@@ -261,7 +261,7 @@ public class InfoBuilderAPI extends PokeTeamsAPI {
 
     /**
      * Sends the pagination list to the source declared in {@link #InfoBuilderAPI(String, Player)}
-     * Will message the source if they are not in a team
+     * Will messages the source if they are not in a team
      */
     public void sendWithFeedback() {
         if(inTeam()) {
@@ -277,7 +277,7 @@ public class InfoBuilderAPI extends PokeTeamsAPI {
                     .contents(contents).
                     sendTo(src);
         } else {
-            src.sendMessage(ErrorMessages.NOT_IN_TEAM.getText(src));
+            src.sendMessage(ErrorMessage.NOT_IN_TEAM.getText(src));
         }
     }
 

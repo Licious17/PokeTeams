@@ -2,8 +2,8 @@ package io.github.tsecho.poketeams.commands;
 
 import io.github.tsecho.poketeams.apis.InfoBuilderAPI;
 import io.github.tsecho.poketeams.configuration.ConfigManager;
-import io.github.tsecho.poketeams.utilities.Permissions;
 import io.github.tsecho.poketeams.language.Texts;
+import io.github.tsecho.poketeams.utilities.Permissions;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;

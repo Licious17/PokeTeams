@@ -1,9 +1,9 @@
 package io.github.tsecho.poketeams.commands;
 
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
-import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessage;
 import io.github.tsecho.poketeams.language.Texts;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
@@ -30,22 +30,22 @@ public class Kick implements CommandExecutor {
 		role = new PokeTeamsAPI(src);
 
 		if(!(src instanceof Player))
-			return ErrorCheck.test(src, TechnicalMessages.NOT_PLAYER);
+			return ErrorCheck.test(src, TechnicalMessage.NOT_PLAYER);
 
 		roleOther = new PokeTeamsAPI(kickUser.getName(), false);
 
 		if(!(role.inTeam() && roleOther.inTeam()) && (role.getTeam().equals(roleOther.getTeam())))
-			return ErrorCheck.test(src, ErrorMessages.BOTH_NOT_IN_TEAM);
+			return ErrorCheck.test(src, ErrorMessage.BOTH_NOT_IN_TEAM);
 		if(!role.canKick())
-			return ErrorCheck.test(src, ErrorMessages.INSUFFICIENT_RANK);
+			return ErrorCheck.test(src, ErrorMessage.INSUFFICIENT_RANK);
 		if(src.getName().equals(kickUser.getName()))
-			return ErrorCheck.test(src, ErrorMessages.KICK_YOURSELF);
+			return ErrorCheck.test(src, ErrorMessage.KICK_YOURSELF);
 		if(role.getPlace() <= roleOther.getPlace())
-			return ErrorCheck.test(src, ErrorMessages.INSUFFICIENT_RANK);
+			return ErrorCheck.test(src, ErrorMessage.INSUFFICIENT_RANK);
 
 		role.kickPlayer(kickUser.getName());
-		src.sendMessage(Texts.of(SuccessMessages.KICK_SEND.getString(), kickUser.getName()));
-		kickUser.getPlayer().ifPresent(p -> p.sendMessage(SuccessMessages.KICK_RECEIVE.getText(src)));
+		src.sendMessage(Texts.of(SuccessMessage.KICK_SEND.getString(), kickUser.getName()));
+		kickUser.getPlayer().ifPresent(p -> p.sendMessage(SuccessMessage.KICK_RECEIVE.getText(src)));
 
 		return CommandResult.success();
 	}

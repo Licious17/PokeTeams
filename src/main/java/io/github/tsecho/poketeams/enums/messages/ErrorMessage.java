@@ -6,7 +6,7 @@ import io.github.tsecho.poketeams.language.Texts;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.text.Text;
 
-public enum ErrorMessages implements IMessageCommon {
+public enum ErrorMessage implements IMessageCommon {
 
     NOT_IN_TEAM, ALREADY_IN_TEAM, INSUFFICIENT_RANK, INNAPROPRIATE,
     AlREADY_EXISTS, BOTH_NOT_IN_TEAM, CANT_PROMOTE, CANT_DEMOTE, MAX_MEMBERS,

@@ -1,7 +1,7 @@
 package io.github.tsecho.poketeams.commands;
 
 import io.github.tsecho.poketeams.configuration.ConfigManager;
-import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessage;
 import io.github.tsecho.poketeams.utilities.Permissions;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -16,7 +16,7 @@ public class Reload implements CommandExecutor {
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		
 		ConfigManager.load();
-		src.sendMessage(TechnicalMessages.RELOADED.getText(src));
+		src.sendMessage(TechnicalMessage.RELOADED.getText(src));
 		
 		return CommandResult.success();
 	}

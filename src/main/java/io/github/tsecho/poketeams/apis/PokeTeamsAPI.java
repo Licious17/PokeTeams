@@ -12,7 +12,10 @@ import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.world.World;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static io.github.tsecho.poketeams.configuration.ConfigManager.*;

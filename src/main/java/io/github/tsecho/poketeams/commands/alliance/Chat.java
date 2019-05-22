@@ -3,9 +3,9 @@ package io.github.tsecho.poketeams.commands.alliance;
 import io.github.tsecho.poketeams.apis.AllianceAPI;
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
 import io.github.tsecho.poketeams.enums.ChatTypes;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
-import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessage;
 import io.github.tsecho.poketeams.language.ChatUtils;
 import io.github.tsecho.poketeams.language.Texts;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
@@ -22,7 +22,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageChannel;
 
-import static io.github.tsecho.poketeams.configuration.ConfigManager.*;
+import static io.github.tsecho.poketeams.configuration.ConfigManager.getConfNode;
 
 public class Chat implements CommandExecutor {
 
@@ -36,26 +36,26 @@ public class Chat implements CommandExecutor {
         this.src = src;
 
         if(!(src instanceof Player))
-            return ErrorCheck.test(src, TechnicalMessages.NOT_PLAYER);
+            return ErrorCheck.test(src, TechnicalMessage.NOT_PLAYER);
 
         role = new PokeTeamsAPI(src);
 
         if(!role.inTeam())
-           return ErrorCheck.test(src, ErrorMessages.NOT_IN_TEAM);
+           return ErrorCheck.test(src, ErrorMessage.NOT_IN_TEAM);
 
         ogAlliance = new AllianceAPI(role);
 
         if(!ogAlliance.inAlliance())
-            return ErrorCheck.test(src, ErrorMessages.NOT_IN_ALLIANCE);
-        if(args.getOne(Text.of("message")).isPresent())
+            return ErrorCheck.test(src, ErrorMessage.NOT_IN_ALLIANCE);
+        if(args.getOne(Text.of("messages")).isPresent())
             return sendMessage(args);
 
         if(ChatUtils.getChatType(src.getName()) != ChatTypes.PUBLIC) {
             ChatUtils.setChat(src.getName(), ChatTypes.PUBLIC);
-            src.sendMessage(SuccessMessages.ALLY_REMOVED_CHAT.getText(src));
+            src.sendMessage(SuccessMessage.ALLY_REMOVED_CHAT.getText(src));
         } else {
             ChatUtils.setChat(src.getName(), ChatTypes.ALLIANCE);
-            src.sendMessage(SuccessMessages.ALLY_ADDED_CHAT.getText(src));
+            src.sendMessage(SuccessMessage.ALLY_ADDED_CHAT.getText(src));
         }
 
         return CommandResult.success();
@@ -65,7 +65,7 @@ public class Chat implements CommandExecutor {
 
         String prefix = getConfNode("Ally-Settings", "Chat-Settings", "Prefix").getString();
         String chatColor = getConfNode("Ally-Settings", "Chat-Settings", "Chat-Color").getString();
-        String message = args.<String>getOne(Text.of("message")).get();
+        String message = args.<String>getOne(Text.of("messages")).get();
 
         Text newMessage = Texts.of((prefix + chatColor + message), src);
         Text staffMessage = Texts.of(getConfNode("Chat-Settings", "SocialSpy-Message").getString() + message, src);
@@ -95,7 +95,7 @@ public class Chat implements CommandExecutor {
     public static CommandSpec build() {
         return CommandSpec.builder()
                 .permission(Permissions.ALLY_CHAT)
-                .arguments(GenericArguments.optionalWeak(GenericArguments.remainingJoinedStrings(Text.of("message"))))
+                .arguments(GenericArguments.optionalWeak(GenericArguments.remainingJoinedStrings(Text.of("messages"))))
                 .executor(new Chat())
                 .build();
     }

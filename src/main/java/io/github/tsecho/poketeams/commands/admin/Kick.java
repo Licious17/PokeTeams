@@ -3,8 +3,8 @@ package io.github.tsecho.poketeams.commands.admin;
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
 import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.enums.ChatTypes;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
 import io.github.tsecho.poketeams.language.ChatUtils;
 import io.github.tsecho.poketeams.language.Texts;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
@@ -36,14 +36,14 @@ public class Kick implements CommandExecutor {
 		this.src = src;
 
 		if(!Utils.teamExists(team))
-			ErrorCheck.test(src, ErrorMessages.NOT_EXISTS);
+			ErrorCheck.test(src, ErrorMessage.NOT_EXISTS);
 		
 		role = new PokeTeamsAPI(user.getName(), false);
 		
 		if(!role.inTeam())
-			ErrorCheck.test(src, ErrorMessages.NOT_IN_TEAM);
+			ErrorCheck.test(src, ErrorMessage.NOT_IN_TEAM);
 		if(!role.getTeam().equals(team))
-			ErrorCheck.test(src, ErrorMessages.OTHER_IN_TEAM);
+			ErrorCheck.test(src, ErrorMessage.OTHER_IN_TEAM);
 		
 		kickPlayer();
 
@@ -62,8 +62,8 @@ public class Kick implements CommandExecutor {
 	}
 	
 	private void messagePlayer() {
-		Sponge.getServer().getPlayer(user.getName()).ifPresent(p -> p.sendMessage(SuccessMessages.KICK_RECEIVE.getText(p)));
-		src.sendMessage(Texts.of(SuccessMessages.KICK_SEND.getString(), user.getName()));
+		Sponge.getServer().getPlayer(user.getName()).ifPresent(p -> p.sendMessage(SuccessMessage.KICK_RECEIVE.getText(p)));
+		src.sendMessage(Texts.of(SuccessMessage.KICK_SEND.getString(), user.getName()));
 	}
 	
 	public static CommandSpec build() {

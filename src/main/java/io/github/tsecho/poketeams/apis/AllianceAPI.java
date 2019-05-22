@@ -1,7 +1,6 @@
 package io.github.tsecho.poketeams.apis;
 
 import io.github.tsecho.poketeams.enums.AllyRanks;
-import io.github.tsecho.poketeams.language.Texts;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 
 import java.util.Arrays;

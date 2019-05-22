@@ -1,7 +1,5 @@
 package io.github.tsecho.poketeams.commands.queue;
 
-import java.util.ArrayList;
-
 import io.github.tsecho.poketeams.pixelmon.QueueManager;
 import io.github.tsecho.poketeams.utilities.Permissions;
 import org.spongepowered.api.command.CommandException;
@@ -14,6 +12,8 @@ import org.spongepowered.api.service.pagination.PaginationList;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
+
+import java.util.ArrayList;
 
 public class List implements CommandExecutor {
 	

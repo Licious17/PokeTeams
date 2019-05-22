@@ -1,10 +1,10 @@
 package io.github.tsecho.poketeams.commands;
 
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
-import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
 import io.github.tsecho.poketeams.enums.Ranks;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessage;
 import io.github.tsecho.poketeams.language.Texts;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
@@ -33,32 +33,32 @@ public class Invite implements CommandExecutor {
 			roleOther = new PokeTeamsAPI(receiver);
 
 			if(!(src instanceof Player))
-				return ErrorCheck.test(src, TechnicalMessages.NOT_PLAYER);
+				return ErrorCheck.test(src, TechnicalMessage.NOT_PLAYER);
 			if(!role.inTeam())
-				return ErrorCheck.test(src, ErrorMessages.NOT_IN_TEAM);
+				return ErrorCheck.test(src, ErrorMessage.NOT_IN_TEAM);
 			if(!role.canInvite())
-				return ErrorCheck.test(src, ErrorMessages.INSUFFICIENT_RANK);
+				return ErrorCheck.test(src, ErrorMessage.INSUFFICIENT_RANK);
 			if(role.getMemberTotal() >= role.getMaxPlayers())
-				return ErrorCheck.test(src, ErrorMessages.MAX_MEMBERS);
+				return ErrorCheck.test(src, ErrorMessage.MAX_MEMBERS);
 			if(roleOther.inTeam())
-				return ErrorCheck.test(src, ErrorMessages.OTHER_IN_TEAM);
+				return ErrorCheck.test(src, ErrorMessage.OTHER_IN_TEAM);
 
 			receiver.sendMessage(Text.builder()
-					    .append(SuccessMessages.INVITED.getText(sender))
+					    .append(SuccessMessage.INVITED.getText(sender))
 						.append(Texts.of("\n"))
-					    .append(SuccessMessages.INVITE_CLICK.getText(sender))
+					    .append(SuccessMessage.INVITE_CLICK.getText(sender))
 						.onClick(TextActions.executeCallback(callback -> joinTeam()))
 						.build());
 
-			sender.sendMessage(SuccessMessages.SEND_INVITE.getText(src));
+			sender.sendMessage(SuccessMessage.SEND_INVITE.getText(src));
 
 		return CommandResult.success();
 	}
 	
 	private void joinTeam() {
 		role.addTeamMember(receiver, Ranks.GRUNT.getName());
-		receiver.sendMessage(SuccessMessages.JOINED_TEAM.getText(sender));
-		sender.sendMessage(SuccessMessages.INVITE_ACCEPTED.getText(receiver));
+		receiver.sendMessage(SuccessMessage.JOINED_TEAM.getText(sender));
+		sender.sendMessage(SuccessMessage.INVITE_ACCEPTED.getText(receiver));
 	}
 	
 	public static CommandSpec build() {

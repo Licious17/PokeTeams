@@ -1,9 +1,9 @@
 package io.github.tsecho.poketeams.commands.admin;
 
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
 import io.github.tsecho.poketeams.enums.Ranks;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
 import io.github.tsecho.poketeams.language.Texts;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
@@ -29,13 +29,13 @@ public class Demote implements CommandExecutor {
         role = new PokeTeamsAPI(player.getName(), false);
 
         if(!role.inTeam())
-            return ErrorCheck.test(src, ErrorMessages.NOT_IN_TEAM);
+            return ErrorCheck.test(src, ErrorMessage.NOT_IN_TEAM);
         if(role.getPlace() == 0)
-            return ErrorCheck.test(src, ErrorMessages.CANT_DEMOTE);
+            return ErrorCheck.test(src, ErrorMessage.CANT_DEMOTE);
 
         role.addTeamMember(player.getName(), Ranks.getEnum(role.getPlace() - 1).getName());
-        player.getPlayer().ifPresent(p -> p.sendMessage(SuccessMessages.DEMOTED.getText(p)));
-        src.sendMessage(Texts.of(SuccessMessages.DEMOTED_ADMIN.getString(), player.getName()));
+        player.getPlayer().ifPresent(p -> p.sendMessage(SuccessMessage.DEMOTED.getText(p)));
+        src.sendMessage(Texts.of(SuccessMessage.DEMOTED_ADMIN.getString(), player.getName()));
 
         return CommandResult.success();
     }

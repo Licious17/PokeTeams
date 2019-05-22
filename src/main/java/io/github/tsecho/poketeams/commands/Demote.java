@@ -1,9 +1,10 @@
 package io.github.tsecho.poketeams.commands;
 
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
-import io.github.tsecho.poketeams.utilities.ErrorCheck;
+import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
 import io.github.tsecho.poketeams.language.Texts;
+import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -15,8 +16,6 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.text.Text;
-
-import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
 
 public class Demote implements CommandExecutor {
 
@@ -39,14 +38,14 @@ public class Demote implements CommandExecutor {
 		role = new PokeTeamsAPI(src);
 
 		if(!role.inTeam() || !roleOther.inTeam() || !role.getTeam().equals(roleOther.getTeam()))
-			return ErrorCheck.test(src, ErrorMessages.BOTH_NOT_IN_TEAM);
+			return ErrorCheck.test(src, ErrorMessage.BOTH_NOT_IN_TEAM);
 		if(!role.canDemote())
-			return ErrorCheck.test(src, ErrorMessages.INSUFFICIENT_RANK);
+			return ErrorCheck.test(src, ErrorMessage.INSUFFICIENT_RANK);
 
 		if(roleOther.getPlace() - 1 < 0)
-			return ErrorCheck.test(src, ErrorMessages.CANT_DEMOTE);
+			return ErrorCheck.test(src, ErrorMessage.CANT_DEMOTE);
 		if(role.getPlace() <= roleOther.getPlace())
-			return ErrorCheck.test(src, ErrorMessages.INSUFFICIENT_RANK);
+			return ErrorCheck.test(src, ErrorMessage.INSUFFICIENT_RANK);
 
 		doAction();
 
@@ -55,8 +54,8 @@ public class Demote implements CommandExecutor {
 
 	private void doAction() {
 		roleOther.setRole(roleOther.getPlace() - 1);
-		src.sendMessage(Texts.of(SuccessMessages.DEMOTED_ADMIN.getString(), demoPlayer.getName()));
-		demoPlayer.getPlayer().ifPresent(p -> p.sendMessage(SuccessMessages.DEMOTED.getText(src)));
+		src.sendMessage(Texts.of(SuccessMessage.DEMOTED_ADMIN.getString(), demoPlayer.getName()));
+		demoPlayer.getPlayer().ifPresent(p -> p.sendMessage(SuccessMessage.DEMOTED.getText(src)));
 	}
 	
 	public static CommandSpec build() {

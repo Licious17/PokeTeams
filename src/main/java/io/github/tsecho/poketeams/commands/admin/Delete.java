@@ -1,12 +1,12 @@
 package io.github.tsecho.poketeams.commands.admin;
 
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
+import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.enums.ChatTypes;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
 import io.github.tsecho.poketeams.language.ChatUtils;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
-import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.utilities.Permissions;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
@@ -30,18 +30,18 @@ public class Delete implements CommandExecutor {
 		role = new PokeTeamsAPI(team, true);
 
 		if(!role.teamExists())
-			return ErrorCheck.test(src, ErrorMessages.NOT_EXISTS);
+			return ErrorCheck.test(src, ErrorMessage.NOT_EXISTS);
 
 
 		ConfigManager.getStorNode("Teams", team, "Members").getChildrenMap().entrySet().stream()
 				.map(key -> key.getKey().toString())
 				.forEach(user -> {
 					ChatUtils.setChat(user, ChatTypes.PUBLIC);
-					Sponge.getServer().getPlayer(user).ifPresent(p -> p.sendMessage(SuccessMessages.DISBANDED.getText(p)));
+					Sponge.getServer().getPlayer(user).ifPresent(p -> p.sendMessage(SuccessMessage.DISBANDED.getText(p)));
 				});
 
 		role.deleteTeam();
-		src.sendMessage(SuccessMessages.DELETED_TEAM.getText(src));
+		src.sendMessage(SuccessMessage.DELETED_TEAM.getText(src));
 
 		return CommandResult.success();
 	}

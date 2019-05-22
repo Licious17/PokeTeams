@@ -1,14 +1,14 @@
 package io.github.tsecho.poketeams.commands;
 
+import io.github.tsecho.poketeams.PokeTeams;
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
 import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.economy.EconManager;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
-import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessage;
 import io.github.tsecho.poketeams.language.CensorCheck;
 import io.github.tsecho.poketeams.language.Texts;
-import io.github.tsecho.poketeams.PokeTeams;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
 import io.github.tsecho.poketeams.utilities.Utils;
@@ -32,19 +32,19 @@ public class Create implements CommandExecutor {
 		String team = args.<String>getOne(Text.of("team")).get();
 
 		if(!(src instanceof Player))
-			return ErrorCheck.test(src, TechnicalMessages.NOT_PLAYER);
+			return ErrorCheck.test(src, TechnicalMessage.NOT_PLAYER);
 
 		PokeTeamsAPI role = new PokeTeamsAPI(src);
 		CensorCheck check = new CensorCheck(team);
 
 		if(role.inTeam())
-			return ErrorCheck.test(src, ErrorMessages.ALREADY_IN_TEAM);
+			return ErrorCheck.test(src, ErrorMessage.ALREADY_IN_TEAM);
 		if(Utils.teamExists(team))
-			return ErrorCheck.test(src, ErrorMessages.AlREADY_EXISTS);
+			return ErrorCheck.test(src, ErrorMessage.AlREADY_EXISTS);
 		if(check.failsCensor(false))
-			return ErrorCheck.test(src, ErrorMessages.INNAPROPRIATE);
+			return ErrorCheck.test(src, ErrorMessage.INNAPROPRIATE);
 
-		Text confirmation = TechnicalMessages.CONFIRM.getText(src)
+		Text confirmation = TechnicalMessage.CONFIRM.getText(src)
 								.toBuilder()
 								.onClick(TextActions.executeCallback(callback -> confirm(src, team)))
 								.build();
@@ -62,10 +62,10 @@ public class Create implements CommandExecutor {
 			if(econ.isEnabled()) {
 
 				if (econ.buyTeam().getResult() == ResultType.SUCCESS) {
-					src.sendMessage(SuccessMessages.MONEY_WITHDRAW.getText(src));
+					src.sendMessage(SuccessMessage.MONEY_WITHDRAW.getText(src));
 					createTeam(team, src);
 				} else {
-					src.sendMessage(ErrorMessages.INSUFFICIENT_FUNDS.getText(src));
+					src.sendMessage(ErrorMessage.INSUFFICIENT_FUNDS.getText(src));
 				}
 
 			} else {
@@ -89,7 +89,7 @@ public class Create implements CommandExecutor {
 				ConfigManager.getConfNode("Team-Settings", "Default-Team-Bal"));
 		ConfigManager.save();
 
-		src.sendMessage(SuccessMessages.CREATED_TEAM.getText(src));
+		src.sendMessage(SuccessMessage.CREATED_TEAM.getText(src));
 	}
 	
 	public static CommandSpec build() {

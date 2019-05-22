@@ -1,8 +1,8 @@
 package io.github.tsecho.poketeams.commands.admin;
 
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
 import io.github.tsecho.poketeams.language.CensorCheck;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
@@ -30,12 +30,12 @@ public class Tag implements CommandExecutor {
 		check = new CensorCheck(tag);
 
 		if(!role.teamExists())
-			return ErrorCheck.test(src, ErrorMessages.NOT_EXISTS);
+			return ErrorCheck.test(src, ErrorMessage.NOT_EXISTS);
 		if(check.failsCensor(true))
-			return ErrorCheck.test(src, ErrorMessages.INNAPROPRIATE);
+			return ErrorCheck.test(src, ErrorMessage.INNAPROPRIATE);
 
 		role.setTag(tag);
-		src.sendMessage(SuccessMessages.TAG_CHANGE.getText(src));
+		src.sendMessage(SuccessMessage.TAG_CHANGE.getText(src));
 				
 		return CommandResult.success();
 	}

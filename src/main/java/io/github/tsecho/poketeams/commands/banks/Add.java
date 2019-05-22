@@ -2,9 +2,9 @@ package io.github.tsecho.poketeams.commands.banks;
 
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
 import io.github.tsecho.poketeams.economy.EconManager;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
-import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessage;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
 import org.spongepowered.api.command.CommandException;
@@ -29,26 +29,26 @@ public class Add implements CommandExecutor {
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
 		if(!(src instanceof Player))
-			return ErrorCheck.test(src, TechnicalMessages.NOT_PLAYER);
+			return ErrorCheck.test(src, TechnicalMessage.NOT_PLAYER);
 
 		addedMoney = args.<Integer>getOne(Text.of("amount")).get();
 		role = new PokeTeamsAPI(src);
 
 		if(!role.inTeam())
-			return ErrorCheck.test(src, ErrorMessages.NOT_IN_TEAM);
+			return ErrorCheck.test(src, ErrorMessage.NOT_IN_TEAM);
 		if(!role.canAddBank())
-			return ErrorCheck.test(src, ErrorMessages.INSUFFICIENT_RANK);
+			return ErrorCheck.test(src, ErrorMessage.INSUFFICIENT_RANK);
 		if(addedMoney < 0)
-			return ErrorCheck.test(src, ErrorMessages.NOT_POSITIVE);
+			return ErrorCheck.test(src, ErrorMessage.NOT_POSITIVE);
 
 		EconManager econ = new EconManager((Player) src);
 		BigDecimal cost = BigDecimal.valueOf(args.<Integer>getOne(Text.of("amount")).get());
 
 		if(econ.withdraw(cost).getResult() != ResultType.SUCCESS)
-			src.sendMessage(ErrorMessages.INSUFFICIENT_FUNDS.getText(src));
+			src.sendMessage(ErrorMessage.INSUFFICIENT_FUNDS.getText(src));
 
 		role.addBal(addedMoney);
-		src.sendMessage(SuccessMessages.MONEY_DEPOSIT.getText(src));
+		src.sendMessage(SuccessMessage.MONEY_DEPOSIT.getText(src));
 
 		return CommandResult.success();
 	}

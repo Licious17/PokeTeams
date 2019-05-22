@@ -2,8 +2,8 @@ package io.github.tsecho.poketeams.commands;
 
 import io.github.tsecho.poketeams.apis.InfoBuilderAPI;
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessage;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
 import io.github.tsecho.poketeams.utilities.Utils;
@@ -31,7 +31,7 @@ public class Info implements CommandExecutor {
 			String teamName = teamOpt.get();
 
 			if(!Utils.teamExists(teamName))
-				ErrorCheck.test(src, ErrorMessages.NOT_EXISTS);
+				ErrorCheck.test(src, ErrorMessage.NOT_EXISTS);
 
 			InfoBuilderAPI.builder(teamName, src)
 					.addName()
@@ -63,11 +63,11 @@ public class Info implements CommandExecutor {
 						.addPlayerList()
 						.sendWithFeedback();
 			} else {
-				src.sendMessage(ErrorMessages.NOT_IN_TEAM.getText(src));
+				src.sendMessage(ErrorMessage.NOT_IN_TEAM.getText(src));
 			}
 
 		} else {
-			src.sendMessage(TechnicalMessages.NOT_PLAYER.getText(src));
+			src.sendMessage(TechnicalMessage.NOT_PLAYER.getText(src));
 		}
 
 		return CommandResult.success();

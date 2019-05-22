@@ -3,9 +3,9 @@ package io.github.tsecho.poketeams.commands.bases;
 import com.flowpowered.math.vector.Vector3d;
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
 import io.github.tsecho.poketeams.configuration.ConfigManager;
-import io.github.tsecho.poketeams.enums.messages.ErrorMessages;
-import io.github.tsecho.poketeams.enums.messages.SuccessMessages;
-import io.github.tsecho.poketeams.enums.messages.TechnicalMessages;
+import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
+import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
+import io.github.tsecho.poketeams.enums.messages.TechnicalMessage;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
 import io.github.tsecho.poketeams.utilities.WorldInfo;
@@ -28,23 +28,23 @@ public class BasesBase implements CommandExecutor {
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 
 		if (!(src instanceof Player))
-			return ErrorCheck.test(src, TechnicalMessages.NOT_PLAYER);
+			return ErrorCheck.test(src, TechnicalMessage.NOT_PLAYER);
 
 		role = new PokeTeamsAPI(src);
 
 		if(!role.inTeam())
-			return ErrorCheck.test(src, ErrorMessages.NOT_IN_TEAM);
+			return ErrorCheck.test(src, ErrorMessage.NOT_IN_TEAM);
 		if(!role.hasBase())
-			return ErrorCheck.test(src, ErrorMessages.NO_BASE);
+			return ErrorCheck.test(src, ErrorMessage.NO_BASE);
 		if(!role.canTeleport())
-			return ErrorCheck.test(src, ErrorMessages.INSUFFICIENT_RANK);
+			return ErrorCheck.test(src, ErrorMessage.INSUFFICIENT_RANK);
 
 		if(ConfigManager.getStorNode("Teams", role.getTeam(), "Location", "World").isVirtual())
 			world = WorldInfo.getWorldUUID();
 		else
 			world = UUID.fromString(ConfigManager.getStorNode("Teams", role.getTeam(), "Location", "World").getString());
 
-		src.sendMessage(SuccessMessages.TELEPORTED.getText(src));
+		src.sendMessage(SuccessMessage.TELEPORTED.getText(src));
 		((Player) src).transferToWorld(world, new Vector3d(role.getX(), role.getY(), role.getZ()));
 
 		return CommandResult.success();
