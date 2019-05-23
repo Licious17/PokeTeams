@@ -17,8 +17,8 @@ apply plugin: 'java'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version = "4.0.0"
-group = 'io.github.tsecho.poketeams'
+version = "4.0.1"
+group = 'io.github.tsecho'
 archivesBaseName = "PokeTeams"
 
 minecraft {

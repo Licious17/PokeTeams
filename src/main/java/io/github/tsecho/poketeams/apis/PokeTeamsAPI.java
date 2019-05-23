@@ -551,7 +551,7 @@ public class PokeTeamsAPI {
 			return getStorNode("Teams", team, "Tag").getString();
 		else 
 			return Texts.getString(PlaceholderAPI.getInstance()
-									.replace(getConfNode("Placeholder-Settings", "Default-TeamTag").getString(), team));
+									.replace(getConfNode("Placeholder-Settings", "Default-TeamTag").getString(), team, true));
 	}
 
 	/**
