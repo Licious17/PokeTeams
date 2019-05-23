@@ -1,6 +1,6 @@
 # PokeTeams
 
-## Wiki
+## Download
 
 _Download can be found on [the ore versions page](https://ore.spongepowered.org/thesilentecho/PokeTeams/versions)_
 
@@ -11,6 +11,8 @@ PokeTeams allows players to create fully customizable teams which they can invit
 In these teams, players can set and use bases, fight other teams with a random queue system, chat in private team chats, and have information recorded about their battles, wild pokemon fights, pokemon catches, and legendary catches.
 
 You can enter in PokeTeams' custom queue system and fight in a full competitive battling system. This can come with custom clauses, rules, and rewards.
+
+If you want to involve even more people into the mix, you can use the alliance system to group teams together.
 
 Follow the rest of the pages here for more information regarding commands, configuration, dependencies, permissions and placeholders!
 
