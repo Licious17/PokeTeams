@@ -24,7 +24,7 @@ public class Texts {
 	 * @return a formatted text object
 	 */
 	public static Text of(String string, String src) {
-		return PlaceholderAPI.getInstance().replace(string, src, false);
+		return PlaceholderAPI.getInstance().replace(string, src);
 	}
 
 	/**

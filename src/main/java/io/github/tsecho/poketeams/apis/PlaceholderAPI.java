@@ -107,8 +107,8 @@ public class PlaceholderAPI {
 	 * This will use a the string as the replacement
 	 * @return a text with all replaced service
 	 */
-	public Text replace(String s, String src, boolean isTeam) {
-		PokeTeamsAPI role = new PokeTeamsAPI(src, isTeam);
+	public Text replace(String s, String src) {
+		PokeTeamsAPI role = new PokeTeamsAPI(src, false);
 		return Texts.of(s
 				.replaceAll("_", "")
 				.replaceAll("%player%", src)

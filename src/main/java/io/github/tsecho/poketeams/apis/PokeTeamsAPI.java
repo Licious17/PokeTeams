@@ -550,8 +550,7 @@ public class PokeTeamsAPI {
 		if(!getStorNode("Teams", team, "Tag").isVirtual())
 			return getStorNode("Teams", team, "Tag").getString();
 		else 
-			return Texts.getString(PlaceholderAPI.getInstance()
-									.replace(getConfNode("Placeholder-Settings", "Default-TeamTag").getString(), team, true));
+			return getConfNode("Placeholder-Settings", "Default-TeamTag").getString();
 	}
 
 	/**
