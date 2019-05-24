@@ -1,10 +1,8 @@
 package io.github.tsecho.poketeams.apis;
 
-import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.enums.ChatTypes;
 import io.github.tsecho.poketeams.enums.Ranks;
 import io.github.tsecho.poketeams.language.ChatUtils;
-import io.github.tsecho.poketeams.language.Texts;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;

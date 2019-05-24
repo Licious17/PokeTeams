@@ -1,7 +1,6 @@
 package io.github.tsecho.poketeams.apis;
 
 import io.github.tsecho.poketeams.PokeTeams;
-import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.language.Texts;
 import lombok.Getter;
 import me.rojo8399.placeholderapi.Listening;
@@ -11,8 +10,6 @@ import me.rojo8399.placeholderapi.Source;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.text.Text;
-
-import static io.github.tsecho.poketeams.configuration.ConfigManager.*;
 
 @Listening
 public class PlaceholderAPI {

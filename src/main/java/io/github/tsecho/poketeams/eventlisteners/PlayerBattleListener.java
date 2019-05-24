@@ -13,15 +13,12 @@ import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
 import io.github.tsecho.poketeams.language.Texts;
 import io.github.tsecho.poketeams.utilities.Utils;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.util.TypeTokens;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import static io.github.tsecho.poketeams.configuration.ConfigManager.getConfNode;
 import static io.github.tsecho.poketeams.configuration.ConfigManager.getSettings;
 
 public class PlayerBattleListener {

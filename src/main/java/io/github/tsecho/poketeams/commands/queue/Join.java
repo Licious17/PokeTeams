@@ -2,7 +2,6 @@ package io.github.tsecho.poketeams.commands.queue;
 
 import io.github.tsecho.poketeams.PokeTeams;
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
-import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.economy.EconManager;
 import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
 import io.github.tsecho.poketeams.enums.messages.QueueMessage;
@@ -20,7 +19,7 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.service.economy.transaction.ResultType;
 
-import static io.github.tsecho.poketeams.configuration.ConfigManager.*;
+import static io.github.tsecho.poketeams.configuration.ConfigManager.getSettings;
 
 public class Join implements CommandExecutor{
 

@@ -1,7 +1,6 @@
 package io.github.tsecho.poketeams.utilities;
 
 import io.github.tsecho.poketeams.PokeTeams;
-import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.economy.Taxes;
 import io.github.tsecho.poketeams.pixelmon.QueueManager;
 import org.spongepowered.api.scheduler.Task;

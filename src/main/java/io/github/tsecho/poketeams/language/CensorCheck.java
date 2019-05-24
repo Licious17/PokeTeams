@@ -6,7 +6,6 @@ import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 
 import java.util.ArrayList;
 
-import static io.github.tsecho.poketeams.configuration.ConfigManager.getConfNode;
 import static io.github.tsecho.poketeams.configuration.ConfigManager.getSettings;
 
 public class CensorCheck {
