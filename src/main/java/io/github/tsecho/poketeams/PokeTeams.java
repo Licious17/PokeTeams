@@ -8,7 +8,6 @@ import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.eventlisteners.*;
 import io.github.tsecho.poketeams.utilities.Tasks;
 import io.github.tsecho.poketeams.utilities.Utils;
-import io.github.tsecho.poketeams.utilities.WorldInfo;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
@@ -25,6 +24,7 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 
 import java.nio.file.Path;
+import java.util.UUID;
 
 @Plugin(id = PokeTeams.ID, 
 		name = PokeTeams.NAME, 
@@ -44,7 +44,10 @@ public class PokeTeams {
 
 	@Getter
 	private static PokeTeams instance;
-	
+
+	@Getter
+	private static UUID worldUUID;
+
 	@Inject
 	@Getter
 	private Logger logger;
@@ -76,7 +79,7 @@ public class PokeTeams {
 	
 	@Listener
 	public void onStart(GameStartedServerEvent e) {
-		WorldInfo.init();
+		worldUUID = Sponge.getServer().getDefaultWorld().get().getUniqueId();
 		/* Temporary method here to transition from player names to UUIDs */
 		Utils.moveToUUID();
 		new Tasks();

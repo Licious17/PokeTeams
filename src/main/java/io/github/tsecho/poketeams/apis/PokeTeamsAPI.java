@@ -1,5 +1,6 @@
 package io.github.tsecho.poketeams.apis;
 
+import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.enums.ChatTypes;
 import io.github.tsecho.poketeams.enums.Ranks;
 import io.github.tsecho.poketeams.language.ChatUtils;
@@ -430,7 +431,7 @@ public class PokeTeamsAPI {
 	 * @return {@code true} if the user has the queue-join permission in config based on their role
 	 */
 	public boolean canJoinQueue() {
-		return role != null && getConfNode("Team-Settings", "Roles", role, "queue-Join").getBoolean();
+		return role != null && getConfNode("Team-Settings", "Roles", role, "Queue-Join").getBoolean();
 	}
 	
 	/**
@@ -531,7 +532,7 @@ public class PokeTeamsAPI {
 	 * @return {@code int} value of how many members there can be in a team 
 	 */
 	public int getMaxPlayers() {
-		return getConfNode("Team-Settings", "Max-Members").getInt();
+		return getSettings().team.maxMembers;
 	}
 	
 	/**
@@ -539,7 +540,7 @@ public class PokeTeamsAPI {
 	 * @return {@code String} name of the team 
 	 */
 	public String getTeam() {
-		return teamExists() ? team : getConfNode("Placeholder-Settings", "Default-TeamName").getString();
+		return teamExists() ? team : getSettings().placeholders.defaultTeamName;
 	}
 	
 	/**
@@ -549,8 +550,7 @@ public class PokeTeamsAPI {
 	public String getTag() {
 		if(!getStorNode("Teams", team, "Tag").isVirtual())
 			return getStorNode("Teams", team, "Tag").getString();
-		else 
-			return getConfNode("Placeholder-Settings", "Default-TeamTag").getString();
+		return getSettings().placeholders.defaultTeamTag;
 	}
 
 	/**
@@ -559,10 +559,8 @@ public class PokeTeamsAPI {
 	 */
 	public String getFormattedTeamTag() {
 		if(!getStorNode("Teams", team, "Tag").isVirtual())
-			return getConfNode("Placeholder-Settings", "Formatted-TeamTag").getString()
-				.replace("%teamtag%", getTag());
-		else
-			return getConfNode("Placeholder-Settings", "Default-TeamTag").getString();
+			return getSettings().placeholders.formattedTeamTag.replace("%teamtag%", getTag());
+		return getSettings().placeholders.defaultTeamTag;
 	}
 	
 	/**
@@ -579,11 +577,11 @@ public class PokeTeamsAPI {
 	 * @return the rating of a team based on several settings and records
 	 */
 	public double getRating() {
-		double highCaught = getConfNode("Leaderboard-Settings", "CAUGHT").getInt();
-		double highLegend = getConfNode("Leaderboard-Settings", "LEGENDS").getInt();
-		double highKills = getConfNode("Leaderboard-Settings", "KILLS").getInt();
-		double highBal = getConfNode("Leaderboard-Settings", "BAL").getInt();
-		double highRecord = getConfNode("Leaderboard-Settings", "RECORD").getInt();
+		double highCaught = getSettings().leaderboard.caughtAverage;
+		double highLegend = getSettings().leaderboard.legendsAverage;
+		double highKills = getSettings().leaderboard.killsAverage;
+		double highBal = getSettings().leaderboard.balAverage;
+		double highRecord = getSettings().leaderboard.recordAverage;
 
 		double totCaught = highCaught >= getCaught() ? ((double) getCaught() / highCaught) * 100.0 : 100.0;
 		double totLegend = highLegend >= getLegends() ? ((double) getLegends() / highLegend) * 100.0 : 100.0;

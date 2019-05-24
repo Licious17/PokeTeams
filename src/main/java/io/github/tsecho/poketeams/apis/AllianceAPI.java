@@ -60,7 +60,7 @@ public class AllianceAPI {
     }
 
     public String getAlliance() {
-        return inAlliance() ? alliance : getConfNode("Placeholder-Settings", "Default-AllianceName").getString();
+        return inAlliance() ? alliance : getSettings().placeholders.defaultAllyName;
     }
 
     /**

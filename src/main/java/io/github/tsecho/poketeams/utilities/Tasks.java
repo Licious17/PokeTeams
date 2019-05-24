@@ -8,6 +8,8 @@ import org.spongepowered.api.scheduler.Task;
 
 import java.util.concurrent.TimeUnit;
 
+import static io.github.tsecho.poketeams.configuration.ConfigManager.getSettings;
+
 public class Tasks {
 
 	public Tasks() {
@@ -18,10 +20,10 @@ public class Tasks {
 
 	private void startQueue() {
 		Task.builder()
-				.name(PokeTeams.ID + "-queue-Timer")
+				.name(PokeTeams.ID + "-Queue-Timer")
 				.delay(5, TimeUnit.SECONDS)
 				.async()
-				.interval(ConfigManager.getConfNode("Battle-Settings", "queue-Timer").getInt(), TimeUnit.SECONDS)
+				.interval(getSettings().battle.queueTimer, TimeUnit.SECONDS)
 				.execute(QueueManager::choosePlayers)
 				.submit(PokeTeams.getInstance());
 	}

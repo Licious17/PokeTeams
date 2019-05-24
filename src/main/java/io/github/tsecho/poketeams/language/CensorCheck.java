@@ -6,6 +6,9 @@ import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 
 import java.util.ArrayList;
 
+import static io.github.tsecho.poketeams.configuration.ConfigManager.getConfNode;
+import static io.github.tsecho.poketeams.configuration.ConfigManager.getSettings;
+
 public class CensorCheck {
 
 	private boolean FAILED = false;
@@ -34,23 +37,20 @@ public class CensorCheck {
 	 */
 	public boolean failsCensor(boolean isTag) {
 
-		if(word.contains("$"))
-			FAILED = true;
-
-		if(!isTag && ConfigManager.getConfNode("Team-Settings", "Name", "Use-Censor").getBoolean())
+		if(!isTag && getSettings().team.name.useCensor)
 			if (ConfigManager.getCensorNode("Partial-Censor").getBoolean())
 				partialCensor();
 			else
 				fullWord();
-		else if(isTag && ConfigManager.getConfNode("Team-Settings", "NameTag", "Use-Censor").getBoolean())
+		else if(isTag && getSettings().team.tag.useCensor)
 			if (ConfigManager.getCensorNode("Partial-Censor").getBoolean())
 				partialCensor();
 			else
 				fullWord();
 
-		if(!isTag && ConfigManager.getConfNode("Team-Settings", "Name", "Max-Length").getInt() < word.length())
+		if(!isTag && getSettings().team.name.maxLength < word.length())
 			FAILED = true;
-		else if(isTag && ConfigManager.getConfNode("Team-Settings", "NameTag", "Max-Length").getInt() < word.replace("&[0123456789abcdefklmnorABCDEFKLMNOR]", "").length())
+		else if(isTag && getSettings().team.tag.maxLength < word.replaceAll("&[abcdefklmnorABCDEFKLMNOR]", "").length())
 			FAILED = true;
 
 		if(!isTag && word.contains("&"))
@@ -58,10 +58,10 @@ public class CensorCheck {
 
 		if(isTag) {
 			if(word.contains("&")) {
-				if(containsStyle() && !ConfigManager.getConfNode("Team-Settings", "NameTag", "Allow-Style").getBoolean()) {
+				if(containsStyle() && !getSettings().team.tag.allowStyle) {
 					FAILED = true;
 				}
-				if(!containsStyle() && !ConfigManager.getConfNode("Team-Settings", "NameTag", "Allow-Colors").getBoolean()) {
+				if(!containsStyle() && !getSettings().team.tag.allowColors) {
 					FAILED = true;
 				}
 			}

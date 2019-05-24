@@ -7,22 +7,22 @@ import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipan
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import io.github.tsecho.poketeams.PokeTeams;
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
-import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
 import io.github.tsecho.poketeams.enums.messages.QueueMessage;
 import io.github.tsecho.poketeams.utilities.Utils;
-import io.github.tsecho.poketeams.utilities.WorldInfo;
 import lombok.Getter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scheduler.Task;
-import org.spongepowered.api.world.World;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+
+import static io.github.tsecho.poketeams.configuration.ConfigManager.getSettings;
 
 public class QueueManager {
 
@@ -82,10 +82,10 @@ public class QueueManager {
 			EntityPixelmon poke2 = Pixelmon.storageManager.getParty(player2.getUniqueId()).getTeam().get(0).getOrSpawnPixelmon((Entity) player2);
 			PlayerParticipant battler2 = new PlayerParticipant((EntityPlayerMP) player2, poke2);
 
-			if(WorldInfo.useArena())
+			if(getSettings().battle.arena.isEnabled)
 				warp(player1, player2);
 
-			BattleRegistry.startBattle(new BattleParticipant[]{battler1}, new BattleParticipant[]{battler2}, new BattleSettings().getSettings());
+			BattleRegistry.startBattle(new BattleParticipant[]{battler1}, new BattleParticipant[]{battler2}, new BattleSettings().getRules());
 
 		} else {
 			Sponge.getServer().getPlayer(playerName1).ifPresent(player -> player.sendMessage(ErrorMessage.NOT_ONLINE.getText(player)));
@@ -102,19 +102,15 @@ public class QueueManager {
 
 	private void warp(Player a, Player b) {
 
-		String worldName = ConfigManager.getConfNode("Battle-Settings", "Arena", "World").getString();
+		String worldName = getSettings().battle.arena.world;
+		UUID uuid = PokeTeams.getWorldUUID();
 
-		if(worldName.equalsIgnoreCase("default")) {
-			a.setLocation(WorldInfo.getPosA(), WorldInfo.getWorldUUID());
-			b.setLocation(WorldInfo.getPosB(), WorldInfo.getWorldUUID());
-		} else if (Sponge.getServer().getWorld(worldName).isPresent()) {
-			World world =  Sponge.getServer().getWorld(worldName).get();
-			a.setLocation(WorldInfo.getPosA(), world.getUniqueId());
-			b.setLocation(WorldInfo.getPosB(), world.getUniqueId());
-		} else {
-			a.setLocation(WorldInfo.getPosA(), WorldInfo.getWorldUUID());
-			b.setLocation(WorldInfo.getPosB(), WorldInfo.getWorldUUID());
+		if(Sponge.getServer().getWorld(worldName).isPresent())
+			uuid = Sponge.getServer().getWorld(worldName).get().getUniqueId();
+		else if(!worldName.equalsIgnoreCase("default"))
 			PokeTeams.getInstance().getLogger().error("The world name in the configuration is not a valid world name!");
-		}
+
+		a.setLocation(getSettings().battle.arena.locA.getVector(), uuid);
+		b.setLocation(getSettings().battle.arena.locB.getVector(), uuid);
 	}
 }

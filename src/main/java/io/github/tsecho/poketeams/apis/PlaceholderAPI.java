@@ -12,6 +12,8 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.text.Text;
 
+import static io.github.tsecho.poketeams.configuration.ConfigManager.*;
+
 @Listening
 public class PlaceholderAPI {
 
@@ -128,11 +130,7 @@ public class PlaceholderAPI {
 
 	@Placeholder(id = "teamname")
 	public String getTeam(@Source CommandSource src) {
-		PokeTeamsAPI role = new PokeTeamsAPI(src);
-		if(role.inTeam())
-			return role.getTeam();
-		else
-			return Texts.getString(replace(ConfigManager.getConfNode("Placeholder-Settings", "Default-TeamName").getString(), src));
+		return new PokeTeamsAPI(src).getTeam();
 	}
 
 	@Placeholder(id = "teamtag")
@@ -177,7 +175,7 @@ public class PlaceholderAPI {
 
 	@Placeholder(id = "formattedteamtag")
 	public String getFormattedTeamTag(@Source CommandSource src) {
-		return String.valueOf(new PokeTeamsAPI(src).getFormattedTeamTag());
+		return new PokeTeamsAPI(src).getFormattedTeamTag();
 	}
 
 	@Placeholder(id = "teamrating")
@@ -187,6 +185,6 @@ public class PlaceholderAPI {
 
 	@Placeholder(id = "teamalliance")
 	public String getAlliance(@Source CommandSource src) {
-		return String.valueOf(new AllianceAPI(new PokeTeamsAPI(src)).getAlliance());
+		return new AllianceAPI(new PokeTeamsAPI(src)).getAlliance();
 	}
 }

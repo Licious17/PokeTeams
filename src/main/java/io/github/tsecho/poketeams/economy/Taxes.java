@@ -13,6 +13,9 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
 
+import static io.github.tsecho.poketeams.configuration.ConfigManager.getSettings;
+import static io.github.tsecho.poketeams.configuration.ConfigManager.getStorNode;
+
 public class Taxes {
 	
 	private static String team;
@@ -31,11 +34,11 @@ public class Taxes {
 	}
 	
 	private static void loopTeams(boolean tax) {
-		ConfigManager.getStorNode("Teams").getChildrenMap().forEach((key, value) -> {
+		getStorNode("Teams").getChildrenMap().forEach((key, value) -> {
 
 			team = key.toString();
-			teamBal = ConfigManager.getStorNode("Teams", team, "Stats", "Bal").getInt();
-			cost = ConfigManager.getConfNode("Team-Settings", "Money", "Tax").getInt();
+			teamBal = getStorNode("Teams", team, "Stats", "Bal").getInt();
+			cost = getSettings().team.money.tax;
 
 			if (cantPay())
 				if (tax)
@@ -48,24 +51,24 @@ public class Taxes {
 	}
 
 	private static void takeMoney() {
-		ConfigManager.getStorNode("Teams", team, "Members").getChildrenMap().entrySet().stream()
+		getStorNode("Teams", team, "Members").getChildrenMap().entrySet().stream()
 				.map(key -> key.getKey().toString())
 				.forEach(membber -> Sponge.getServer().getPlayer(membber).ifPresent(p -> p.sendMessage(SuccessMessage.TAX_TAKEN.getText(p))));
-		new PokeTeamsAPI(team, true).addBal(-1 * cost);
+		new PokeTeamsAPI(team, true).addBal(-cost);
 	}
 
 	
 	private static void sendDeletion() {
-		ConfigManager.getStorNode("Teams", team, "Members").getChildrenMap().entrySet().stream()
+		getStorNode("Teams", team, "Members").getChildrenMap().entrySet().stream()
 				.map(key -> key.getKey().toString())
 				.forEach(member -> Sponge.getServer().getPlayer(member).ifPresent(p -> p.sendMessage(SuccessMessage.DISBANDED.getText(p))));
 		new PokeTeamsAPI(team, true).deleteTeam();
 	}
 	
 	private static void sendWarning() {
-		ConfigManager.getStorNode("Teams", team, "Members").getChildrenMap().entrySet().stream()
+		getStorNode("Teams", team, "Members").getChildrenMap().entrySet().stream()
 				.map(key -> key.getKey().toString())
-				.forEach(membber -> Sponge.getServer().getPlayer(membber).ifPresent(p -> p.sendMessage(SuccessMessage.TAX_WARNING.getText(p))));
+				.forEach(member -> Sponge.getServer().getPlayer(member).ifPresent(p -> p.sendMessage(SuccessMessage.TAX_WARNING.getText(p))));
 	}
 	
 	private static boolean cantPay() {
@@ -73,20 +76,14 @@ public class Taxes {
 	}
 	
 	private static boolean isTaxTime() {
-		try {
-			LocalTime now = Instant.now().atZone(ZoneId.systemDefault()).toLocalTime().truncatedTo(ChronoUnit.MINUTES);
+		LocalTime now = Instant.now().atZone(ZoneId.systemDefault()).toLocalTime().truncatedTo(ChronoUnit.MINUTES);
+		return getSettings().team.money.taxTimes.stream()
+				.filter(i -> now.equals(LocalTime.of(Integer.valueOf(i.split(":")[0]), Integer.valueOf(i.split(":")[1]))))
+				.collect(Collectors.toList()).size() > 0;
 
-			return ConfigManager.getConfNode("Team-Settings", "Money", "Tax-Timer").getList(TypeTokens.STRING_TOKEN).stream()
-					.filter(i -> now.equals(LocalTime.of(Integer.valueOf(i.split(":")[0]), Integer.valueOf(i.split(":")[1]))))
-					.collect(Collectors.toList()).size() > 0;
-
-		} catch (ObjectMappingException e) {
-			e.printStackTrace();
-			return false;
-		}
 	}
 	
 	private static boolean isTaxingEnabled() {
-		return ConfigManager.getConfNode("Team-Settings", "Money", "Tax-Enabled").getBoolean();
+		return getSettings().team.money.taxEnabled;
 	}
 }

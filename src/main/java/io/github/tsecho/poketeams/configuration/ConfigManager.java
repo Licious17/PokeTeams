@@ -1,11 +1,14 @@
 package io.github.tsecho.poketeams.configuration;
 
+import com.google.common.reflect.TypeToken;
 import io.github.tsecho.poketeams.PokeTeams;
-import io.github.tsecho.poketeams.utilities.WorldInfo;
+import io.github.tsecho.poketeams.configuration.serialization.Settings;
+import lombok.Getter;
 import ninja.leaping.configurate.ConfigurationOptions;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,10 +16,12 @@ import java.nio.file.Path;
 
 public class ConfigManager {
 
+	@Getter private static Settings settings;
 	private static Path dir, config, storage, censor, lang, alliances;
 	private static ConfigurationLoader<CommentedConfigurationNode> storLoad, confLoad, censorLoad, langLoad, allyLoad;
 	private static CommentedConfigurationNode confNode, storNode, censorNode, langNode, allyNode;
 	private static final String[] FILES = {"Configuration.conf", "Censor.conf", "Language.conf", "Teams.conf", "Alliances.conf"};
+	private final static TypeToken<Settings> TYPE = TypeToken.of(Settings.class);
 
 	public static void setup(Path folder) {
 		dir = folder;
@@ -49,13 +54,14 @@ public class ConfigManager {
 			censorNode = censorLoad.load();
 			langNode = langLoad.load();
 			allyNode = allyLoad.load();
-				
-		} catch(IOException e) {
+
+			settings = new Settings();
+			settings = confNode.getValue(TYPE);
+            save();
+
+        } catch(IOException | ObjectMappingException e) {
 			PokeTeams.getInstance().getLogger().error("Error loading up PokeTeams Configuration"); e.printStackTrace();
 		}
-
-		save();
-		WorldInfo.refreshPos();
 	}
 	
 	public static void save() {

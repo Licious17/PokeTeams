@@ -13,6 +13,7 @@ import org.spongepowered.api.event.EventListener;
 import org.spongepowered.api.event.message.MessageChannelEvent;
 import org.spongepowered.api.text.Text;
 
+import static io.github.tsecho.poketeams.configuration.ConfigManager.getSettings;
 import static io.github.tsecho.poketeams.enums.ChatTypes.ALLIANCE;
 import static io.github.tsecho.poketeams.enums.ChatTypes.TEAM;
 
@@ -34,7 +35,7 @@ public class ChatListener implements EventListener<MessageChannelEvent.Chat>{
 
 			this.chatType = ChatUtils.getChatType(player.getName());
 			this.message = Texts.getString(e.getRawMessage());
-			this.staffMessage = Texts.of(ConfigManager.getConfNode("Chat-Settings", "SocialSpy-Message").getString() + message, player);
+			this.staffMessage = Texts.of(getSettings().chat.spyMessage + message, player);
 
 			if(inGroupChat()) {
 				modifyTeam();
@@ -45,15 +46,15 @@ public class ChatListener implements EventListener<MessageChannelEvent.Chat>{
 	}
 	
 	private void modifyTeam() {
-		prefix = ConfigManager.getConfNode("Chat-Settings", "Prefix").getString();
-		chatColor = ConfigManager.getConfNode("Chat-Settings", "Chat-Color").getString();
+		prefix = getSettings().chat.prefix;
+		chatColor = getSettings().chat.chatColor;
 		newMessage = Texts.of((prefix + chatColor + message), player);
 		sendMessages();
 	}
 
 	private void modifyAlliance() {
-		prefix = ConfigManager.getConfNode("Ally-Settings", "Chat-Settings", "Prefix").getString();
-		chatColor = ConfigManager.getConfNode("Ally-Settings", "Chat-Settings", "Chat-Color").getString();
+		prefix = getSettings().ally.roles.chat.prefix;
+		chatColor =  getSettings().ally.roles.chat.chatColor;
 		newMessage = Texts.of((prefix + chatColor + message), player);
 		ogAlliance = new AllianceAPI(role);
 		sendMessages();
@@ -68,7 +69,7 @@ public class ChatListener implements EventListener<MessageChannelEvent.Chat>{
 				members.sendMessage(staffMessage);
 		}
 
-		if(ConfigManager.getConfNode("Chat-Settings", "Console-SocialSpy").getBoolean())
+		if(getSettings().chat.useConsoleSpy)
 			Sponge.getServer().getConsole().sendMessage(newMessage);
 		e.setCancelled(true);
 	}
@@ -83,7 +84,7 @@ public class ChatListener implements EventListener<MessageChannelEvent.Chat>{
 	}
 	
 	private boolean isStaff(Player members) {
-		return ConfigManager.getConfNode("Chat-Settings", "Players-SocialSpy").getBoolean() && members.hasPermission(Permissions.SOCIAL_SPY);
+		return getSettings().chat.usePlayerSpy && members.hasPermission(Permissions.SOCIAL_SPY);
 	}
 	
 	private boolean isPlayer() {

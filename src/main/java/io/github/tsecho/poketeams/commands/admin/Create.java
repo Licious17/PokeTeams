@@ -1,6 +1,5 @@
 package io.github.tsecho.poketeams.commands.admin;
 
-import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
 import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
 import io.github.tsecho.poketeams.language.Texts;
@@ -16,6 +15,8 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.text.Text;
 
+import static io.github.tsecho.poketeams.configuration.ConfigManager.*;
+
 public class Create implements CommandExecutor {
 
     @Override
@@ -26,14 +27,13 @@ public class Create implements CommandExecutor {
         if(Utils.teamExists(team))
             return ErrorCheck.test(src, ErrorMessage.AlREADY_EXISTS);
 
-        ConfigManager.getStorNode("Teams", team, "Record", "Wins").setValue(0);
-        ConfigManager.getStorNode("Teams", team, "Record", "Losses").setValue(0);
-        ConfigManager.getStorNode("Teams", team, "Stats", "Kills").setValue(0);
-        ConfigManager.getStorNode("Teams", team, "Stats", "Caught").setValue(0);
-        ConfigManager.getStorNode("Teams", team, "Stats", "Legends").setValue(0);
-        ConfigManager.getStorNode("Teams", team, "Stats", "Bal").setValue(
-                ConfigManager.getConfNode("Team-Settings", "Default-Team-Bal"));
-        ConfigManager.save();
+        getStorNode("Teams", team, "Record", "Wins").setValue(0);
+        getStorNode("Teams", team, "Record", "Losses").setValue(0);
+        getStorNode("Teams", team, "Stats", "Kills").setValue(0);
+        getStorNode("Teams", team, "Stats", "Caught").setValue(0);
+        getStorNode("Teams", team, "Stats", "Legends").setValue(0);
+        getStorNode("Teams", team, "Stats", "Bal").setValue(getSettings().team.defaultTeamBal);
+        save();
 
         src.sendMessage(Texts.of(SuccessMessage.CREATED_TEAM.getString().replace("%teamname%", team)));
 

@@ -21,6 +21,8 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.text.Text;
 
+import static io.github.tsecho.poketeams.configuration.ConfigManager.getSettings;
+
 public class Kick implements CommandExecutor {
 
 	private PokeTeamsAPI role;
@@ -51,14 +53,13 @@ public class Kick implements CommandExecutor {
 	}
 	
 	private void kickPlayer() {
-		if(role.getMemberTotal() == 1 && ConfigManager.getConfNode("Team-Settings", "Delete-When-Empty").getBoolean()) {
-			messagePlayer();
+		if(role.getMemberTotal() == 1 && getSettings().team.deleteWhenEmpty) {
 			role.deleteTeam();
 			ChatUtils.setChat(user.getName(), ChatTypes.PUBLIC);
 		} else {
-			messagePlayer();
 			role.kickPlayer(user.getName());
 		}
+		messagePlayer();
 	}
 	
 	private void messagePlayer() {
