@@ -43,7 +43,7 @@ public class Withdraw implements CommandExecutor {
         if(requested < 0)
             return ErrorCheck.test(src, ErrorMessage.NOT_POSITIVE);
         if(role.takeBal(requested))
-            src.sendMessage(Texts.of(SuccessMessage.MONEY_REWARD.getString(src).replaceAll("%price%", String.valueOf(requested))));
+            src.sendMessage(Texts.of(SuccessMessage.MONEY_REWARD.getString(src).replace("%price%", String.valueOf(requested))));
         else
             return ErrorCheck.test(src, ErrorMessage.INSUFFICIENT_FUNDS);
 

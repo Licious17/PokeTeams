@@ -87,20 +87,20 @@ public class PlaceholderAPI {
 			return service.replaceSourcePlaceholders(Texts.of(s), src);
 		else
 			return Texts.of(s
-				.replaceAll("_", "")
-				.replaceAll("%player%", src.getName())
-				.replaceAll("%teamname%", getTeam(src)
-				.replaceAll("%teamtag%", getTag(src)
-				.replaceAll("%teamwins%", getWins(src)
-				.replaceAll("%teamkills%" , getKills(src))
-				.replaceAll("%teamlosses%", getLosses(src)
-				.replaceAll("%teamratio%", getRatio(src)
-				.replaceAll("%teamcaught%", getCaught(src)
-				.replaceAll("%teamcaughtlegend%", getLegendCaught(src)
-				.replaceAll("%teamrating%", getRating(src))
-				.replaceAll("%formattedteamtag%", getFormattedTeamTag(src))
-				.replaceAll("%teamalliance%", getAlliance(src))
-				.replaceAll("%teambal%", getBalance(src))))))))));
+				.replace("_", "")
+				.replace("%player%", src.getName())
+				.replace("%teamname%", getTeam(src)
+				.replace("%teamtag%", getTag(src)
+				.replace("%teamwins%", getWins(src)
+				.replace("%teamkills%" , getKills(src))
+				.replace("%teamlosses%", getLosses(src)
+				.replace("%teamratio%", getRatio(src)
+				.replace("%teamcaught%", getCaught(src)
+				.replace("%teamcaughtlegend%", getLegendCaught(src)
+				.replace("%teamrating%", getRating(src))
+				.replace("%formattedteamtag%", getFormattedTeamTag(src))
+				.replace("%teamalliance%", getAlliance(src))
+				.replace("%teambal%", getBalance(src))))))))));
 	}
 
 	/**
@@ -110,20 +110,20 @@ public class PlaceholderAPI {
 	public Text replace(String s, String src) {
 		PokeTeamsAPI role = new PokeTeamsAPI(src, false);
 		return Texts.of(s
-				.replaceAll("_", "")
-				.replaceAll("%player%", src)
-				.replaceAll("%teamname%", role.getTeam())
-				.replaceAll("%teamtag%", role.getTag())
-				.replaceAll("%teamcaughtlegend%", String.valueOf(role.getLegends()))
-				.replaceAll("%teamalliance%", new AllianceAPI(role).getAlliance())
-				.replaceAll("%teamwins%", String.valueOf(role.getWins()))
-				.replaceAll("%teamkills%" , String.valueOf(role.getKills()))
-				.replaceAll("%teamlosses%", String.valueOf(role.getLosses()))
-				.replaceAll("%teamratio%", String.valueOf(role.getRatio()))
-				.replaceAll("%teamcaught%", String.valueOf(role.getCaught()))
-				.replaceAll("%formattedteamtag%", role.getFormattedTeamTag())
-				.replaceAll("%teamrating%", String.valueOf(role.getRating()))
-				.replaceAll("%teambal%", String.valueOf(role.getBal())));
+				.replace("_", "")
+				.replace("%player%", src)
+				.replace("%teamname%", role.getTeam())
+				.replace("%teamtag%", role.getTag())
+				.replace("%teamcaughtlegend%", String.valueOf(role.getLegends()))
+				.replace("%teamalliance%", new AllianceAPI(role).getAlliance())
+				.replace("%teamwins%", String.valueOf(role.getWins()))
+				.replace("%teamkills%" , String.valueOf(role.getKills()))
+				.replace("%teamlosses%", String.valueOf(role.getLosses()))
+				.replace("%teamratio%", String.valueOf(role.getRatio()))
+				.replace("%teamcaught%", String.valueOf(role.getCaught()))
+				.replace("%formattedteamtag%", role.getFormattedTeamTag())
+				.replace("%teamrating%", String.valueOf(role.getRating()))
+				.replace("%teambal%", String.valueOf(role.getBal())));
 	}
 
 	@Placeholder(id = "teamname")

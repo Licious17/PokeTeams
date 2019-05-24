@@ -50,7 +50,7 @@ public class CensorCheck {
 
 		if(!isTag && ConfigManager.getConfNode("Team-Settings", "Name", "Max-Length").getInt() < word.length())
 			FAILED = true;
-		else if(isTag && ConfigManager.getConfNode("Team-Settings", "NameTag", "Max-Length").getInt() < word.replaceAll("&[0123456789abcdefklmnorABCDEFKLMNOR]", "").length())
+		else if(isTag && ConfigManager.getConfNode("Team-Settings", "NameTag", "Max-Length").getInt() < word.replace("&[0123456789abcdefklmnorABCDEFKLMNOR]", "").length())
 			FAILED = true;
 
 		if(!isTag && word.contains("&"))

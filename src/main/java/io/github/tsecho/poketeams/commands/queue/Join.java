@@ -52,7 +52,7 @@ public class Join implements CommandExecutor{
 					return ErrorCheck.test(src, ErrorMessage.INSUFFICIENT_FUNDS);
 
 				src.sendMessage(Texts.of(QueueMessage.ADDED_QUEUE_COST.getString()
-						.replaceAll("%price%", String.valueOf(ConfigManager.getConfNode("Battle-Settings", "Queue-Fee", "Price").getInt())), src));
+						.replace("%price%", String.valueOf(ConfigManager.getConfNode("Battle-Settings", "Queue-Fee", "Price").getInt())), src));
 
 				QueueManager.getQueue().add(src.getName());
 

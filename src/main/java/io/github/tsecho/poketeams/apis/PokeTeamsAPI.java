@@ -560,7 +560,7 @@ public class PokeTeamsAPI {
 	public String getFormattedTeamTag() {
 		if(!getStorNode("Teams", team, "Tag").isVirtual())
 			return getConfNode("Placeholder-Settings", "Formatted-TeamTag").getString()
-				.replaceAll("%teamtag%", getTag());
+				.replace("%teamtag%", getTag());
 		else
 			return getConfNode("Placeholder-Settings", "Default-TeamTag").getString();
 	}

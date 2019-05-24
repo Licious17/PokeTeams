@@ -72,14 +72,14 @@ public class PlayerBattleListener {
 
 						BigDecimal cost = BigDecimal.valueOf(Integer.valueOf(i.replaceAll("\\D+","")));
 						econ.pay(cost);
-						winner.sendMessage(Texts.of(SuccessMessage.MONEY_REWARD.getString(winner).replaceAll("%price%", cost.toPlainString()), winner));
+						winner.sendMessage(Texts.of(SuccessMessage.MONEY_REWARD.getString(winner).replace("%price%", cost.toPlainString()), winner));
 
 					} else {
 						PokeTeams.getInstance().getLogger().error("Economy plugin is not available! Please add one for rewards to work properly");
 					}
 
 				} else {
-					Sponge.getCommandManager().process(Sponge.getServer().getConsole(), i.replaceAll("%player%", winner.getName()));
+					Sponge.getCommandManager().process(Sponge.getServer().getConsole(), i.replace("%player%", winner.getName()));
 				}
 			}
 		} catch (ObjectMappingException e) {

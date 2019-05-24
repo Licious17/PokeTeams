@@ -45,7 +45,7 @@ public class TransferOwner implements CommandExecutor {
         roleOther.setRole(4);
 
         src.sendMessage(SuccessMessage.DEMOTED.getText(src));
-        src.sendMessage(Texts.of(SuccessMessage.PROMOTE_SEND.getString().replaceAll("%player%", newOwner.getName())));
+        src.sendMessage(Texts.of(SuccessMessage.PROMOTE_SEND.getString().replace("%player%", newOwner.getName())));
         newOwner.getPlayer().ifPresent(p -> p.sendMessage(SuccessMessage.PROMOTED.getText(p)));
 
         return CommandResult.success();

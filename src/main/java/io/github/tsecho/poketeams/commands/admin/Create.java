@@ -35,7 +35,7 @@ public class Create implements CommandExecutor {
                 ConfigManager.getConfNode("Team-Settings", "Default-Team-Bal"));
         ConfigManager.save();
 
-        src.sendMessage(Texts.of(SuccessMessage.CREATED_TEAM.getString().replaceAll("%teamname%", team)));
+        src.sendMessage(Texts.of(SuccessMessage.CREATED_TEAM.getString().replace("%teamname%", team)));
 
         return CommandResult.success();
     }
