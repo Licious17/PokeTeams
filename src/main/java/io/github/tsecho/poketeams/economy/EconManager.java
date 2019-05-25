@@ -1,7 +1,6 @@
 package io.github.tsecho.poketeams.economy;
 
 import io.github.tsecho.poketeams.PokeTeams;
-import io.github.tsecho.poketeams.configuration.ConfigManager;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.cause.Cause;
@@ -13,6 +12,8 @@ import org.spongepowered.api.service.economy.account.UniqueAccount;
 import org.spongepowered.api.service.economy.transaction.TransactionResult;
 
 import java.math.BigDecimal;
+
+import static io.github.tsecho.poketeams.configuration.ConfigManager.getSettings;
 
 public class EconManager {
 
@@ -34,8 +35,7 @@ public class EconManager {
      * @return TransactionResult of the bought team (SUCCESS or NO_FUNDS)
      */
     public TransactionResult buyTeam() {
-        int cost = ConfigManager.getConfNode("Team-Settings", "Money", "Creation-Cost").getInt();
-        return account.withdraw(currency, BigDecimal.valueOf(cost), CAUSE);
+        return account.withdraw(currency, BigDecimal.valueOf(getSettings().team.money.creationCost), CAUSE);
     }
 
     /**
@@ -43,8 +43,7 @@ public class EconManager {
      * @return TransactionResult of entering the queue
      */
     public TransactionResult enterQueue() {
-        int cost = ConfigManager.getConfNode("Battle-Settings", "queue-Fee", "Price").getInt();
-        return account.withdraw(currency, BigDecimal.valueOf(cost), CAUSE);
+        return account.withdraw(currency, BigDecimal.valueOf(getSettings().battle.queueFee.price), CAUSE);
     }
 
     /**

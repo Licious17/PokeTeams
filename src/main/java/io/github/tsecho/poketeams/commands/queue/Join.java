@@ -2,7 +2,6 @@ package io.github.tsecho.poketeams.commands.queue;
 
 import io.github.tsecho.poketeams.PokeTeams;
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
-import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.economy.EconManager;
 import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
 import io.github.tsecho.poketeams.enums.messages.QueueMessage;
@@ -19,6 +18,8 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.service.economy.transaction.ResultType;
+
+import static io.github.tsecho.poketeams.configuration.ConfigManager.getSettings;
 
 public class Join implements CommandExecutor{
 
@@ -39,7 +40,7 @@ public class Join implements CommandExecutor{
 		if(QueueManager.getQueue().contains(src.getName()))
 			return ErrorCheck.test(src, QueueMessage.ALREADY_IN_QUEUE);
 
-		if(ConfigManager.getConfNode("Battle-Settings", "Queue-Fee", "Enabled").getBoolean()) {
+		if(getSettings().battle.queueFee.isEnabled) {
 
 			EconManager econ = new EconManager((Player) src);
 
@@ -52,7 +53,7 @@ public class Join implements CommandExecutor{
 					return ErrorCheck.test(src, ErrorMessage.INSUFFICIENT_FUNDS);
 
 				src.sendMessage(Texts.of(QueueMessage.ADDED_QUEUE_COST.getString()
-						.replaceAll("%price%", String.valueOf(ConfigManager.getConfNode("Battle-Settings", "Queue-Fee", "Price").getInt())), src));
+						.replace("%price%", String.valueOf(getSettings().battle.queueFee.price)), src));
 
 				QueueManager.getQueue().add(src.getName());
 

@@ -1,9 +1,7 @@
 package io.github.tsecho.poketeams.apis;
 
 import io.github.tsecho.poketeams.PokeTeams;
-import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.language.Texts;
-import lombok.Getter;
 import me.rojo8399.placeholderapi.Listening;
 import me.rojo8399.placeholderapi.Placeholder;
 import me.rojo8399.placeholderapi.PlaceholderService;
@@ -15,8 +13,8 @@ import org.spongepowered.api.text.Text;
 @Listening
 public class PlaceholderAPI {
 
-	@Getter private PlaceholderService service;
-	@Getter private boolean enabled = false;
+	private PlaceholderService service;
+	private boolean enabled = false;
 	private static PlaceholderAPI INSTANCE;
 
 	private PlaceholderAPI() {}
@@ -87,52 +85,48 @@ public class PlaceholderAPI {
 			return service.replaceSourcePlaceholders(Texts.of(s), src);
 		else
 			return Texts.of(s
-				.replaceAll("_", "")
-				.replaceAll("%player%", src.getName())
-				.replaceAll("%teamname%", getTeam(src)
-				.replaceAll("%teamtag%", getTag(src)
-				.replaceAll("%teamwins%", getWins(src)
-				.replaceAll("%teamkills%" , getKills(src))
-				.replaceAll("%teamlosses%", getLosses(src)
-				.replaceAll("%teamratio%", getRatio(src)
-				.replaceAll("%teamcaught%", getCaught(src)
-				.replaceAll("%teamcaughtlegend%", getLegendCaught(src)
-				.replaceAll("%teamrating%", getRating(src))
-				.replaceAll("%formattedteamtag%", getFormattedTeamTag(src))
-				.replaceAll("%teamalliance%", getAlliance(src))
-				.replaceAll("%teambal%", getBalance(src))))))))));
+				.replace("_", "")
+				.replace("%player%", src.getName())
+				.replace("%teamname%", getTeam(src)
+				.replace("%teamtag%", getTag(src)
+				.replace("%teamwins%", getWins(src)
+				.replace("%teamkills%" , getKills(src))
+				.replace("%teamlosses%", getLosses(src)
+				.replace("%teamratio%", getRatio(src)
+				.replace("%teamcaught%", getCaught(src)
+				.replace("%teamcaughtlegend%", getLegendCaught(src)
+				.replace("%teamrating%", getRating(src))
+				.replace("%formattedteamtag%", getFormattedTeamTag(src))
+				.replace("%teamalliance%", getAlliance(src))
+				.replace("%teambal%", getBalance(src))))))))));
 	}
 
 	/**
 	 * This will use a the string as the replacement
 	 * @return a text with all replaced service
 	 */
-	public Text replace(String s, String src, boolean isTeam) {
-		PokeTeamsAPI role = new PokeTeamsAPI(src, isTeam);
+	public Text replace(String s, String src) {
+		PokeTeamsAPI role = new PokeTeamsAPI(src, false);
 		return Texts.of(s
-				.replaceAll("_", "")
-				.replaceAll("%player%", src)
-				.replaceAll("%teamname%", role.getTeam())
-				.replaceAll("%teamtag%", role.getTag())
-				.replaceAll("%teamcaughtlegend%", String.valueOf(role.getLegends()))
-				.replaceAll("%teamalliance%", new AllianceAPI(role).getAlliance())
-				.replaceAll("%teamwins%", String.valueOf(role.getWins()))
-				.replaceAll("%teamkills%" , String.valueOf(role.getKills()))
-				.replaceAll("%teamlosses%", String.valueOf(role.getLosses()))
-				.replaceAll("%teamratio%", String.valueOf(role.getRatio()))
-				.replaceAll("%teamcaught%", String.valueOf(role.getCaught()))
-				.replaceAll("%formattedteamtag%", role.getFormattedTeamTag())
-				.replaceAll("%teamrating%", String.valueOf(role.getRating()))
-				.replaceAll("%teambal%", String.valueOf(role.getBal())));
+				.replace("_", "")
+				.replace("%player%", src)
+				.replace("%teamname%", role.getTeam())
+				.replace("%teamtag%", role.getTag())
+				.replace("%teamcaughtlegend%", String.valueOf(role.getLegends()))
+				.replace("%teamalliance%", new AllianceAPI(role).getAlliance())
+				.replace("%teamwins%", String.valueOf(role.getWins()))
+				.replace("%teamkills%" , String.valueOf(role.getKills()))
+				.replace("%teamlosses%", String.valueOf(role.getLosses()))
+				.replace("%teamratio%", String.valueOf(role.getRatio()))
+				.replace("%teamcaught%", String.valueOf(role.getCaught()))
+				.replace("%formattedteamtag%", role.getFormattedTeamTag())
+				.replace("%teamrating%", String.valueOf(role.getRating()))
+				.replace("%teambal%", String.valueOf(role.getBal())));
 	}
 
 	@Placeholder(id = "teamname")
 	public String getTeam(@Source CommandSource src) {
-		PokeTeamsAPI role = new PokeTeamsAPI(src);
-		if(role.inTeam())
-			return role.getTeam();
-		else
-			return Texts.getString(replace(ConfigManager.getConfNode("Placeholder-Settings", "Default-TeamName").getString(), src));
+		return new PokeTeamsAPI(src).getTeam();
 	}
 
 	@Placeholder(id = "teamtag")
@@ -177,7 +171,7 @@ public class PlaceholderAPI {
 
 	@Placeholder(id = "formattedteamtag")
 	public String getFormattedTeamTag(@Source CommandSource src) {
-		return String.valueOf(new PokeTeamsAPI(src).getFormattedTeamTag());
+		return new PokeTeamsAPI(src).getFormattedTeamTag();
 	}
 
 	@Placeholder(id = "teamrating")
@@ -187,6 +181,10 @@ public class PlaceholderAPI {
 
 	@Placeholder(id = "teamalliance")
 	public String getAlliance(@Source CommandSource src) {
-		return String.valueOf(new AllianceAPI(new PokeTeamsAPI(src)).getAlliance());
+		return new AllianceAPI(new PokeTeamsAPI(src)).getAlliance();
 	}
+
+    public PlaceholderService getService() {
+        return this.service;
+    }
 }

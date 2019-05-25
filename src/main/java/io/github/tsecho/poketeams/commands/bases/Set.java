@@ -1,13 +1,12 @@
 package io.github.tsecho.poketeams.commands.bases;
 
+import io.github.tsecho.poketeams.PokeTeams;
 import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
-import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
 import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
 import io.github.tsecho.poketeams.enums.messages.TechnicalMessage;
 import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
-import io.github.tsecho.poketeams.utilities.WorldInfo;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -15,6 +14,8 @@ import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
+
+import static io.github.tsecho.poketeams.configuration.ConfigManager.getSettings;
 
 public class Set implements CommandExecutor {
 
@@ -44,8 +45,8 @@ public class Set implements CommandExecutor {
 	}
 
 	private boolean isBadWorld() {
-		if(ConfigManager.getConfNode("Base-Settings", "Only-Default-World").getBoolean())
-			if(!player.getWorldUniqueId().get().toString().equalsIgnoreCase(WorldInfo.getWorldUUID().toString()))
+		if(getSettings().base.onlyDefaultWorld)
+			if(!player.getWorldUniqueId().get().equals(PokeTeams.getWorldUUID()))
 				return true;
 		return false;
 	}

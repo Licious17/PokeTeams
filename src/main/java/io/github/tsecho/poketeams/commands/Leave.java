@@ -15,6 +15,8 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 
+import static io.github.tsecho.poketeams.configuration.ConfigManager.getSettings;
+
 public class Leave implements CommandExecutor {
 
 	private PokeTeamsAPI role;
@@ -38,7 +40,7 @@ public class Leave implements CommandExecutor {
 			role.kickPlayer(src.getName());
 
 			if(ConfigManager.getStorNode("Teams", role.getTeam(), "Members").getChildrenMap().entrySet().isEmpty()) {
-				if(ConfigManager.getConfNode("Team-Settings", "Delete-When-Empty").getBoolean()) {
+				if(getSettings().team.deleteWhenEmpty) {
 					role.deleteTeam();
 					src.sendMessage(SuccessMessage.DELETED_TEAM.getText(src));
 				}

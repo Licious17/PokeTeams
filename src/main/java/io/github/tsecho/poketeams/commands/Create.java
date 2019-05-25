@@ -24,6 +24,8 @@ import org.spongepowered.api.service.economy.transaction.ResultType;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 
+import static io.github.tsecho.poketeams.configuration.ConfigManager.getSettings;
+
 public class Create implements CommandExecutor {
 
 	@Override
@@ -55,7 +57,7 @@ public class Create implements CommandExecutor {
 	}
 
 	private void confirm(CommandSource src, String team) {
-		if(ConfigManager.getConfNode("Team-Settings", "Money", "Cost-Enabled").getBoolean()) {
+		if(getSettings().team.money.costEnabled) {
 
 			EconManager econ = new EconManager((Player) src);
 

@@ -13,15 +13,13 @@ import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
 import io.github.tsecho.poketeams.language.Texts;
 import io.github.tsecho.poketeams.utilities.Utils;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.util.TypeTokens;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import static io.github.tsecho.poketeams.configuration.ConfigManager.getConfNode;
+import static io.github.tsecho.poketeams.configuration.ConfigManager.getSettings;
 
 public class PlayerBattleListener {
 
@@ -52,43 +50,38 @@ public class PlayerBattleListener {
 
 	private void sendOutput(Player winner, Player loser) {
 
-		if(getConfNode("Battle-Settings", "Message-Winners").getBoolean())
+		if(getSettings().battle.messageWinners)
 			winner.sendMessage(QueueMessage.BATTLE_WON.getText(winner));
 
-		if(getConfNode("Battle-Settings", "Message-Losers").getBoolean())
+		if(getSettings().battle.messageLosers)
 			loser.sendMessage(QueueMessage.BATTLE_LOST.getText(loser));
 
-		if(!getConfNode("Battle-Settings", "Give-Winner-Rewards").getBoolean())
+		if(!getSettings().battle.giveWinnerRewards)
 			return;
 
-		try {
-			for(String i : getConfNode("Battle-Settings", "Winner-Rewards").getList(TypeTokens.STRING_TOKEN)) {
+		for(String i : getSettings().battle.rewards) {
 
-				if(i.startsWith("[MONEY=")) {
-
-					EconManager econ = new EconManager(winner);
-
-					if(econ.isEnabled()) {
-
-						BigDecimal cost = BigDecimal.valueOf(Integer.valueOf(i.replaceAll("\\D+","")));
-						econ.pay(cost);
-						winner.sendMessage(Texts.of(SuccessMessage.MONEY_REWARD.getString(winner).replaceAll("%price%", cost.toPlainString()), winner));
-
-					} else {
-						PokeTeams.getInstance().getLogger().error("Economy plugin is not available! Please add one for rewards to work properly");
-					}
-
-				} else {
-					Sponge.getCommandManager().process(Sponge.getServer().getConsole(), i.replaceAll("%player%", winner.getName()));
-				}
+			if(!i.startsWith("[MONEY=")) {
+				Sponge.getCommandManager().process(Sponge.getServer().getConsole(), i.replace("%player%", winner.getName()));
+				continue;
 			}
-		} catch (ObjectMappingException e) {
-			e.printStackTrace();
+
+			EconManager econ = new EconManager(winner);
+
+			if(econ.isEnabled()) {
+
+				BigDecimal cost = BigDecimal.valueOf(Integer.valueOf(i.replaceAll("\\D+", "")));
+				econ.pay(cost);
+				winner.sendMessage(Texts.of(SuccessMessage.MONEY_REWARD.getString(winner).replace("%price%", cost.toPlainString()), winner));
+
+			} else {
+				PokeTeams.getInstance().getLogger().error("Economy plugin is not available! Please add one for rewards to work properly");
+			}
 		}
 	}
 
 	private boolean queueAllows(Player winner, Player loser) {
-		if(getConfNode("Battle-Settings", "Record-Only-Queue").getBoolean())
+		if(getSettings().battle.recordOnlyQueue)
 			return Utils.inQueue(winner.getName()) && Utils.inQueue(loser.getName());
 		return true;
 	}
@@ -111,7 +104,7 @@ public class PlayerBattleListener {
 	}
 
 	private boolean alwaysRecord() {
-		return getConfNode("Battle-Settings", "Record-All-Battles").getBoolean();
+		return getSettings().battle.recordAllBattles;
 	}
 	
 	private boolean areBattleTeams(PokeTeamsAPI role, PokeTeamsAPI roleOther) {

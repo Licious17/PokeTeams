@@ -23,6 +23,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageChannel;
 
 import static io.github.tsecho.poketeams.configuration.ConfigManager.getConfNode;
+import static io.github.tsecho.poketeams.configuration.ConfigManager.getSettings;
 
 public class Chat implements CommandExecutor {
 
@@ -63,12 +64,12 @@ public class Chat implements CommandExecutor {
 
     private CommandResult sendMessage(CommandContext args) {
 
-        String prefix = getConfNode("Ally-Settings", "Chat-Settings", "Prefix").getString();
-        String chatColor = getConfNode("Ally-Settings", "Chat-Settings", "Chat-Color").getString();
+        String prefix =  getSettings().ally.roles.chat.prefix;
+        String chatColor =  getSettings().ally.roles.chat.chatColor;
         String message = args.<String>getOne(Text.of("messages")).get();
 
         Text newMessage = Texts.of((prefix + chatColor + message), src);
-        Text staffMessage = Texts.of(getConfNode("Chat-Settings", "SocialSpy-Message").getString() + message, src);
+        Text staffMessage = Texts.of( getSettings().chat.spyMessage + message, src);
 
         for(Player members : Sponge.getServer().getOnlinePlayers())
             if(inAlliance(members))
@@ -88,7 +89,7 @@ public class Chat implements CommandExecutor {
     }
 
     private boolean isStaff(Player members) {
-        return getConfNode("Chat-Settings", "Players-SocialSpy").getBoolean() && members.hasPermission(Permissions.SOCIAL_SPY);
+        return getSettings().chat.usePlayerSpy && members.hasPermission(Permissions.SOCIAL_SPY);
     }
 
 
