@@ -8,7 +8,6 @@ import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.eventlisteners.*;
 import io.github.tsecho.poketeams.utilities.Tasks;
 import io.github.tsecho.poketeams.utilities.Utils;
-import lombok.Getter;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.config.ConfigDir;
@@ -38,29 +37,33 @@ public class PokeTeams {
 
 	public static final String ID = "poketeams";
 	public static final String NAME = "PokeTeams";
-	public static final String VERSION = "4.0.1";
+	public static final String VERSION = "4.0.2";
 	public static final String AUTHORS = "TSEcho";
 	public static final String DESCRIPTION = "Teams plugin with Pixelmon Reforged Support";
 
-	@Getter
 	private static PokeTeams instance;
 
-	@Getter
 	private static UUID worldUUID;
 
 	@Inject
-	@Getter
-	private Logger logger;
+    private Logger logger;
 
 	@Inject 
 	@ConfigDir(sharedRoot = false)
 	private Path dir;
 	
 	@Inject
-	@Getter
-	private PluginContainer container;
+    private PluginContainer container;
 
-	@Listener
+    public static PokeTeams getInstance() {
+        return PokeTeams.instance;
+    }
+
+    public static UUID getWorldUUID() {
+        return PokeTeams.worldUUID;
+    }
+
+    @Listener
 	public void onPreInit(GamePreInitializationEvent e) {
 		instance = this;
 		ConfigManager.setup(dir);
@@ -90,4 +93,12 @@ public class PokeTeams {
 		ConfigManager.load();
 		logger.info("PokeTeams has been reloaded!");
 	}
+
+    public Logger getLogger() {
+        return this.logger;
+    }
+
+    public PluginContainer getContainer() {
+        return this.container;
+    }
 }

@@ -2,7 +2,6 @@ package io.github.tsecho.poketeams.apis;
 
 import io.github.tsecho.poketeams.PokeTeams;
 import io.github.tsecho.poketeams.language.Texts;
-import lombok.Getter;
 import me.rojo8399.placeholderapi.Listening;
 import me.rojo8399.placeholderapi.Placeholder;
 import me.rojo8399.placeholderapi.PlaceholderService;
@@ -14,8 +13,8 @@ import org.spongepowered.api.text.Text;
 @Listening
 public class PlaceholderAPI {
 
-	@Getter private PlaceholderService service;
-	@Getter private boolean enabled = false;
+	private PlaceholderService service;
+	private boolean enabled = false;
 	private static PlaceholderAPI INSTANCE;
 
 	private PlaceholderAPI() {}
@@ -184,4 +183,12 @@ public class PlaceholderAPI {
 	public String getAlliance(@Source CommandSource src) {
 		return new AllianceAPI(new PokeTeamsAPI(src)).getAlliance();
 	}
+
+    public PlaceholderService getService() {
+        return this.service;
+    }
+
+    public boolean isEnabled() {
+        return this.enabled;
+    }
 }

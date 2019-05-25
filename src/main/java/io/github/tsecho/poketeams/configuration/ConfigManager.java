@@ -3,7 +3,6 @@ package io.github.tsecho.poketeams.configuration;
 import com.google.common.reflect.TypeToken;
 import io.github.tsecho.poketeams.PokeTeams;
 import io.github.tsecho.poketeams.configuration.serialization.Settings;
-import lombok.Getter;
 import ninja.leaping.configurate.ConfigurationOptions;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -16,7 +15,7 @@ import java.nio.file.Path;
 
 public class ConfigManager {
 
-	@Getter private static Settings settings;
+	private static Settings settings;
 	private static Path dir, config, storage, censor, lang, alliances;
 	private static ConfigurationLoader<CommentedConfigurationNode> storLoad, confLoad, censorLoad, langLoad, allyLoad;
 	private static CommentedConfigurationNode confNode, storNode, censorNode, langNode, allyNode;
@@ -115,4 +114,7 @@ public class ConfigManager {
 		return allyNode.getNode(node);
 	}
 
+    public static Settings getSettings() {
+        return ConfigManager.settings;
+    }
 }

@@ -72,6 +72,7 @@ public class BattleSettings {
         }
     }
 
+    @ConfigSerializable
     public static class Competitive {
 
         @Setting("Rules")
@@ -94,6 +95,7 @@ public class BattleSettings {
         }
     }
 
+    @ConfigSerializable
     public static class QueueFee {
 
         @Setting("Enabled")

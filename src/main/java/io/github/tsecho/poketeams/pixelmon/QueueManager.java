@@ -10,7 +10,6 @@ import io.github.tsecho.poketeams.apis.PokeTeamsAPI;
 import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
 import io.github.tsecho.poketeams.enums.messages.QueueMessage;
 import io.github.tsecho.poketeams.utilities.Utils;
-import lombok.Getter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import org.spongepowered.api.Sponge;
@@ -26,7 +25,7 @@ import static io.github.tsecho.poketeams.configuration.ConfigManager.getSettings
 
 public class QueueManager {
 
-	@Getter private static ArrayList<String> queue = new ArrayList();
+	private static ArrayList<String> queue = new ArrayList();
 	private static final Random RANDOM = new Random();
 	private String playerName1, playerName2;
 
@@ -69,8 +68,12 @@ public class QueueManager {
 			}			
 		}
 	}
-	
-	private void forceBattle() {
+
+    public static ArrayList<String> getQueue() {
+        return QueueManager.queue;
+    }
+
+    private void forceBattle() {
 		if(Sponge.getServer().getPlayer(playerName1).isPresent() && Sponge.getServer().getPlayer(playerName2).isPresent()) {
 
 			Player player1 = Sponge.getServer().getPlayer(playerName1).get();
