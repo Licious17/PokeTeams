@@ -187,8 +187,4 @@ public class PlaceholderAPI {
     public PlaceholderService getService() {
         return this.service;
     }
-
-    public boolean isEnabled() {
-        return this.enabled;
-    }
 }
