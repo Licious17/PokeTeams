@@ -3,22 +3,21 @@ buildscript {
         jcenter()
         maven {
             name = "forge"
-            url = "http://files.minecraftforge.net/maven"
+            url = "https://files.minecraftforge.net/maven"
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
     }
 }
 
-apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'java'
+apply plugin: "net.minecraftforge.gradle.forge"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 version = "4.0.2"
-group = 'io.github.tsecho'
+group = 'com.github.TSEcho'
 archivesBaseName = "PokeTeams"
 
 minecraft {
@@ -28,16 +27,16 @@ minecraft {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io'}
     maven {
         name 'Sponge maven repo'
         url 'http://repo.spongepowered.org/maven'
     }
-    maven { url 'https://jitpack.io'}
 }
 
 dependencies {
-	compile "org.spongepowered:spongeapi:7.1.0-SNAPSHOT"
-	compile 'com.github.rojo8399:PlaceholderAPI:master-SNAPSHOT'
+    compile 'org.spongepowered:spongeapi:7.1.0-SNAPSHOT'
+    compile 'com.github.rojo8399:PlaceholderAPI:master-SNAPSHOT'
     compile 'org.projectlombok:lombok:1.16.10'
     compile files('libs/Pixelmon-1.12.2-7.0.6-server.jar')
 } 
