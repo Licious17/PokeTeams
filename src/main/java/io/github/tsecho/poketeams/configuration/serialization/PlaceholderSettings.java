@@ -15,6 +15,6 @@ public class PlaceholderSettings {
     @Setting("Formatted-TeamTag")
     public String formattedTeamTag;
 
-    @Setting("Default-Alliance")
+    @Setting("Default-AllianceName")
     public String defaultAllyName;
 }

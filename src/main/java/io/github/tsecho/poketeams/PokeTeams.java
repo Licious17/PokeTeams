@@ -37,7 +37,7 @@ public class PokeTeams {
 
 	public static final String ID = "poketeams";
 	public static final String NAME = "PokeTeams";
-	public static final String VERSION = "4.0.2";
+	public static final String VERSION = "4.0.3";
 	public static final String AUTHORS = "TSEcho";
 	public static final String DESCRIPTION = "Teams plugin with Pixelmon Reforged Support";
 
