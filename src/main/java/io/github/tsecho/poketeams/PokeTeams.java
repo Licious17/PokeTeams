@@ -6,6 +6,7 @@ import io.github.tsecho.poketeams.apis.PlaceholderAPI;
 import io.github.tsecho.poketeams.commands.Base;
 import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.eventlisteners.*;
+import io.github.tsecho.poketeams.services.UserStorage;
 import io.github.tsecho.poketeams.utilities.Tasks;
 import io.github.tsecho.poketeams.utilities.Utils;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
+import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.message.MessageChannelEvent;
@@ -71,7 +73,6 @@ public class PokeTeams {
 	
 	@Listener
 	public void onInit(GameInitializationEvent e) {
-		PlaceholderAPI.getInstance();
 		Sponge.getCommandManager().register(instance, Base.build(), "poketeams", "teams", "team");
 		Sponge.getEventManager().registerListener(this, MessageChannelEvent.Chat.class, Order.FIRST, new ChatListener());
 		Sponge.getEventManager().registerListeners(this, new ConnectionListener());
@@ -79,12 +80,16 @@ public class PokeTeams {
 		Pixelmon.EVENT_BUS.register(new CatchPokemonListener());
 		Pixelmon.EVENT_BUS.register(new PlayerBattleListener());
 	}
+
+	@Listener
+    public void onPostInit(GamePostInitializationEvent e) {
+        PlaceholderAPI.getInstance();
+        UserStorage.getInstance();
+    }
 	
 	@Listener
 	public void onStart(GameStartedServerEvent e) {
 		worldUUID = Sponge.getServer().getDefaultWorld().get().getUniqueId();
-		/* Temporary method here to transition from player names to UUIDs */
-		Utils.moveToUUID();
 		new Tasks();
 	}
 	

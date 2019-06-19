@@ -4,18 +4,17 @@ import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.enums.Ranks;
 import io.github.tsecho.poketeams.enums.messages.ErrorMessage;
 import io.github.tsecho.poketeams.language.Texts;
+import io.github.tsecho.poketeams.services.UserStorage;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.service.pagination.PaginationList;
-import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+
+import static io.github.tsecho.poketeams.configuration.ConfigManager.getStorNode;
 
 public class InfoBuilderAPI extends PokeTeamsAPI {
 
@@ -60,7 +59,7 @@ public class InfoBuilderAPI extends PokeTeamsAPI {
      * @param team for the info generator to attempt to create
      * @param src for the info to be sent to
      */
-    public InfoBuilderAPI(String team, Player src) {
+    private InfoBuilderAPI(String team, Player src) {
         super(team, true);
         this.src = src;
         contents = new ArrayList<>();
@@ -71,7 +70,7 @@ public class InfoBuilderAPI extends PokeTeamsAPI {
      * @param member for the info generator to attempt to create
      * @param src for the info to be sent to
      */
-    public InfoBuilderAPI(Player member, Player src) {
+    private InfoBuilderAPI(Player member, Player src) {
         super(member);
         this.src = src;
         contents = new ArrayList<>();
@@ -82,7 +81,7 @@ public class InfoBuilderAPI extends PokeTeamsAPI {
      * @param team for the info generator to attempt to create
      * @param src for the info to be sent to
      */
-    public InfoBuilderAPI(String team, CommandSource src) {
+    private InfoBuilderAPI(String team, CommandSource src) {
         super(team, true);
         this.src = src;
         contents = new ArrayList<>();
@@ -185,65 +184,45 @@ public class InfoBuilderAPI extends PokeTeamsAPI {
      * @return the current builder
      */
     public InfoBuilderAPI addPlayerList() {
-        HashMap<String, String> owners = new HashMap<>();
-        HashMap<String, String> captains = new HashMap<>();
-        HashMap<String, String> officers = new HashMap<>();
-        HashMap<String, String> members = new HashMap<>();
-        HashMap<String, String> grunts = new HashMap<>();
+        List<String> owners = new ArrayList<>();
+        List<String> captains = new ArrayList<>();
+        List<String> officers = new ArrayList<>();
+        List<String> members = new ArrayList<>();
+        List<String> grunts = new ArrayList<>();
 
-        if(teamExists()) {
-            for (Map.Entry<Object, ? extends CommentedConfigurationNode> players : ConfigManager
-                    .getStorNode("Teams", team, "Members").getChildrenMap().entrySet()) {
+        for(User member : getAllMembers()) {
+            String name = member.getName();
+            UUID uuid = member.getUniqueId();
+            String rank = getStorNode("Teams", team, "Members", uuid.toString()).getString();
 
-                String rank = players.getValue().getString();
-                UUID uuid = UUID.fromString(players.getKey().toString());
-                String player = Sponge.getServiceManager().provide(UserStorageService.class).get().get(uuid).get().getName();
+            if(rank.equals(Ranks.OWNER.getName()))
+                owners.add(name);
+            else if(rank.equals(Ranks.CAPTAIN.getName()))
+                captains.add(name);
+            else if(rank.equals(Ranks.OFFICER.getName()))
+                officers.add(name);
+            else if(rank.equals(Ranks.MEMBER.getName()))
+                members.add(name);
+            else
+                grunts.add(name);
 
-                if(rank.equals(Ranks.OWNER.getName()))
-                    owners.put(player, rank);
-                else if(rank.equals(Ranks.CAPTAIN.getName()))
-                    captains.put(player, rank);
-                else if(rank.equals(Ranks.OFFICER.getName()))
-                    officers.put(player, rank);
-                else if(rank.equals(Ranks.MEMBER.getName()))
-                    members.put(player, rank);
-                else
-                    grunts.put(player, rank);
-            }
-        }
-
-        if(!owners.isEmpty()) {
-            String line = "&c" + Ranks.OWNER.getTranslatedName() + "s: ";
-            for(String member: owners.keySet())
-                line += "&e" + member + ", ";
-            this.contents.add(Texts.of(line.substring(0, line.length() - 2)));
-        }
-        if(!captains.isEmpty()) {
-            String line = "&c" + Ranks.CAPTAIN.getTranslatedName() + "s: ";
-            for(String member: captains.keySet())
-                line += "&e" + member + ", ";
-            this.contents.add(Texts.of(line.substring(0, line.length() - 2)));
-        }
-        if(!officers.isEmpty()) {
-            String line = "&c" + Ranks.OFFICER.getTranslatedName() + "s: ";
-            for(String member: officers.keySet())
-                line += "&e" + member + ", ";
-            this.contents.add(Texts.of(line.substring(0, line.length() - 2)));
-        }
-        if(!members.isEmpty()) {
-            String line = "&c" + Ranks.MEMBER.getTranslatedName() + "s: ";
-            for(String member: members.keySet())
-                line += "&e" + member + ", ";
-            this.contents.add(Texts.of(line.substring(0, line.length() - 2)));
-        }
-        if(!grunts.isEmpty()) {
-            String line = "&c" + Ranks.GRUNT.getTranslatedName() + "s: ";
-            for(String member: grunts.keySet())
-                line += "&e" + member + ", ";
-            this.contents.add(Texts.of(line.substring(0, line.length() - 2)));
+            addMembers(owners, Ranks.OWNER);
+            addMembers(captains, Ranks.CAPTAIN);
+            addMembers(officers, Ranks.OFFICER);
+            addMembers(members, Ranks.MEMBER);
+            addMembers(grunts, Ranks.GRUNT);
         }
 
         return this;
+    }
+
+    private void addMembers(List<String> group, Ranks rank) {
+        if(!group.isEmpty()) {
+            String line = "&c" + rank.getTranslatedName() + "s: ";
+            for(String member: group)
+                line += "&e" + member + ", ";
+            this.contents.add(Texts.of(line.substring(0, line.length() - 2)));
+        }
     }
 
     /**

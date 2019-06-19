@@ -4,6 +4,7 @@ import io.github.tsecho.poketeams.enums.AllyRanks;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ public class AllianceAPI {
      */
     public List<PokeTeamsAPI> getAllTeams() {
         if(!inAlliance())
-            return Arrays.asList();
+            return Collections.emptyList();
         else
             return getAllyNode("Allies", alliance, "Teams").getChildrenMap().entrySet().stream()
                         .map(key -> new PokeTeamsAPI(key.getKey().toString(), true))

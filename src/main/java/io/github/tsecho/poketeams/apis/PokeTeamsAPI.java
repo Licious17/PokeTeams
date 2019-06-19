@@ -3,12 +3,11 @@ package io.github.tsecho.poketeams.apis;
 import io.github.tsecho.poketeams.enums.ChatTypes;
 import io.github.tsecho.poketeams.enums.Ranks;
 import io.github.tsecho.poketeams.language.ChatUtils;
+import io.github.tsecho.poketeams.services.UserStorage;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
-import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.world.World;
 
 import java.util.ArrayList;
@@ -19,6 +18,7 @@ import java.util.stream.Collectors;
 
 import static io.github.tsecho.poketeams.configuration.ConfigManager.*;
 
+@SuppressWarnings("WeakerAccess")
 public class PokeTeamsAPI {
 
 	protected String role, team;
@@ -69,7 +69,7 @@ public class PokeTeamsAPI {
 				players = 0;
 
 		} else {
-			uuid = Sponge.getServiceManager().provide(UserStorageService.class).get().get(name).get().getUniqueId().toString();
+			uuid = UserStorage.getInstance().getUUIDFromName(name).get().toString();
 			players = 0;
 
 			for (Map.Entry<Object, ? extends CommentedConfigurationNode> teams : getStorNode("Teams").getChildrenMap().entrySet()) {
@@ -91,14 +91,13 @@ public class PokeTeamsAPI {
 	 * @return a list of all Users on this team
 	 */
 	public List<User> getAllMembers() {
-		UserStorageService service = Sponge.getServiceManager().provide(UserStorageService.class).get();
 
 		if(!teamExists())
 			return new ArrayList<>();
 
 		return getStorNode("Teams", team, "Members").getChildrenMap().entrySet().stream()
 				.map(key -> key.getKey().toString())
-				.map(uuid -> service.get(UUID.fromString(uuid)).get())
+				.map(uuid -> UserStorage.getInstance().getUserFromUUID(UUID.fromString(uuid)).get())
 				.collect(Collectors.toList());
 	}
 
@@ -161,7 +160,8 @@ public class PokeTeamsAPI {
 	 */
 	public void addTeamMember(String playerName, String rank) {
 		if (teamExists()) {
-			String playerUUID = Sponge.getServiceManager().provide(UserStorageService.class).get().get(playerName).get().getUniqueId().toString();
+
+			String playerUUID = UserStorage.getInstance().getUUIDFromName(playerName).toString();
 			getStorNode("Teams", team, "Members", playerUUID).setValue(rank);
 			save();
 		}
@@ -172,7 +172,7 @@ public class PokeTeamsAPI {
      * @param playerName to kick from the team
      */
 	public void kickPlayer(String playerName) {
-        String playerUUID = Sponge.getServiceManager().provide(UserStorageService.class).get().get(playerName).get().getUniqueId().toString();
+        String playerUUID = UserStorage.getInstance().getUUIDFromName(playerName).toString();
         getStorNode("Teams", team, "Members", playerUUID).setValue(null);
         save();
         ChatUtils.setChat(playerName, ChatTypes.PUBLIC);
@@ -268,7 +268,6 @@ public class PokeTeamsAPI {
 	}
 	
 	/**
-	 * 
 	 * @param tag to set as the team's new tag
 	 * @see PokeTeamsAPI#getTag()
 	 */
@@ -280,7 +279,6 @@ public class PokeTeamsAPI {
 	}
 
 	/**
-	 *
 	 * @param x Can be retrieved with {@link PokeTeamsAPI#getX()}
 	 * @param y Can be retrieved with {@link PokeTeamsAPI#getY()}
 	 * @param z Can be retrieved with {@link PokeTeamsAPI#getZ()}
@@ -313,7 +311,6 @@ public class PokeTeamsAPI {
 	}
 	
 	/**
-	 * 
 	 * @return {@code int} value representing the user's rank
 	 */
 	public int getPlace() {
@@ -321,7 +318,6 @@ public class PokeTeamsAPI {
 	}
 	
 	/**
-	 * 
 	 * @return The user's rank as a string
 	 */
 	public String getRank() {
@@ -329,7 +325,6 @@ public class PokeTeamsAPI {
 	}
 	
 	/**
-	 * 
 	 * @return The user's the user's rank as translated by the language file
 	 */
 	public String getTranslatedRank() {
@@ -337,7 +332,6 @@ public class PokeTeamsAPI {
 	}
 
     /**
-     *
      * @return {@code true} if the user has any alliance permission in config based on their role
      */
     public boolean canAllianceCommands() {

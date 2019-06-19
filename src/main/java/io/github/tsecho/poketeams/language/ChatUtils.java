@@ -9,7 +9,7 @@ import java.util.Map;
 public class ChatUtils {
 
     private static Map<String, ChatTypes> chatRegistry = new HashMap<>();
-    private static ArrayList<String> socialSpy = new ArrayList();
+    private static ArrayList<String> socialSpy = new ArrayList<>();
 
     /**
      * Adds players to the chat registry

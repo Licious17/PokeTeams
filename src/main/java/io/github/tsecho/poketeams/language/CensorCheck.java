@@ -19,7 +19,7 @@ public class CensorCheck {
 	 * @param word to be checked for (includes team)
 	 */
 	public CensorCheck(String word) {
-		words = new ArrayList();
+		words = new ArrayList<>();
 		this.word = word;
 
 		try {
@@ -36,15 +36,11 @@ public class CensorCheck {
 	 */
 	public boolean failsCensor(boolean isTag) {
 
-		if(!isTag && getSettings().team.name.useCensor)
-			if (ConfigManager.getCensorNode("Partial-Censor").getBoolean())
+		if(ConfigManager.getCensorNode("Partial-Censor").getBoolean())
+			if((!isTag && getSettings().team.name.useCensor) || (isTag && getSettings().team.tag.useCensor))
 				partialCensor();
-			else
-				fullWord();
-		else if(isTag && getSettings().team.tag.useCensor)
-			if (ConfigManager.getCensorNode("Partial-Censor").getBoolean())
-				partialCensor();
-			else
+		else
+			if((!isTag && getSettings().team.name.useCensor) || (isTag && getSettings().team.tag.useCensor))
 				fullWord();
 
 		if(!isTag && getSettings().team.name.maxLength < word.length())

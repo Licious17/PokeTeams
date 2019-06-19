@@ -64,7 +64,7 @@ public enum AllyRanks {
 
     /**
      * Ranks from 0-1 from grunt to owner
-     * @return the place in the rank hierachy (0-1)
+     * @return the place in the rank hierarchy (0-1)
      */
     public int getHierarchyPlace() {
         switch(this) {

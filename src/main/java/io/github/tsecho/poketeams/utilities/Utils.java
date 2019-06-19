@@ -1,13 +1,9 @@
 package io.github.tsecho.poketeams.utilities;
 
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import org.spongepowered.api.Sponge;
-import org.spongepowered.api.service.user.UserStorageService;
-
 import java.util.ArrayList;
-import java.util.Map;
 
-import static io.github.tsecho.poketeams.configuration.ConfigManager.*;
+import static io.github.tsecho.poketeams.configuration.ConfigManager.getAllyNode;
+import static io.github.tsecho.poketeams.configuration.ConfigManager.getStorNode;
 
 public class Utils {
 
@@ -31,30 +27,5 @@ public class Utils {
 
 	public static boolean allianceExists(String alliance) {
 		return !getAllyNode("Allies", alliance).isVirtual();
-	}
-
-	public static void moveToUUID() {
-		UserStorageService service = Sponge.getServiceManager().provide(UserStorageService.class).get();
-
-		for (Map.Entry<Object, ? extends CommentedConfigurationNode> teams : getStorNode("Teams").getChildrenMap().entrySet()) {
-
-			String team = teams.getKey().toString();
-
-			for (Map.Entry<Object, ? extends CommentedConfigurationNode> players : getStorNode("Teams", team, "Members").getChildrenMap().entrySet()) {
-
-				String name = players.getKey().toString();
-				String rank = getStorNode("Teams", team, "Members", name).getString();
-
-				if (name.length() < 17 && service.get(name).isPresent()) {
-					String uuid = service.get(name).get().getUniqueId().toString();
-
-					if (!uuid.equals(name)) {
-						getStorNode("Teams", team, "Members", uuid).setValue(rank);
-						getStorNode("Teams", team, "Members", name).setValue(null);
-					}
-				}
-			}
-		}
-		save();
 	}
 }
