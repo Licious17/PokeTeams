@@ -5,7 +5,7 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 
 @ConfigSerializable
 public class AllySettings {
-    @Setting("Chat") public Chat chat = new Chat();
+    @Setting("Chat-Settings") public Chat chat = new Chat();
 
     @ConfigSerializable
     public static class Chat {
