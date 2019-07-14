@@ -5,24 +5,11 @@ import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;
 
 @ConfigSerializable
 public class AllySettings {
-
-    @Setting
-    public Roles roles = new Roles();
+    @Setting("Chat") public Chat chat = new Chat();
 
     @ConfigSerializable
-    public static class Roles {
-
-        @Setting
-        public Chat chat = new Chat();
-
-        @ConfigSerializable
-        public static class Chat {
-
-            @Setting("Chat-Color")
-            public String chatColor;
-
-            @Setting("Prefix")
-            public String prefix;
-        }
+    public static class Chat {
+        @Setting("Chat-Color") public String chatColor;
+        @Setting("Prefix") public String prefix;
     }
 }

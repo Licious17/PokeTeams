@@ -8,7 +8,6 @@ import io.github.tsecho.poketeams.configuration.ConfigManager;
 import io.github.tsecho.poketeams.eventlisteners.*;
 import io.github.tsecho.poketeams.services.UserStorage;
 import io.github.tsecho.poketeams.utilities.Tasks;
-import io.github.tsecho.poketeams.utilities.Utils;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.config.ConfigDir;

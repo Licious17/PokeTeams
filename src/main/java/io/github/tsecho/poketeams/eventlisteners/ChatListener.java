@@ -53,8 +53,8 @@ public class ChatListener implements EventListener<MessageChannelEvent.Chat>{
 	}
 
 	private void modifyAlliance() {
-		prefix = getSettings().ally.roles.chat.prefix;
-		chatColor =  getSettings().ally.roles.chat.chatColor;
+		prefix = getSettings().ally.chat.prefix;
+		chatColor =  getSettings().ally.chat.chatColor;
 		newMessage = Texts.of((prefix + chatColor + message), player);
 		ogAlliance = new AllianceAPI(role);
 		sendMessages();

@@ -66,7 +66,7 @@ public class PlaceholderAPI {
 
 			return builder;
 
-		}).map(builder -> builder.plugin(PokeTeams.getInstance()).author("TSEcho").version("4.0.0")).forEach(builder -> {
+		}).map(builder -> builder.plugin(PokeTeams.getInstance()).author("TSEcho").version("4.0.4")).forEach(builder -> {
 
 			try {
 				builder.buildAndRegister();

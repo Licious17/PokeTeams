@@ -64,8 +64,8 @@ public class Chat implements CommandExecutor {
 
     private CommandResult sendMessage(CommandContext args) {
 
-        String prefix =  getSettings().ally.roles.chat.prefix;
-        String chatColor =  getSettings().ally.roles.chat.chatColor;
+        String prefix =  getSettings().ally.chat.prefix;
+        String chatColor =  getSettings().ally.chat.chatColor;
         String message = args.<String>getOne(Text.of("messages")).get();
 
         Text newMessage = Texts.of((prefix + chatColor + message), src);

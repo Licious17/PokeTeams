@@ -3,7 +3,6 @@ package io.github.tsecho.poketeams.configuration;
 import com.google.common.reflect.TypeToken;
 import io.github.tsecho.poketeams.PokeTeams;
 import io.github.tsecho.poketeams.configuration.serialization.Settings;
-import lombok.Getter;
 import ninja.leaping.configurate.ConfigurationOptions;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
