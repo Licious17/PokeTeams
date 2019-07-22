@@ -34,7 +34,7 @@ public class Kick implements CommandExecutor {
 
 		roleOther = new PokeTeamsAPI(kickUser.getName(), false);
 
-		if(!(role.inTeam() && roleOther.inTeam()) && (role.getTeam().equals(roleOther.getTeam())))
+		if(!(role.inTeam() && roleOther.inTeam()) || !(role.getTeam().equals(roleOther.getTeam())))
 			return ErrorCheck.test(src, ErrorMessage.BOTH_NOT_IN_TEAM);
 		if(!role.canKick())
 			return ErrorCheck.test(src, ErrorMessage.INSUFFICIENT_RANK);

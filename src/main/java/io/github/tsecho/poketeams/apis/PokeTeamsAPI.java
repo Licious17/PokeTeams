@@ -8,6 +8,7 @@ import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
+import org.spongepowered.api.text.chat.ChatType;
 import org.spongepowered.api.world.World;
 
 import java.util.ArrayList;
@@ -160,8 +161,7 @@ public class PokeTeamsAPI {
 	 */
 	public void addTeamMember(String playerName, String rank) {
 		if (teamExists()) {
-
-			String playerUUID = UserStorage.getInstance().getUUIDFromName(playerName).toString();
+			String playerUUID = UserStorage.getInstance().getUUIDFromName(playerName).get().toString();
 			getStorNode("Teams", team, "Members", playerUUID).setValue(rank);
 			save();
 		}
@@ -172,7 +172,7 @@ public class PokeTeamsAPI {
      * @param playerName to kick from the team
      */
 	public void kickPlayer(String playerName) {
-        String playerUUID = UserStorage.getInstance().getUUIDFromName(playerName).toString();
+        String playerUUID = UserStorage.getInstance().getUUIDFromName(playerName).get().toString();
         getStorNode("Teams", team, "Members", playerUUID).setValue(null);
         save();
         ChatUtils.setChat(playerName, ChatTypes.PUBLIC);

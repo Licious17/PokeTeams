@@ -205,13 +205,13 @@ public class InfoBuilderAPI extends PokeTeamsAPI {
                 members.add(name);
             else
                 grunts.add(name);
-
-            addMembers(owners, Ranks.OWNER);
-            addMembers(captains, Ranks.CAPTAIN);
-            addMembers(officers, Ranks.OFFICER);
-            addMembers(members, Ranks.MEMBER);
-            addMembers(grunts, Ranks.GRUNT);
         }
+
+        addMembers(owners, Ranks.OWNER);
+        addMembers(captains, Ranks.CAPTAIN);
+        addMembers(officers, Ranks.OFFICER);
+        addMembers(members, Ranks.MEMBER);
+        addMembers(grunts, Ranks.GRUNT);
 
         return this;
     }
