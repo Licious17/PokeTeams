@@ -45,7 +45,7 @@ public class Add implements CommandExecutor {
 		BigDecimal cost = BigDecimal.valueOf(args.<Integer>getOne(Text.of("amount")).get());
 
 		if(econ.withdraw(cost).getResult() != ResultType.SUCCESS)
-			src.sendMessage(ErrorMessage.INSUFFICIENT_FUNDS.getText(src));
+			return ErrorCheck.test(src, ErrorMessage.INSUFFICIENT_FUNDS);
 
 		role.addBal(addedMoney);
 		src.sendMessage(SuccessMessage.MONEY_DEPOSIT.getText(src));
