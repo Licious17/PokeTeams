@@ -13,25 +13,11 @@ public class CatchPokemonListener {
     public void onCapture(CaptureEvent.SuccessfulCapture e) {
         PokeTeamsAPI role = new PokeTeamsAPI((Player) e.player);
 
-        if(isLegend(e.getPokemon()))
-            addLegend(role);
-        else
-            addCaught(role);
-    }
-
-    private void addCaught(PokeTeamsAPI role) {
-        if(role.inTeam())
-            role.addAmountCaught(1);
-    }
-
-    private void addLegend(PokeTeamsAPI role) {
         if(role.inTeam()) {
-            role.addLegendsCaught(1);
             role.addAmountCaught(1);
+            if(EnumSpecies.legendaries.contains(e.getPokemon().getPokemonName())) {
+                role.addLegendsCaught(1);
+            }
         }
-    }
-
-    private boolean isLegend(EntityPixelmon pokemon) {
-        return EnumSpecies.legendaries.contains(EnumSpecies.getFromName(pokemon.getName()).get().getPokemonName());
     }
 }

@@ -19,7 +19,7 @@ public class PlaceholderAPI {
 
 	private PlaceholderAPI() {}
 
-	public static PlaceholderAPI getInstance() {
+	public static PlaceholderAPI getOrCreate() {
 		if(INSTANCE == null) {
 			INSTANCE = new PlaceholderAPI();
 

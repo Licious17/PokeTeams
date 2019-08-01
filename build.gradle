@@ -16,7 +16,7 @@ apply plugin: "net.minecraftforge.gradle.forge"
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version = "4.0.6"
+version = "4.0.7"
 group = 'com.github.TSEcho'
 archivesBaseName = "PokeTeams"
 

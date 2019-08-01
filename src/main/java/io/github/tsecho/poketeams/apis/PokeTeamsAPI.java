@@ -8,13 +8,13 @@ import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
-import org.spongepowered.api.text.chat.ChatType;
 import org.spongepowered.api.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static io.github.tsecho.poketeams.configuration.ConfigManager.*;
@@ -70,7 +70,7 @@ public class PokeTeamsAPI {
 				players = 0;
 
 		} else {
-			uuid = UserStorage.getInstance().getUUIDFromName(name).get().toString();
+			uuid = UserStorage.getOrCreate().getUUIDFromName(name).get().toString();
 			players = 0;
 
 			for (Map.Entry<Object, ? extends CommentedConfigurationNode> teams : getStorNode("Teams").getChildrenMap().entrySet()) {
@@ -92,13 +92,12 @@ public class PokeTeamsAPI {
 	 * @return a list of all Users on this team
 	 */
 	public List<User> getAllMembers() {
-
 		if(!teamExists())
 			return new ArrayList<>();
 
 		return getStorNode("Teams", team, "Members").getChildrenMap().entrySet().stream()
 				.map(key -> key.getKey().toString())
-				.map(uuid -> UserStorage.getInstance().getUserFromUUID(UUID.fromString(uuid)).get())
+				.map(uuid -> UserStorage.getOrCreate().getUserFromUUID(UUID.fromString(uuid)).get())
 				.collect(Collectors.toList());
 	}
 
@@ -122,11 +121,13 @@ public class PokeTeamsAPI {
 	 * Deletes this object's team. Will make the rest of the methods return default values
 	 */
 	public void deleteTeam() {
-		if(teamExists()) {
-			getStorNode("Teams", team).setValue(null);
-			role = team = null;
-			players = 0;
-		}
+		CompletableFuture.runAsync(() -> {
+			if(teamExists()) {
+				getStorNode("Teams", team).setValue(null);
+				role = team = null;
+				players = 0;
+			}
+		});
 	}
 
 	/**
@@ -135,36 +136,40 @@ public class PokeTeamsAPI {
 	 * @see PokeTeamsAPI#getPlace()
 	 */
 	public void setRole(int newRole) {
-		if(inTeam()) {
-			role = Ranks.getEnum(newRole).getName();
-			getStorNode("Teams", team, "Members", uuid).setValue(role);
-			save();
-		}
+		CompletableFuture.runAsync(() -> {
+			if(inTeam()) {
+				role = Ranks.getEnum(newRole).getName();
+				getStorNode("Teams", team, "Members", uuid).setValue(role);
+				save();
+			}
+		});
 	}
 
 	/**
-	 *
 	 * @param player to add to a team
 	 * @param rank of the player to set at
 	 */
 	public void addTeamMember(CommandSource player, String rank) {
-		if(teamExists()) {
-			getStorNode("Teams", team, "Members", ((Player) player).getUniqueId().toString()).setValue(rank);
-			save();
-		}
+		CompletableFuture.runAsync(() -> {
+			if(teamExists()) {
+				getStorNode("Teams", team, "Members", ((Player) player).getUniqueId().toString()).setValue(rank);
+				save();
+			}
+		});
 	}
 
 	/**
-	 *
 	 * @param playerName to add to a team
 	 * @param rank of the player to set at
 	 */
 	public void addTeamMember(String playerName, String rank) {
-		if (teamExists()) {
-			String playerUUID = UserStorage.getInstance().getUUIDFromName(playerName).get().toString();
-			getStorNode("Teams", team, "Members", playerUUID).setValue(rank);
-			save();
-		}
+		CompletableFuture.runAsync(() -> {
+			if(teamExists()) {
+				String playerUUID = UserStorage.getOrCreate().getUUIDFromName(playerName).get().toString();
+				getStorNode("Teams", team, "Members", playerUUID).setValue(rank);
+				save();
+			}
+		});
 	}
 
     /**
@@ -172,11 +177,13 @@ public class PokeTeamsAPI {
      * @param playerName to kick from the team
      */
 	public void kickPlayer(String playerName) {
-        String playerUUID = UserStorage.getInstance().getUUIDFromName(playerName).get().toString();
-        getStorNode("Teams", team, "Members", playerUUID).setValue(null);
-        save();
-        ChatUtils.setChat(playerName, ChatTypes.PUBLIC);
-        players -= 1;
+		CompletableFuture.runAsync(() -> {
+			String playerUUID = UserStorage.getOrCreate().getUUIDFromName(playerName).get().toString();
+			getStorNode("Teams", team, "Members", playerUUID).setValue(null);
+			save();
+			ChatUtils.setChat(playerName, ChatTypes.PUBLIC);
+			players -= 1;
+		});
     }
 
 	/**
@@ -201,10 +208,12 @@ public class PokeTeamsAPI {
 	 * @see PokeTeamsAPI#getLosses()
 	 */
 	public void addLoss(int amount) {
-		if(teamExists()) {
-			getStorNode("Teams", team, "Record", "Losses").setValue(getLosses() + amount);
-			save();
-		}
+		CompletableFuture.runAsync(() -> {
+			if(teamExists()) {
+				getStorNode("Teams", team, "Record", "Losses").setValue(getLosses() + amount);
+				save();
+			}
+		});
 	}
 
 	/**
@@ -213,10 +222,12 @@ public class PokeTeamsAPI {
 	 * @see PokeTeamsAPI#getWins()
 	 */
 	public void addWin(int amount) {
-		if(teamExists()) {
-			getStorNode("Teams", team, "Record", "Wins").setValue(getWins() + amount);
-			save();
-		}
+		CompletableFuture.runAsync(() -> {
+			if(teamExists()) {
+				getStorNode("Teams", team, "Record", "Wins").setValue(getWins() + amount);
+				save();
+			}
+		});
 	}
 	
 	/**
@@ -225,10 +236,12 @@ public class PokeTeamsAPI {
 	 * @see PokeTeamsAPI#getCaught()
 	 */
 	public void addAmountCaught(int amount) {
-		if(teamExists()) {
-			getStorNode("Teams", team, "Stats", "Caught").setValue(getCaught() + amount);
-			save();
-		}
+		CompletableFuture.runAsync(() -> {
+			if(teamExists()) {
+				getStorNode("Teams", team, "Stats", "Caught").setValue(getCaught() + amount);
+				save();
+			}
+		});
 	}
 
 	/**
@@ -237,10 +250,12 @@ public class PokeTeamsAPI {
 	 * @see PokeTeamsAPI#getBal()
 	 */
 	public void addBal(int amount) {
-		if(teamExists()) {
-			getStorNode("Teams", team, "Stats", "Bal").setValue(getBal() + amount);
-			save();
-		}
+		CompletableFuture.runAsync(() -> {
+			if(teamExists()) {
+				getStorNode("Teams", team, "Stats", "Bal").setValue(getBal() + amount);
+				save();
+			}
+		});
 	}
 	
 	/**
@@ -249,10 +264,12 @@ public class PokeTeamsAPI {
 	 * @see PokeTeamsAPI#getKills()
 	 */
 	public void addAmountKilled(int amount) {
-		if(teamExists()) {
-			getStorNode("Teams", team, "Stats", "Kills").setValue(getKills() + amount);
-			save();
-		}
+		CompletableFuture.runAsync(() -> {
+			if(teamExists()) {
+				getStorNode("Teams", team, "Stats", "Kills").setValue(getKills() + amount);
+				save();
+			}
+		});
 	}
 	
 	/**
@@ -261,10 +278,12 @@ public class PokeTeamsAPI {
 	 * @see PokeTeamsAPI#getLegends()
 	 */
 	public void addLegendsCaught(int amount) {
-		if(teamExists()) {
-			getStorNode("Teams", team, "Stats", "Legends").setValue(getLegends() + amount);
-			save();
-		}
+		CompletableFuture.runAsync(() -> {
+			if(teamExists()) {
+				getStorNode("Teams", team, "Stats", "Legends").setValue(getLegends() + amount);
+				save();
+			}
+		});
 	}
 	
 	/**
@@ -272,10 +291,12 @@ public class PokeTeamsAPI {
 	 * @see PokeTeamsAPI#getTag()
 	 */
 	public void setTag(String tag) {
-		if(teamExists()) {
-			getStorNode("Teams", team, "Tag").setValue(tag);
-			save();
-		}
+		CompletableFuture.runAsync(() -> {
+			if(teamExists()) {
+				getStorNode("Teams", team, "Tag").setValue(tag);
+				save();
+			}
+		});
 	}
 
 	/**
@@ -285,13 +306,15 @@ public class PokeTeamsAPI {
 	 * @param world to use for the base (can use default world if wanted)
 	 */
 	public void setBase(double x, double y, double z, World world) {
-		if(teamExists()) {
-			getStorNode("Teams", team, "Location", "X").setValue(x);
-			getStorNode("Teams", team, "Location", "Y").setValue(y);
-			getStorNode("Teams", team, "Location", "Z").setValue(z);
-			getStorNode("Teams", team, "Location", "World").setValue(world.getUniqueId().toString());
-			save();
-		}
+		CompletableFuture.runAsync(() -> {
+			if(teamExists()) {
+				getStorNode("Teams", team, "Location", "X").setValue(x);
+				getStorNode("Teams", team, "Location", "Y").setValue(y);
+				getStorNode("Teams", team, "Location", "Z").setValue(z);
+				getStorNode("Teams", team, "Location", "World").setValue(world.getUniqueId().toString());
+				save();
+			}
+		});
 	}
 
 	/**

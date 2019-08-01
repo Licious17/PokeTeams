@@ -40,7 +40,7 @@ public class BasesBase implements CommandExecutor {
 			return ErrorCheck.test(src, ErrorMessage.INSUFFICIENT_RANK);
 
 		if(ConfigManager.getStorNode("Teams", role.getTeam(), "Location", "World").isVirtual())
-			world = PokeTeams.getWorldUUID();
+			world = PokeTeams.getBaseWorld();
 		else
 			world = UUID.fromString(ConfigManager.getStorNode("Teams", role.getTeam(), "Location", "World").getString());
 

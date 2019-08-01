@@ -1,6 +1,7 @@
 package io.github.tsecho.poketeams.eventlisteners;
 
 import com.google.common.collect.ImmutableMap;
+import com.pixelmonmod.pixelmon.api.events.BeatWildPixelmonEvent;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
@@ -21,11 +22,19 @@ import java.util.Optional;
 
 import static io.github.tsecho.poketeams.configuration.ConfigManager.getSettings;
 
-public class PlayerBattleListener {
+public class BattleListener {
+
+	@SubscribeEvent
+	public void onWildBattle(BeatWildPixelmonEvent e) {
+		PokeTeamsAPI role = new PokeTeamsAPI((Player) e.player);
+
+		if(role.inTeam()) {
+			role.addAmountKilled(1);
+		}
+	}
 
 	@SubscribeEvent
 	public void onPlayerBattle(BattleEndEvent e) {
-
 		getParticipants(e.results).ifPresent(participants -> {
 
 			PokeTeamsAPI role = new PokeTeamsAPI(participants[0]);
@@ -75,7 +84,7 @@ public class PlayerBattleListener {
 				winner.sendMessage(Texts.of(SuccessMessage.MONEY_REWARD.getString(winner).replace("%price%", cost.toPlainString()), winner));
 
 			} else {
-				PokeTeams.getInstance().getLogger().error("Economy plugin is not available! Please add one for rewards to work properly");
+				PokeTeams.getLogger().error("Economy plugin is not available! Please add one for rewards to work properly");
 			}
 		}
 	}

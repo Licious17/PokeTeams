@@ -1,6 +1,4 @@
-/.gradle
-/.settings
-/.idea
-/bin
-/build
+.gradle/
+.idea/
+build/
 PokeTeams.iml

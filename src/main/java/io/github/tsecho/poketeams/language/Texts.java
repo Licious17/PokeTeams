@@ -14,7 +14,7 @@ public class Texts {
 	 * @return a formatted text object
 	 */
 	public static Text of(String string, CommandSource src) {
-		return PlaceholderAPI.getInstance().replace(string, src);
+		return PlaceholderAPI.getOrCreate().replace(string, src);
 	}
 
 	/**
@@ -24,7 +24,7 @@ public class Texts {
 	 * @return a formatted text object
 	 */
 	public static Text of(String string, String src) {
-		return PlaceholderAPI.getInstance().replace(string, src);
+		return PlaceholderAPI.getOrCreate().replace(string, src);
 	}
 
 	/**

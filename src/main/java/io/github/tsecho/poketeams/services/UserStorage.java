@@ -14,7 +14,7 @@ public class UserStorage {
 
     private UserStorage() {}
 
-    public static UserStorage getInstance() {
+    public static UserStorage getOrCreate() {
         if(INSTANCE == null) {
             INSTANCE = new UserStorage();
 

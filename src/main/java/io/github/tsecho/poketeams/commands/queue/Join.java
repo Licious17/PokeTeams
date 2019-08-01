@@ -59,7 +59,7 @@ public class Join implements CommandExecutor{
 
 			} else {
 				src.sendMessage(Texts.of("&cEconomy plugin is not installed! Please contact an admin with this messages"));
-				PokeTeams.getInstance().getLogger().error("Economy plugin not installed! Economy features will not work correctly!");
+				PokeTeams.getLogger().error("Economy plugin not installed! Economy features will not work correctly!");
 			}
 
 		} else {

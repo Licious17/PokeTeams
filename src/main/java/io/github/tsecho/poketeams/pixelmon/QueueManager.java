@@ -17,6 +17,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scheduler.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -25,7 +26,7 @@ import static io.github.tsecho.poketeams.configuration.ConfigManager.getSettings
 
 public class QueueManager {
 
-	private static ArrayList<String> queue = new ArrayList();
+	private static List<String> queue = new ArrayList();
 	private static final Random RANDOM = new Random();
 	private String playerName1, playerName2;
 
@@ -69,7 +70,7 @@ public class QueueManager {
 		}
 	}
 
-    public static ArrayList<String> getQueue() {
+    public static List<String> getQueue() {
         return QueueManager.queue;
     }
 
@@ -106,12 +107,12 @@ public class QueueManager {
 	private void warp(Player a, Player b) {
 
 		String worldName = getSettings().battle.arena.world;
-		UUID uuid = PokeTeams.getWorldUUID();
+		UUID uuid = PokeTeams.getBaseWorld();
 
 		if(Sponge.getServer().getWorld(worldName).isPresent())
 			uuid = Sponge.getServer().getWorld(worldName).get().getUniqueId();
 		else if(!worldName.equalsIgnoreCase("default"))
-			PokeTeams.getInstance().getLogger().error("The world name in the configuration is not a valid world name!");
+			PokeTeams.getLogger().error("The world name in the configuration is not a valid world name!");
 
 		a.setLocation(getSettings().battle.arena.locA.getVector(), uuid);
 		b.setLocation(getSettings().battle.arena.locB.getVector(), uuid);

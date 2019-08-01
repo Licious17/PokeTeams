@@ -46,7 +46,7 @@ public class Set implements CommandExecutor {
 
 	private boolean isBadWorld() {
 		if(getSettings().base.onlyDefaultWorld)
-			if(!player.getWorldUniqueId().get().equals(PokeTeams.getWorldUUID()))
+			if(!player.getWorldUniqueId().get().equals(PokeTeams.getBaseWorld()))
 				return true;
 		return false;
 	}
