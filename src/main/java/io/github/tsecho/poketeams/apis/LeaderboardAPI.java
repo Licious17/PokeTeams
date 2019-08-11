@@ -90,13 +90,12 @@ public class LeaderboardAPI {
     }
 
     private void buildRating() {
-        for (Map.Entry<Object, ? extends CommentedConfigurationNode> teams : ConfigManager.getStorNode("Teams")
-                .getChildrenMap().entrySet()) {
-
-            String name = teams.getKey().toString();
+        ConfigManager.getStorNode("Teams").getChildrenMap().entrySet().forEach(entry -> {
+            String name = entry.getKey().toString();
             PokeTeamsAPI team = new PokeTeamsAPI(name, true);
-            data.put(teams.getKey().toString(), team.getRating());
-        }
+            data.put(entry.getKey().toString(), team.getRating());
+        });
+
         sort();
         int num = 1;
         for(String i : data.keySet()) {
