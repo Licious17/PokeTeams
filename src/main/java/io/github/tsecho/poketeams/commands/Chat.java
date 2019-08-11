@@ -8,6 +8,7 @@ import io.github.tsecho.poketeams.enums.messages.SuccessMessage;
 import io.github.tsecho.poketeams.enums.messages.TechnicalMessage;
 import io.github.tsecho.poketeams.language.ChatUtils;
 import io.github.tsecho.poketeams.language.Texts;
+import io.github.tsecho.poketeams.utilities.ErrorCheck;
 import io.github.tsecho.poketeams.utilities.Permissions;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
@@ -34,12 +35,12 @@ public class Chat implements CommandExecutor {
 		this.src = src;
 
 		if(!(src instanceof Player))
-			src.sendMessage(TechnicalMessage.NOT_PLAYER.getText(src));
+			return ErrorCheck.test(src, TechnicalMessage.NOT_PLAYER);
 
 		role = new PokeTeamsAPI(src);
 
 		if(!role.inTeam())
-			src.sendMessage(ErrorMessage.NOT_IN_TEAM.getText(src));
+			return ErrorCheck.test(src, ErrorMessage.NOT_IN_TEAM);
 		if(args.getOne(Text.of("messages")).isPresent())
 			return sendMessage(args);
 
