@@ -18,11 +18,7 @@ Follow the rest of the pages here for more information regarding commands, confi
 
 ## API Support
 
-I always want to support fellow developers so if you ever want to use PokeTeams as an API feel free to check out the [Developer page](https://github.com/TSEcho/PokeTeams/wiki/Developers) for more information
-
-## Support me
-
-[If you want to support me you can check out my direct paypal link here ](https://www.paypal.me/nathancraft10)
+I always want to support fellow developers so if you ever want to use PokeTeams as an API feel free to check out the [Developer page](https://github.com/NateCraft/PokeTeams/wiki/Developers) for more information
 
 ## Wiki
 
