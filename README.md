@@ -1,9 +1,5 @@
 # PokeTeams
 
-## Download
-
-_Download can be found on [the ore versions page](https://ore.spongepowered.org/thesilentecho/PokeTeams/versions)_
-
 ## General Idea
 
 PokeTeams allows players to create fully customizable teams which they can invite their friends to and play with. The players can promote their team members in a hierarchy from grunt all the way to owner. Each rank has specific abilities that can be fully customized in the configuration files
@@ -15,11 +11,3 @@ You can enter in PokeTeams' custom queue system and fight in a full competitive 
 If you want to involve even more people into the mix, you can use the alliance system to group teams together.
 
 Follow the rest of the pages here for more information regarding commands, configuration, dependencies, permissions and placeholders!
-
-## API Support
-
-I always want to support fellow developers so if you ever want to use PokeTeams as an API feel free to check out the [Developer page](https://github.com/NateCraft/PokeTeams/wiki/Developers) for more information
-
-## Wiki
-
-All other features such as commands, permissions, dependencies, placeholders, config, etc check out my [wiki](https://github.com/NateCraft/PokeTeams/wiki)
