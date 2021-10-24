@@ -17,9 +17,9 @@ import static java.util.stream.Collectors.toMap;
 public class LeaderboardAPI {
 
     private static final DecimalFormat df = new DecimalFormat("##.#");
-    private LeaderboardTypes type;
+    private final LeaderboardTypes type;
     private HashMap<String, Double> data;
-    private ArrayList<Text> contents;
+    private final ArrayList<Text> contents;
 
     /**
      * @see LeaderboardTypes
@@ -29,8 +29,6 @@ public class LeaderboardAPI {
         this.type = type;
         this.contents = new ArrayList<>();
         this.data = new HashMap<>();
-        this.type = type;
-
         if(type == LeaderboardTypes.RECORD)
             buildRecord();
         else if(type == LeaderboardTypes.BAL)
@@ -61,7 +59,7 @@ public class LeaderboardAPI {
                 .getChildrenMap().entrySet()) {
 
             String team = teams.getKey().toString();
-            String value = type.name().substring(0, 1) + type.name().substring(1).toLowerCase();
+            String value = type.name().charAt(0) + type.name().substring(1).toLowerCase();
             double stat = ConfigManager.getStorNode("Teams", team, "Stats", value).getInt();
             data.put(teams.getKey().toString(), stat);
         }
@@ -90,10 +88,10 @@ public class LeaderboardAPI {
     }
 
     private void buildRating() {
-        ConfigManager.getStorNode("Teams").getChildrenMap().entrySet().forEach(entry -> {
-            String name = entry.getKey().toString();
+        ConfigManager.getStorNode("Teams").getChildrenMap().forEach((key, value) -> {
+            String name = key.toString();
             PokeTeamsAPI team = new PokeTeamsAPI(name, true);
-            data.put(entry.getKey().toString(), team.getRating());
+            data.put(key.toString(), team.getRating());
         });
 
         sort();

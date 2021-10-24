@@ -3,7 +3,6 @@ package io.github.tsecho.poketeams.apis;
 import io.github.tsecho.poketeams.enums.AllyRanks;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -13,14 +12,14 @@ import static io.github.tsecho.poketeams.configuration.ConfigManager.*;
 
 public class AllianceAPI {
 
-    private PokeTeamsAPI teamsAPI;
+    private final PokeTeamsAPI teamsAPI;
     private String alliance;
     private String role;
 
     /**
      * All methods cannot return null and will give default values if none are present
      *
-     * @param teamsAPI to base the alliance of of
+     * @param teamsAPI to base the alliance of from
      */
     public AllianceAPI(PokeTeamsAPI teamsAPI) {
         this.teamsAPI = teamsAPI;
@@ -47,8 +46,8 @@ public class AllianceAPI {
         if(!inAlliance())
             return Collections.emptyList();
         else
-            return getAllyNode("Allies", alliance, "Teams").getChildrenMap().entrySet().stream()
-                        .map(key -> new PokeTeamsAPI(key.getKey().toString(), true))
+            return getAllyNode("Allies", alliance, "Teams").getChildrenMap().keySet().stream()
+                        .map(commentedConfigurationNode -> new PokeTeamsAPI(commentedConfigurationNode.toString(), true))
                         .collect(Collectors.toList());
     }
 
@@ -86,7 +85,7 @@ public class AllianceAPI {
     }
 
     /**
-     * @return {@code true} if the team has the delete permission in config based on the teams rank
+     * @return {@code true} if the team has permission to delete in the config based on the teams rank
      */
     public boolean canDelete() {
         return inAlliance() && getConfNode("Ally-Settings", "Roles", role, "Delete").getBoolean();

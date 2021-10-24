@@ -21,7 +21,6 @@ import org.spongepowered.api.event.message.MessageChannelEvent;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
-
 import java.nio.file.Path;
 import java.util.UUID;
 
@@ -30,7 +29,7 @@ import java.util.UUID;
 		authors = PokeTeams.AUTHORS, 
 		description = PokeTeams.DESCRIPTION,
 		version = PokeTeams.VERSION,
-		dependencies = {@Dependency(id = Pixelmon.MODID, version = Pixelmon.VERSION), 
+		dependencies = {@Dependency(id = Pixelmon.MODID),
 					    @Dependency(id = "placeholderapi", optional = true)})
 
 public class PokeTeams {

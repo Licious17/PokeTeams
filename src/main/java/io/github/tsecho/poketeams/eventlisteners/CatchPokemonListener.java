@@ -15,7 +15,7 @@ public class CatchPokemonListener {
 
         if(role.inTeam()) {
             role.addAmountCaught(1);
-            if(EnumSpecies.legendaries.contains(e.getPokemon().getPokemonName())) {
+            if(EnumSpecies.legendaries.contains(e.getPokemon().getSpecies())) {
                 role.addLegendsCaught(1);
             }
         }

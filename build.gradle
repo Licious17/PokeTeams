@@ -1,41 +1,49 @@
 buildscript {
     repositories {
-        jcenter()
-        maven {
-            name = "forge"
-            url = "https://files.minecraftforge.net/maven"
-        }
+        maven { url = "https://files.minecraftforge.net/maven" }
     }
     dependencies {
-        classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
 
-apply plugin: "net.minecraftforge.gradle.forge"
+apply plugin: 'net.minecraftforge.gradle'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version = "4.0.8"
+version = "4.0.9"
 group = 'com.github.TSEcho'
 archivesBaseName = "PokeTeams"
 
 minecraft {
-    version = "1.12.2-14.23.5.2768"
-    mappings = 'stable_39'
+
+    mappings channel: 'stable', version: '39-1.12'
+
 }
 
 repositories {
     mavenCentral()
     maven { url 'https://jitpack.io'}
     maven {
-        name 'Sponge maven repo'
-        url 'http://repo.spongepowered.org/maven'
+        name = 'sponge-repo'
+        url = 'https://repo.spongepowered.org/maven'
+    }
+    ivy {
+        name = 'Pixelmon Reforged'
+        url "https://download.nodecdn.net/containers/reforged/server/release"
+        metadataSources {
+            artifact()
+        }
+        patternLayout {
+            artifact "[revision]/[artifact].[ext]"
+        }
     }
 }
 
 dependencies {
-    compile 'org.spongepowered:spongeapi:7.1.0-SNAPSHOT'
-    compile 'com.github.rojo8399:PlaceholderAPI:master-SNAPSHOT'
-    compile files('libs/Pixelmon-1.12.2-7.0.7.jar')
-} 
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2855'
+    compileOnly 'org.spongepowered:spongeapi:7.3.0'
+    compileOnly 'com.github.rojo8399:PlaceholderAPI:master-SNAPSHOT'
+    compileOnly 'pixelmon:Pixelmon-1.12.2-8.3.1-server:8.3.1'
+}

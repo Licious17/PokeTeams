@@ -19,8 +19,8 @@ import static io.github.tsecho.poketeams.configuration.ConfigManager.getStorNode
 public class InfoBuilderAPI extends PokeTeamsAPI {
 
     private final Text PADDING = Texts.of("&6=");
-    private CommandSource src;
-    private ArrayList<Text> contents;
+    private final CommandSource src;
+    private final ArrayList<Text> contents;
     private Text title;
 
     /**
@@ -218,9 +218,9 @@ public class InfoBuilderAPI extends PokeTeamsAPI {
 
     private void addMembers(List<String> group, Ranks rank) {
         if(!group.isEmpty()) {
-            String line = "&c" + rank.getTranslatedName() + "s: ";
+            StringBuilder line = new StringBuilder("&c" + rank.getTranslatedName() + "s: ");
             for(String member: group)
-                line += "&e" + member + ", ";
+                line.append("&e").append(member).append(", ");
             this.contents.add(Texts.of(line.substring(0, line.length() - 2)));
         }
     }
